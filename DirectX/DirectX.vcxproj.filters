@@ -52,6 +52,9 @@
     <ClCompile Include="WICTextureLoader11.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="polygon.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="game_window.h">
@@ -87,6 +90,9 @@
     <ClInclude Include="debug_text.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
+    <ClInclude Include="polygon.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="shader_pixel_2d.hlsl">
@@ -95,30 +101,6 @@
     <FxCompile Include="shader_vertex_2d.hlsl">
       <Filter>シェーダー ファイル</Filter>
     </FxCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <Library Include="DirectXTex_Debug.lib" />
-    <Library Include="DirectXTex_Release.lib" />
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="knight_1.png">
-      <Filter>リソース ファイル</Filter>
-    </Image>
-    <Image Include="knight_2.png">
-      <Filter>リソース ファイル</Filter>
-    </Image>
-    <Image Include="knight_3.png">
-      <Filter>リソース ファイル</Filter>
-    </Image>
-    <Image Include="knight_3_summer.png">
-      <Filter>リソース ファイル</Filter>
-    </Image>
-    <Image Include="kokosozai.png">
-      <Filter>リソース ファイル</Filter>
-    </Image>
-    <Image Include="consolab_ascii_512.png">
-      <Filter>リソース ファイル</Filter>
-    </Image>
   </ItemGroup>
   <ItemGroup>
     <None Include="DirectXTex.inl">

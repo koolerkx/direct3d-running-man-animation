@@ -14,6 +14,7 @@
 #include "debug_text.h"
 #include <sstream>
 
+#include "polygon.h"
 #include "system_timer.h"
 
 int APIENTRY WinMain(
@@ -35,6 +36,10 @@ int APIENTRY WinMain(
     Texture_Initialize(Direct3D_GetDevice(), Direct3D_GetContext());
     SpriteAnim_Initialize();
 
+    // todo: to remove
+    Polygon_Initialize(Direct3D_GetDevice(), Direct3D_GetContext());
+    int texid_white = Texture_Load(L"assets/white.png");
+    
     // デバッグテキスト
     hal::DebugText debugText(
         Direct3D_GetDevice(),
@@ -126,6 +131,9 @@ int APIENTRY WinMain(
                 }
                 SpriteAnim_Draw(playIdRun, 0, static_cast<float>(32 + 128 + 32), 140.0f, 200.0f);
 
+                Texture_SetTexture(texid_white);
+                Polygon_Draw();
+                
                 SpriteAnim_Update(elapsed_time);
 
                 // DirectX::XMFLOAT4 color = {1.0f, 1.0f, 1.0f, 1.0f};
@@ -154,6 +162,9 @@ int APIENTRY WinMain(
     }
     while (msg.message != WM_QUIT);
 
+    // todo: to remove
+    Polygon_Finalize();
+    
     SpriteAnim_Finalize();
     Texture_Finalize();
     Sprite_Finalize();
