@@ -22,9 +22,10 @@ void Sprite_Begin();
  * @param texid テクスチャID
  * @param display_x 左上のX座標
  * @param display_y 左上のY座標
+ * @param angle 回転角度
  * @param color 色
  */
-void Sprite_Draw(int texid, float display_x, float display_y,
+void Sprite_Draw(int texid, float display_x, float display_y, float angle = 0,
                  const DirectX::XMFLOAT4& color = {1.0f, 1.0f, 1.0f, 1.0f});
 
 /**
@@ -34,9 +35,10 @@ void Sprite_Draw(int texid, float display_x, float display_y,
  * @param display_y 左上のY座標
  * @param display_w 表示幅
  * @param display_h 表示高さ
+ * @param angle 回転角度
  * @param color 色
  */
-void Sprite_Draw(int texid, float display_x, float display_y, float display_w, float display_h,
+void Sprite_Draw(int texid, float display_x, float display_y, float display_w, float display_h, float angle = 0,
                  const DirectX::XMFLOAT4& color = {1.0f, 1.0f, 1.0f, 1.0f});
 
 /**
@@ -48,10 +50,11 @@ void Sprite_Draw(int texid, float display_x, float display_y, float display_w, f
  * @param uvcut_y UVカット左上Y座標
  * @param uvcut_w UVカットの幅
  * @param uvcut_h UVカットの高さ
+ * @param angle 回転角度
  * @param color 色
  */
 void Sprite_Draw(int texid, float display_x, float display_y, float uvcut_x, float uvcut_y, float uvcut_w,
-                 float uvcut_h, const DirectX::XMFLOAT4& color = {1.0f, 1.0f, 1.0f, 1.0f});
+                 float uvcut_h, float angle = 0, const DirectX::XMFLOAT4& color = {1.0f, 1.0f, 1.0f, 1.0f});
 
 /**
  * @brief UVカット（表示サイズ変更可）
@@ -64,10 +67,12 @@ void Sprite_Draw(int texid, float display_x, float display_y, float uvcut_x, flo
  * @param uvcut_h UVカットの高さ
  * @param display_w 表示幅
  * @param display_h 表示高さ
+ * @param angle 回転角度
  * @param color 色
  */
 void Sprite_Draw(int texid, float display_x, float display_y, float uvcut_x, float uvcut_y, float uvcut_w,
                  float uvcut_h, float display_w, float display_h,
+                 float angle = 0,
                  const DirectX::XMFLOAT4& color = {1.0f, 1.0f, 1.0f, 1.0f});
 
 #endif // SPRITE_H

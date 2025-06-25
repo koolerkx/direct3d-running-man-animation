@@ -17,6 +17,8 @@
 #include "polygon.h"
 #include "system_timer.h"
 
+#include <DirectXMath.h>
+
 int APIENTRY WinMain(
     _In_ HINSTANCE hInstance,
     _In_opt_ HINSTANCE,
@@ -39,7 +41,7 @@ int APIENTRY WinMain(
     // todo: to remove
     Polygon_Initialize(Direct3D_GetDevice(), Direct3D_GetContext());
     int texid_white = Texture_Load(L"assets/white.png");
-    
+
     // デバッグテキスト
     hal::DebugText debugText(
         Direct3D_GetDevice(),
@@ -89,6 +91,9 @@ int APIENTRY WinMain(
     ULONG frame_count = 0;
     double fps = 0;
 
+    // 回転
+    float angle = 0.0f;
+
     // ゲームループ＆メッセージループ
     MSG msg;
 
@@ -125,6 +130,15 @@ int APIENTRY WinMain(
 
                 Sprite_Draw(texid_knight_winter, 0, 0, 128, 128);
 
+
+                angle += DirectX::XM_2PI * elapsed_time;
+                Sprite_Draw(texid_knight_winter,
+                            500 - 256 / 2, 500 - 256 / 2,
+                            0, 0, 512, 512,
+                            256, 256
+                            ,angle
+                );
+
                 for (int i = 0; i < ids.size(); i++)
                 {
                     SpriteAnim_Draw(ids[i], static_cast<float>((32 + 128) * i), 32.0f, 128.0f, 128.0f);
@@ -133,7 +147,7 @@ int APIENTRY WinMain(
 
                 Texture_SetTexture(texid_white);
                 Polygon_Draw();
-                
+
                 SpriteAnim_Update(elapsed_time);
 
                 // DirectX::XMFLOAT4 color = {1.0f, 1.0f, 1.0f, 1.0f};
@@ -164,7 +178,7 @@ int APIENTRY WinMain(
 
     // todo: to remove
     Polygon_Finalize();
-    
+
     SpriteAnim_Finalize();
     Texture_Finalize();
     Sprite_Finalize();

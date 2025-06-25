@@ -74,30 +74,33 @@ void Sprite_Begin()
     Shader_SetProjectionMatrix(XMMatrixOrthographicOffCenterLH(0.0f, SCREEN_WIDTH, SCREEN_HEIGHT, 0.0f, 0.0f, 1.0f));
 }
 
-void Sprite_Draw(int texid, float display_x, float display_y, const XMFLOAT4& color)
+void Sprite_Draw(int texid, float display_x, float display_y, float angle, const XMFLOAT4& color)
 {
     float IMAGE_WIDTH = static_cast<float>(Texture_Width(texid));
     float IMAGE_HEIGHT = static_cast<float>(Texture_Height(texid));
 
-    Sprite_Draw(texid, display_x, display_y, 0.0f, 0.0f, IMAGE_WIDTH, IMAGE_HEIGHT, IMAGE_WIDTH, IMAGE_HEIGHT, color);
+    Sprite_Draw(texid, display_x, display_y, 0.0f, 0.0f, IMAGE_WIDTH, IMAGE_HEIGHT, IMAGE_WIDTH, IMAGE_HEIGHT, angle,
+                color);
 }
 
-void Sprite_Draw(int texid, float display_x, float display_y, float display_w, float display_h, const XMFLOAT4& color)
+void Sprite_Draw(int texid, float display_x, float display_y, float display_w, float display_h, float angle,
+                 const XMFLOAT4& color)
 {
     float IMAGE_WIDTH = static_cast<float>(Texture_Width(texid));
     float IMAGE_HEIGHT = static_cast<float>(Texture_Height(texid));
 
-    Sprite_Draw(texid, display_x, display_y, 0.0f, 0.0f, IMAGE_WIDTH, IMAGE_HEIGHT, display_w, display_h, color);
+    Sprite_Draw(texid, display_x, display_y, 0.0f, 0.0f, IMAGE_WIDTH, IMAGE_HEIGHT, display_w, display_h, angle, color);
 }
 
 void Sprite_Draw(int texid, float display_x, float display_y, float uvcut_x, float uvcut_y, float uvcut_w,
-                 float uvcut_h, const XMFLOAT4& color)
+                 float uvcut_h, float angle, const XMFLOAT4& color)
 {
-    Sprite_Draw(texid, display_x, display_y, uvcut_x, uvcut_y, uvcut_w, uvcut_h, uvcut_w, uvcut_h, color);
+    Sprite_Draw(texid, display_x, display_y, uvcut_x, uvcut_y, uvcut_w, uvcut_h, uvcut_w, uvcut_h, angle, color);
 }
 
 void Sprite_Draw(int texid, float display_x, float display_y, float uvcut_x, float uvcut_y, float uvcut_w,
                  float uvcut_h, float display_w, float display_h,
+                 float angle,
                  const XMFLOAT4& color)
 {
     // テクスチャ設定
@@ -114,10 +117,10 @@ void Sprite_Draw(int texid, float display_x, float display_y, float uvcut_x, flo
     Vertex* v = static_cast<Vertex*>(msr.pData);
 
     // 画面の左上から右下に向かう線分を描画する -> 時計回り
-    v[0].position = {display_x, display_y, 0.0f}; // LT
-    v[1].position = {display_x + display_w, display_y, 0.0f}; // RT
-    v[2].position = {display_x, display_y + display_h, 0.0f}; // LB
-    v[3].position = {display_x + display_w, display_y + display_h, 0.0f}; // RB
+    v[0].position = {-0.5f, -0.5f, 0.0f}; // LT
+    v[1].position = {+0.5f, -0.5f, 0.0f}; // RT
+    v[2].position = {-0.5f, +0.5f, 0.0f}; // LB
+    v[3].position = {+0.5f, +0.5f, 0.0f}; // RB
 
     v[0].color = color;
     v[1].color = color;
@@ -140,6 +143,33 @@ void Sprite_Draw(int texid, float display_x, float display_y, float uvcut_x, flo
 
     // 頂点バッファのロックを解除
     g_pContext->Unmap(g_pVertexBuffer, 0);
+
+    // 関数１：自分でやる
+    // XMMATRIX translation = XMMatrixTranslation(display_x + display_w / 2, display_y + display_h / 2, 0.0f); // 平行移動
+    // XMMATRIX scale = XMMatrixScaling(display_w, display_h, 1.0f); // 拡大・縮小
+    // XMMATRIX rotation = XMMatrixRotationZ(angle);  // 回転行列をシェーダーに設定
+    // XMMATRIX mat = scale * rotation * translation;
+
+    // 関数２：XMMatrixAffineTransformation2D
+    // XMVECTOR scale = XMVectorSet(display_w, display_h, 0.0f, 0.0f);
+    // XMVECTOR rotCenter = XMVectorSet(0, 0, 0.0f, 0.0f);
+    // XMVECTOR translation = XMVectorSet(display_x + display_w / 2, display_y + display_h / 2, 0.0f, 0.0f);
+    // XMMATRIX mat = XMMatrixAffineTransformation2D(scale, rotCenter, angle, translation);
+    //
+    // XMMATRIX mat = XMMatrixAffineTransformation2D(scale, rotCenter, angle, translation);
+
+    // 関数３：XMMatrixTransformation2D
+    XMMATRIX mat = XMMatrixTransformation2D(
+        XMVectorSet(0, 0, 0, 0), // 拡大縮小ピボットポイント
+        0.0f, // 拡大縮小軸
+        XMVectorSet(display_w, display_h, 0, 0), // 拡大縮小
+        XMVectorSet(0, 0, 0, 0), // 回転ピボットポイント
+        angle, // 回転角度
+        XMVectorSet(display_x + display_w / 2, display_y + display_h / 2, 0, 0) // 平行移動
+    );
+
+    Shader_SetWorldMatrix(mat);
+
 
     // 頂点バッファを描画パイプラインに設定
     UINT stride = sizeof(Vertex);
