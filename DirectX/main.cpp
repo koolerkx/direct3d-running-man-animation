@@ -39,7 +39,7 @@ int APIENTRY WinMain(
     SpriteAnim_Initialize();
 
     // todo: to remove
-    Polygon_Initialize(Direct3D_GetDevice(), Direct3D_GetContext());
+    CircleRenderer circle(Direct3D_GetDevice(), Direct3D_GetContext(), { 500.0f, 500.0f, 200.0f});
     int texid_white = Texture_Load(L"assets/white.png");
 
     // デバッグテキスト
@@ -92,7 +92,7 @@ int APIENTRY WinMain(
     double fps = 0;
 
     // 回転
-    float angle = 0.0f;
+    double angle = 0.0f;
 
     // ゲームループ＆メッセージループ
     MSG msg;
@@ -129,14 +129,13 @@ int APIENTRY WinMain(
                 Sprite_Begin();
 
                 Sprite_Draw(texid_knight_winter, 0, 0, 128, 128);
-
-
-                angle += DirectX::XM_2PI * elapsed_time;
+                
+                angle += DirectX::XM_PI * elapsed_time;
                 Sprite_Draw(texid_knight_winter,
                             500 - 256 / 2, 500 - 256 / 2,
                             0, 0, 512, 512,
                             256, 256
-                            ,angle
+                            , angle
                 );
 
                 for (int i = 0; i < ids.size(); i++)
@@ -145,11 +144,12 @@ int APIENTRY WinMain(
                 }
                 SpriteAnim_Draw(playIdRun, 0, static_cast<float>(32 + 128 + 32), 140.0f, 200.0f);
 
-                Texture_SetTexture(texid_white);
-                Polygon_Draw();
 
                 SpriteAnim_Update(elapsed_time);
 
+                Texture_SetTexture(texid_white);
+                circle.draw(200.0f);
+                
                 // DirectX::XMFLOAT4 color = {1.0f, 1.0f, 1.0f, 1.0f};
                 //
                 // Sprite_Draw(texid_knight_winter, 32.0f, 32.0f, color);
@@ -175,9 +175,6 @@ int APIENTRY WinMain(
         }
     }
     while (msg.message != WM_QUIT);
-
-    // todo: to remove
-    Polygon_Finalize();
 
     SpriteAnim_Finalize();
     Texture_Finalize();

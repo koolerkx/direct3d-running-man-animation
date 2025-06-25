@@ -48,7 +48,6 @@ ComPtr<IDCompositionTarget> g_dcompTarget;
 ComPtr<IDCompositionVisual> g_dcompVisual;
 
 static bool configureBackBuffer(); // バックバッファの設定・生成
-static void releaseBackBuffer(); // バックバッファの解放
 
 
 bool Direct3D_Initialize(HWND hWnd, int width, int height)
@@ -200,33 +199,11 @@ bool Direct3D_Initialize(HWND hWnd, int width, int height)
 
 void Direct3D_Finalize()
 {
-    releaseBackBuffer();
-
-    g_pSwapChain.Reset();
-    dxgiDevice.Reset();
-    g_pDevice.Reset();
-    // if (g_pSwapChain)
-    // {
-    //     g_pSwapChain->Release();
-    //     g_pSwapChain = nullptr;
-    // }
-    //
-    // if (g_pDeviceContext)
-    // {
-    //     g_pDeviceContext->Release();
-    //     g_pDeviceContext = nullptr;
-    // }
-    //
-    // if (g_pDevice)
-    // {
-    //     g_pDevice->Release();
-    //     g_pDevice = nullptr;
-    // }
 }
 
 void Direct3D_Clear()
 {
-    float clear_color[4] = {0.0f, 0.0f, 0.0f, 0.0f};
+    float clear_color[4] = {0.0f, 0.0f, 0.0f, 1.0f};
     g_pDeviceContext->ClearRenderTargetView(g_pRenderTargetView.Get(), clear_color);
     g_pDeviceContext->ClearDepthStencilView(g_pDepthStencilView.Get(), D3D11_CLEAR_DEPTH, 1.0f, 0);
 
@@ -339,28 +316,4 @@ bool configureBackBuffer()
 
 
     return true;
-}
-
-void releaseBackBuffer()
-{
-    // SAFE_RELEASE(g_pRenderTargetView);
-    // SAFE_RELEASE(g_pDepthStencilBuffer)
-    // SAFE_RELEASE(g_pDepthStencilView)
-    // if (g_pRenderTargetView)
-    // {
-    //     g_pRenderTargetView->Release();
-    //     g_pRenderTargetView = nullptr;
-    // }
-    //
-    // if (g_pDepthStencilBuffer)
-    // {
-    //     g_pDepthStencilBuffer->Release();
-    //     g_pDepthStencilBuffer = nullptr;
-    // }
-    //
-    // if (g_pDepthStencilView)
-    // {
-    //     g_pDepthStencilView->Release();
-    //     g_pDepthStencilView = nullptr;
-    // }
 }

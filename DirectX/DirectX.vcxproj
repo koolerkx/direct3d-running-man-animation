@@ -172,6 +172,8 @@
     </ItemDefinitionGroup>
     <ItemGroup>
         <ClCompile Include="direct3d\direct3d.cpp" />
+        <ClCompile Include="direct3d\polygon.cpp" />
+        <ClCompile Include="direct3d\polygon.h" />
         <ClCompile Include="direct3d\shader.cpp" />
         <ClCompile Include="direct3d\sprite.cpp" />
         <ClCompile Include="direct3d\sprtie_anim.cpp" />
@@ -184,7 +186,6 @@
         <ClCompile Include="utils\WICTextureLoader11.cpp" />
         <ClInclude Include="scene\Scene.cpp" />
         <ClInclude Include="scene\SceneManager.cpp" />
-        <ClCompile Include="polygon.cpp" />
     </ItemGroup>
     <ItemGroup>
         <ClInclude Include="direct3d\direct3d.h" />
@@ -200,7 +201,6 @@
         <ClInclude Include="utils\DirectXTex.h" />
         <ClInclude Include="utils\system_timer.h" />
         <ClInclude Include="utils\WICTextureLoader11.h" />
-        <ClCompile Include="polygon.h" />
     </ItemGroup>
     <ItemGroup>
         <None Include="ascii_texture_generator.py" />
