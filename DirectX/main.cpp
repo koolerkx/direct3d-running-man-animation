@@ -17,7 +17,7 @@
 #include "polygon.h"
 #include "system_timer.h"
 
-#include <DirectXMath.h>
+#include "Scene.h"
 
 int APIENTRY WinMain(
     _In_ HINSTANCE hInstance,
@@ -94,6 +94,10 @@ int APIENTRY WinMain(
     // 回転
     double angle = 0.0f;
 
+    Scene scene;
+    scene.init();
+    scene.startSetup();
+
     // ゲームループ＆メッセージループ
     MSG msg;
 
@@ -128,27 +132,29 @@ int APIENTRY WinMain(
                 Direct3D_Clear();
                 Sprite_Begin();
 
-                Sprite_Draw(texid_knight_winter, 0, 0, 128, 128);
-                
-                angle += DirectX::XM_PI * elapsed_time;
-                Sprite_Draw(texid_knight_winter,
-                            500 - 256 / 2, 500 - 256 / 2,
-                            0, 0, 512, 512,
-                            256, 256
-                            , angle
-                );
+                scene.draw_loop();
 
-                for (int i = 0; i < ids.size(); i++)
-                {
-                    SpriteAnim_Draw(ids[i], static_cast<float>((32 + 128) * i), 32.0f, 128.0f, 128.0f);
-                }
-                SpriteAnim_Draw(playIdRun, 0, static_cast<float>(32 + 128 + 32), 140.0f, 200.0f);
-
-
-                SpriteAnim_Update(elapsed_time);
-
-                Texture_SetTexture(texid_white);
-                circle.draw(200.0f);
+                // Sprite_Draw(texid_knight_winter, 0, 0, 128, 128);
+                //
+                // angle += DirectX::XM_PI * elapsed_time;
+                // Sprite_Draw(texid_knight_winter,
+                //             500 - 256 / 2, 500 - 256 / 2,
+                //             0, 0, 512, 512,
+                //             256, 256
+                //             , static_cast<float>(angle)
+                // );
+                //
+                // for (int i = 0; i < ids.size(); i++)
+                // {
+                //     SpriteAnim_Draw(ids[i], static_cast<float>((32 + 128) * i), 32.0f, 128.0f, 128.0f);
+                // }
+                // SpriteAnim_Draw(playIdRun, 0, static_cast<float>(32 + 128 + 32), 140.0f, 200.0f);
+                //
+                //
+                // SpriteAnim_Update(elapsed_time);
+                //
+                // Texture_SetTexture(texid_white);
+                // circle.draw(200.0f);
                 
                 // DirectX::XMFLOAT4 color = {1.0f, 1.0f, 1.0f, 1.0f};
                 //
