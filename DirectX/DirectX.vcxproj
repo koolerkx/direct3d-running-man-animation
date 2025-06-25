@@ -88,6 +88,7 @@
                 $(ProjectDir)direct3d;
                 $(ProjectDir)game_window;
                 $(ProjectDir)utils;
+                $(ProjectDir)scene;
                 $(ProjectDir);
                 %(AdditionalIncludeDirectories)
             </AdditionalIncludeDirectories>
@@ -181,6 +182,8 @@
         <ClCompile Include="utils\debug_text.cpp" />
         <ClCompile Include="utils\system_timer.cpp" />
         <ClCompile Include="utils\WICTextureLoader11.cpp" />
+        <ClInclude Include="scene\Scene.cpp" />
+        <ClInclude Include="scene\SceneManager.cpp" />
     </ItemGroup>
     <ItemGroup>
         <ClInclude Include="direct3d\direct3d.h" />
@@ -189,6 +192,8 @@
         <ClInclude Include="direct3d\sprite_anim.h" />
         <ClInclude Include="direct3d\texture.h" />
         <ClInclude Include="game_window\game_window.h" />
+        <ClInclude Include="scene\Scene.h" />
+        <ClInclude Include="scene\SceneManager.h" />
         <ClInclude Include="utils\debug_ostream.h" />
         <ClInclude Include="utils\debug_text.h" />
         <ClInclude Include="utils\DirectXTex.h" />
