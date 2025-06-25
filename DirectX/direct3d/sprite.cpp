@@ -182,3 +182,63 @@ void Sprite_Draw(int texid, float display_x, float display_y, float uvcut_x, flo
     // ポリゴン描画命令発行
     g_pContext->Draw(NUM_VERTEX, 0);
 }
+
+
+void Sprite_Draw(int texid, float display_x, float display_y, float uvcut_x, float uvcut_y, float uvcut_w,
+                 float uvcut_h, float display_w, float display_h,
+                 XMMATRIX mat,
+                 const XMFLOAT4& color)
+{
+    // テクスチャ設定
+    Texture_SetTexture(texid);
+
+    // シェーダーを描画パイプラインに設定
+    Shader_Begin();
+
+    // 頂点バッファをロックする
+    D3D11_MAPPED_SUBRESOURCE msr;
+    g_pContext->Map(g_pVertexBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &msr);
+
+    // 頂点バッファへの仮想ポインタを取得
+    Vertex* v = static_cast<Vertex*>(msr.pData);
+
+    // 画面の左上から右下に向かう線分を描画する -> 時計回り
+    v[0].position = {-0.5f, -0.5f, 0.0f}; // LT
+    v[1].position = {+0.5f, -0.5f, 0.0f}; // RT
+    v[2].position = {-0.5f, +0.5f, 0.0f}; // LB
+    v[3].position = {+0.5f, +0.5f, 0.0f}; // RB
+
+    v[0].color = color;
+    v[1].color = color;
+    v[2].color = color;
+    v[3].color = color;
+
+    // UVマップ
+    const int IMAGE_WIDTH = Texture_Width(texid);
+    const int IMAGE_HEIGHT = Texture_Height(texid);
+
+    float u0 = uvcut_x / static_cast<float>(IMAGE_WIDTH);
+    float v0 = uvcut_y / static_cast<float>(IMAGE_HEIGHT);
+    float u1 = (uvcut_x + uvcut_w) / static_cast<float>(IMAGE_WIDTH);
+    float v1 = (uvcut_y + uvcut_h) / static_cast<float>(IMAGE_HEIGHT);
+
+    v[0].uv = {u0, v0};
+    v[1].uv = {u1, v0};
+    v[2].uv = {u0, v1};
+    v[3].uv = {u1, v1};
+
+    // 頂点バッファのロックを解除
+    g_pContext->Unmap(g_pVertexBuffer, 0);
+    Shader_SetWorldMatrix(mat);
+
+    // 頂点バッファを描画パイプラインに設定
+    UINT stride = sizeof(Vertex);
+    UINT offset = 0;
+    g_pContext->IASetVertexBuffers(0, 1, &g_pVertexBuffer, &stride, &offset);
+
+    // プリミティブトポロジ設定
+    g_pContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
+
+    // ポリゴン描画命令発行
+    g_pContext->Draw(NUM_VERTEX, 0);
+}
