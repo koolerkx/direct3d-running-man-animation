@@ -6,7 +6,15 @@
  */
 
 // 定数バッファ
-float4x4 mtx;
+cbuffer VS_CONSTANT_BUFFER: register(b0)
+{
+    float4x4 proj;
+};
+
+cbuffer VS_CONSTANT_BUFFER: register(b1)
+{
+    float4x4 world;
+};
 
 struct VS_INPUT
 {
@@ -25,7 +33,13 @@ struct VS_OUTPUT
 VS_OUTPUT main(VS_INPUT vs_in)
 {
     VS_OUTPUT vs_out;
-    vs_out.posH = mul(vs_in.posL, mtx);
+
+    // 座標変換
+    // float4x4 mtx = mul(world, proj); // 同じ意味で、合成行列
+    // vs_out.posH = mul(vs_in.posL, mtx);
+    vs_in.posL = mul(vs_in.posL, world);
+    vs_out.posH = mul(vs_in.posL, proj);
+
     vs_out.color = vs_in.color;
     vs_out.uv = vs_in.uv;
     return vs_out;

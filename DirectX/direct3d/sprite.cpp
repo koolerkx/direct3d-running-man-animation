@@ -71,7 +71,7 @@ void Sprite_Begin()
     SCREEN_HEIGHT = static_cast<float>(Direct3D_GetBackBufferHeight());
 
     // 頂点シェーダーに変換行列を設定
-    Shader_SetMatrix(XMMatrixOrthographicOffCenterLH(0.0f, SCREEN_WIDTH, SCREEN_HEIGHT, 0.0f, 0.0f, 1.0f));
+    Shader_SetProjectionMatrix(XMMatrixOrthographicOffCenterLH(0.0f, SCREEN_WIDTH, SCREEN_HEIGHT, 0.0f, 0.0f, 1.0f));
 }
 
 void Sprite_Draw(int texid, float display_x, float display_y, const XMFLOAT4& color)
