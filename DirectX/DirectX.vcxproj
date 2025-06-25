@@ -197,6 +197,7 @@
     <ClInclude Include="scene\Scene.h" />
     <ClInclude Include="scene\SceneManager.h" />
     <ClInclude Include="scene\SceneSprite.h" />
+    <ClInclude Include="utils\debug_helper.h" />
     <ClInclude Include="utils\debug_ostream.h" />
     <ClInclude Include="utils\debug_text.h" />
     <ClInclude Include="utils\DirectXTex.h" />
