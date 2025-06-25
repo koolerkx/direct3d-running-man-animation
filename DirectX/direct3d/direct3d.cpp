@@ -6,6 +6,15 @@
  */
 
 #include "direct3d.h"
+#include <dxgi1_2.h>
+
+#include <dcomp.h>
+#pragma comment( lib, "dcomp" )
+
+
+#include <wrl/client.h>
+using Microsoft::WRL::ComPtr;
+
 #include "debug_ostream.h"
 
 #pragma comment(lib, "d3d11.lib")
@@ -18,16 +27,16 @@
 #endif
 
 /* 各種インターフェース */
-static ID3D11Device* g_pDevice = nullptr;
-static ID3D11DeviceContext* g_pDeviceContext = nullptr;
-static IDXGISwapChain* g_pSwapChain = nullptr;
-static ID3D11BlendState* g_pBlendStateMultiply = nullptr;
-static ID3D11DepthStencilState* g_pDepthStencilStateDepthDisable = nullptr;
+static ComPtr<ID3D11Device> g_pDevice = nullptr;
+static ComPtr<ID3D11DeviceContext> g_pDeviceContext = nullptr;
+static ComPtr<IDXGISwapChain> g_pSwapChain = nullptr;
+static ComPtr<ID3D11BlendState> g_pBlendStateMultiply = nullptr;
+static ComPtr<ID3D11DepthStencilState> g_pDepthStencilStateDepthDisable = nullptr;
 
 /* バックバッファ関連 */
-static ID3D11RenderTargetView* g_pRenderTargetView = nullptr;
-static ID3D11Texture2D* g_pDepthStencilBuffer = nullptr;
-static ID3D11DepthStencilView* g_pDepthStencilView = nullptr;
+static ComPtr<ID3D11RenderTargetView> g_pRenderTargetView = nullptr;
+static ComPtr<ID3D11Texture2D> g_pDepthStencilBuffer = nullptr;
+static ComPtr<ID3D11DepthStencilView> g_pDepthStencilView = nullptr;
 static D3D11_TEXTURE2D_DESC g_BackBufferDesc{};
 
 static D3D11_VIEWPORT g_Viewport{};
@@ -86,10 +95,10 @@ bool Direct3D_Initialize(HWND hWnd)
         ARRAYSIZE(levels),
         D3D11_SDK_VERSION,
         &swap_chain_desc,
-        &g_pSwapChain, // 大事
-        &g_pDevice, // 大事
+        g_pSwapChain.GetAddressOf(), // 大事
+        g_pDevice.GetAddressOf(), // 大事
         &feature_level,
-        &g_pDeviceContext // 大事
+        g_pDeviceContext.GetAddressOf() // 大事
     );
 
     if (FAILED(hr))
@@ -128,11 +137,11 @@ bool Direct3D_Initialize(HWND hWnd)
 
     bd.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
 
-    g_pDevice->CreateBlendState(&bd, &g_pBlendStateMultiply);
+    g_pDevice->CreateBlendState(&bd, g_pBlendStateMultiply.GetAddressOf());
 
     // HACK: 3Dの場合、関数化のほうがいい
     float blend_factor[4] = {0.0f, 0.0f, 0.0f, 0.0f};
-    g_pDeviceContext->OMSetBlendState(g_pBlendStateMultiply, blend_factor, 0xffffffff);
+    g_pDeviceContext->OMSetBlendState(g_pBlendStateMultiply.Get(), blend_factor, 0xffffffff);
 
     // 深度ステンシルステート設定
     D3D11_DEPTH_STENCIL_DESC dsd = {};
@@ -141,13 +150,13 @@ bool Direct3D_Initialize(HWND hWnd)
     dsd.DepthEnable = FALSE; // 無効にする
     dsd.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ZERO;
 
-    g_pDevice->CreateDepthStencilState(&dsd, &g_pDepthStencilStateDepthDisable);
+    g_pDevice->CreateDepthStencilState(&dsd, g_pDepthStencilStateDepthDisable.GetAddressOf());
 
     // dsd.DepthEnable = TRUE;
     // dsd.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
     // g_pDevice->CreateDepthStencilState(&dsd, &g_pDepthStencilStateDepthEnable);
 
-    g_pDeviceContext->OMSetDepthStencilState(g_pDepthStencilStateDepthDisable, NULL);
+    g_pDeviceContext->OMSetDepthStencilState(g_pDepthStencilStateDepthDisable.Get(), NULL);
 
 
     return true;
@@ -157,11 +166,6 @@ void Direct3D_Finalize()
 {
     releaseBackBuffer();
 
-    SAFE_RELEASE(g_pDepthStencilStateDepthDisable);
-    SAFE_RELEASE(g_pBlendStateMultiply);
-    SAFE_RELEASE(g_pSwapChain);
-    SAFE_RELEASE(g_pDeviceContext);
-    SAFE_RELEASE(g_pDevice);
     // if (g_pSwapChain)
     // {
     //     g_pSwapChain->Release();
@@ -184,11 +188,11 @@ void Direct3D_Finalize()
 void Direct3D_Clear()
 {
     float clear_color[4] = {0.2f, 0.4f, 0.8f, 1.0f};
-    g_pDeviceContext->ClearRenderTargetView(g_pRenderTargetView, clear_color);
-    g_pDeviceContext->ClearDepthStencilView(g_pDepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
+    g_pDeviceContext->ClearRenderTargetView(g_pRenderTargetView.Get(), clear_color);
+    g_pDeviceContext->ClearDepthStencilView(g_pDepthStencilView.Get(), D3D11_CLEAR_DEPTH, 1.0f, 0);
 
     // レンダーターゲットビューとデプスステンシルビューの設定 
-    g_pDeviceContext->OMSetRenderTargets(1, &g_pRenderTargetView, g_pDepthStencilView);
+    g_pDeviceContext->OMSetRenderTargets(1, g_pRenderTargetView.GetAddressOf(), g_pDepthStencilView.Get());
 }
 
 void Direct3D_Present()
@@ -211,12 +215,12 @@ unsigned int Direct3D_GetBackBufferHeight()
 
 ID3D11Device* Direct3D_GetDevice()
 {
-    return g_pDevice;
+    return g_pDevice.Get();
 }
 
 ID3D11DeviceContext* Direct3D_GetContext()
 {
-    return g_pDeviceContext;
+    return g_pDeviceContext.Get();
 }
 
 
@@ -236,7 +240,7 @@ bool configureBackBuffer()
     }
 
     // バックバッファのレンダーターゲットビューの生成
-    hr = g_pDevice->CreateRenderTargetView(back_buffer_pointer, nullptr, &g_pRenderTargetView);
+    hr = g_pDevice->CreateRenderTargetView(back_buffer_pointer, nullptr, g_pRenderTargetView.GetAddressOf());
 
     if (FAILED(hr))
     {
@@ -263,7 +267,7 @@ bool configureBackBuffer()
     depth_stencil_desc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
     depth_stencil_desc.CPUAccessFlags = 0;
     depth_stencil_desc.MiscFlags = 0;
-    hr = g_pDevice->CreateTexture2D(&depth_stencil_desc, nullptr, &g_pDepthStencilBuffer);
+    hr = g_pDevice->CreateTexture2D(&depth_stencil_desc, nullptr, g_pDepthStencilBuffer.GetAddressOf());
 
     if (FAILED(hr))
     {
@@ -277,7 +281,7 @@ bool configureBackBuffer()
     depth_stencil_view_desc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
     depth_stencil_view_desc.Texture2D.MipSlice = 0;
     depth_stencil_view_desc.Flags = 0;
-    hr = g_pDevice->CreateDepthStencilView(g_pDepthStencilBuffer, &depth_stencil_view_desc, &g_pDepthStencilView);
+    hr = g_pDevice->CreateDepthStencilView(g_pDepthStencilBuffer.Get(), &depth_stencil_view_desc, g_pDepthStencilView.GetAddressOf());
 
     if (FAILED(hr))
     {
@@ -300,9 +304,9 @@ bool configureBackBuffer()
 
 void releaseBackBuffer()
 {
-    SAFE_RELEASE(g_pRenderTargetView)
-    SAFE_RELEASE(g_pDepthStencilBuffer)
-    SAFE_RELEASE(g_pDepthStencilView)
+    // SAFE_RELEASE(g_pRenderTargetView);
+    // SAFE_RELEASE(g_pDepthStencilBuffer)
+    // SAFE_RELEASE(g_pDepthStencilView)
     // if (g_pRenderTargetView)
     // {
     //     g_pRenderTargetView->Release();
