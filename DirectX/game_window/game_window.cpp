@@ -4,13 +4,11 @@
 // ウィンドウ情報
 static constexpr char WINDOW_CLASS[] = "GameWindow"; // メインウインドウクラス名
 static constexpr char TITLE[] = "Game"; // 	タイトルバーのテクスト
-const constexpr int SCREEN_WIDTH = 1600;
-const constexpr int SCREEN_HEIGHT = 900;
 
 // ウインドウプロシージャ　プロトタイプ宣言
 LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
-HWND GameWindow_Create(_In_ HINSTANCE hInstance)
+HWND GameWindow_Create(_In_ HINSTANCE hInstance, int width, int height)
 {
     // ウインドウクラスの登録
     WNDCLASSEX wcex{};
@@ -30,11 +28,12 @@ HWND GameWindow_Create(_In_ HINSTANCE hInstance)
     // メインウィンドウの作成
 
     RECT window_rect{
-        0, 0, SCREEN_WIDTH, SCREEN_HEIGHT
+        0, 0, width, height
     };
 
     DWORD style = WS_OVERLAPPEDWINDOW & ~(WS_MAXIMIZEBOX | WS_THICKFRAME);
-
+    DWORD exStyle = WS_EX_NOREDIRECTIONBITMAP | WS_EX_WINDOWEDGE;
+    
     AdjustWindowRect(&window_rect, style, FALSE);
 
     const int WINDOW_WIDTH = window_rect.right - window_rect.left;
@@ -50,7 +49,8 @@ HWND GameWindow_Create(_In_ HINSTANCE hInstance)
     const int WINDOW_X = std::max(0, (desktop_width - WINDOW_WIDTH) / 2);
     const int WINDOW_Y = std::max(0, (desktop_height - WINDOW_HEIGHT) / 2);
 
-    HWND hWnd = CreateWindow(
+    HWND hWnd = CreateWindowEx(
+        exStyle,
         WINDOW_CLASS,
         TITLE,
         style, //　Window Style Flag

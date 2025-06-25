@@ -13,6 +13,6 @@
 #define WIN32_LEAN_AND_MEAN
 #include <Windows.h>
 
-HWND GameWindow_Create(_In_ HINSTANCE hInstance);
+HWND GameWindow_Create(_In_ HINSTANCE hInstance, int width, int height);
 
 #endif // GAME_WINDOW_H

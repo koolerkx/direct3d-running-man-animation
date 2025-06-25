@@ -14,7 +14,7 @@
 // セーフリリースマクロ
 #define SAFE_RELEASE(o) if (o) { (o)->Release(); o = NULL; }
 
-bool Direct3D_Initialize(HWND hWnd); // Direct3Dの初期化
+bool Direct3D_Initialize(HWND hWnd, int width, int height); // Direct3Dの初期化
 void Direct3D_Finalize(); // Direct3Dの終了処理
 
 void Direct3D_Clear(); // バックバッファのクリア

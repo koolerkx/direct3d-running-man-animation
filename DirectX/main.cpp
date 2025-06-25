@@ -24,10 +24,12 @@ int APIENTRY WinMain(
 {
     CoInitializeEx(nullptr, COINIT_MULTITHREADED);
 
-    HWND hWnd = GameWindow_Create(hInstance);
+    constexpr int SCREEN_WIDTH = 1600;
+    constexpr int SCREEN_HEIGHT = 900;
+    HWND hWnd = GameWindow_Create(hInstance, SCREEN_WIDTH, SCREEN_HEIGHT);
 
     SystemTimer_Initialize();
-    Direct3D_Initialize(hWnd);
+    Direct3D_Initialize(hWnd, SCREEN_WIDTH, SCREEN_HEIGHT);
     Shader_Initialize(Direct3D_GetDevice(), Direct3D_GetContext());
     Sprite_Initialize(Direct3D_GetDevice(), Direct3D_GetContext());
     Texture_Initialize(Direct3D_GetDevice(), Direct3D_GetContext());
