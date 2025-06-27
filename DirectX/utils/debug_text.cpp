@@ -7,6 +7,10 @@
 
 ==============================================================================*/
 #include "debug_text.h"
+
+#include <map>
+
+#include "debug_ostream.h"
 #include "WICTextureLoader11.h"
 using namespace DirectX;
 #include <D3Dcompiler.h>
@@ -402,6 +406,147 @@ namespace hal
 		m_pContext->RSSetState(pPreviousRasterizerState.Get());
 	}
 
+	void DebugText::Draw(const SpriteState& spriteState)
+	{
+		if( !m_CharacterCount){
+			return; // 描画する文字がない場合は何もしない
+		}
+
+		if (!m_pVertexBuffer || m_CharacterCount > m_BufferSourceCharacterCount) {
+			createBuffer(m_CharacterCount);
+		}
+
+		// 頂点バッファと頂点インデックスをロックする
+		D3D11_MAPPED_SUBRESOURCE msr;
+		m_pContext->Map(m_pVertexBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &msr);
+
+		// 頂点バッファへの仮想ポインタを取得
+		Vertex* v = (Vertex*)msr.pData;
+
+		m_pContext->Map(m_pIndexBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &msr);
+
+		// インデックスバッファへの仮想ポインタを取得
+		WORD* indices = (WORD*)msr.pData;
+
+		// 頂点情報を書き込み
+		UINT lineCount = 0;
+		WORD characterCount = 0;
+		const float characterWidth = m_TextureWidth / 16.0f;
+		const float characterHeight = m_TextureHeight / 16.0f;
+
+		for (const auto& strings : m_TextLines) {
+
+			UINT columnCount = 0;
+
+			for (const auto& string : strings.strings) {
+
+				for (const auto& code : string.characters) {
+
+					int index = code - ' ';
+
+					if (index) {
+						float u0 = (index % 16) / 16.0f;
+						float v0 = (index / 16) / 16.0f;
+						float u1 = (index % 16 + 1) / 16.0f;
+						float v1 = (index / 16 + 1) / 16.0f;
+						float x = spriteState.position.x + columnCount * m_CharacterSpacing;
+						float y = spriteState.position.y + lineCount * m_LineSpacing;
+
+						v[0].position = { x, y, 1.0f };
+						v[0].color = spriteState.color;
+						v[0].texcoord = { u0, v0 };
+
+						v[1].position = { x + characterWidth, y, 1.0f };
+						v[1].color = spriteState.color;
+						v[1].texcoord = { u1, v0 };
+
+						v[2].position = { x, y + characterHeight, 1.0f };
+						v[2].color = spriteState.color;
+						v[2].texcoord = { u0, v1 };
+
+						v[3].position = { x + characterWidth, y + characterHeight, 1.0f };
+						v[3].color = spriteState.color;
+						v[3].texcoord = { u1, v1 };
+
+						v += 4;
+
+						indices[0] = characterCount * 4 + 0;
+						indices[1] = characterCount * 4 + 1;
+						indices[2] = characterCount * 4 + 2;
+						indices[3] = characterCount * 4 + 2;
+						indices[4] = characterCount * 4 + 1;
+						indices[5] = characterCount * 4 + 3;
+						indices += 6;
+
+						characterCount++;
+					}
+
+					columnCount++;
+				}
+			}
+
+			lineCount++;
+		}
+
+		// 頂点バッファと頂点インデックスのロックを解除
+		m_pContext->Unmap(m_pVertexBuffer.Get(), 0);
+		m_pContext->Unmap(m_pIndexBuffer.Get(), 0);
+
+		// 頂点バッファを描画パイプラインに設定
+		UINT stride = sizeof(Vertex);
+		UINT offset = 0;
+		m_pContext->IASetVertexBuffers(0, 1, m_pVertexBuffer.GetAddressOf(), &stride, &offset);
+
+		// インデックスバッファを描画パイプラインに設定
+		m_pContext->IASetIndexBuffer(m_pIndexBuffer.Get(), DXGI_FORMAT_R16_UINT, 0);
+		
+		// 頂点シェーダーを描画パイプラインに設定
+		m_pContext->VSSetShader(m_pVertexShader.Get(), nullptr, 0);
+
+		// 定数バッファを描画パイプラインに設定
+		m_pContext->VSSetConstantBuffers(0, 1, m_pVSConstantBuffer.GetAddressOf());
+
+		// 入力レイアウトを描画パイプラインに設定
+		m_pContext->IASetInputLayout(m_pInputLayout.Get());
+
+		// ピクセルシェーダーとテクスチャとサンプラーステートを描画パイプラインに設定
+		m_pContext->PSSetShader(m_pPixelShader.Get(), nullptr, 0);
+		m_pContext->PSSetShaderResources(0, 1, &m_pTextureView);
+		m_pContext->PSSetSamplers(0, 1, m_pSamplerState.GetAddressOf());
+
+		ComPtr<ID3D11BlendState> pPreviousBlendState; // 設定前のブレンドステート
+		float previous_blend_factor[4];
+		UINT previous_sample_mask;
+		m_pContext->OMGetBlendState(pPreviousBlendState.GetAddressOf(), previous_blend_factor, &previous_sample_mask);
+
+		// ブレンドステートを設定
+		float blend_factor[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
+		m_pContext->OMSetBlendState(m_pBlendState.Get(), blend_factor, 0xffffffff);
+
+		ComPtr<ID3D11DepthStencilState> pPreviousDepthStencilState; // 設定前の深度ステンシルステート
+		UINT previous_stencil_ref = 0;
+		m_pContext->OMGetDepthStencilState(pPreviousDepthStencilState.GetAddressOf(), &previous_stencil_ref);
+
+		// 深度ステンシルステートを設定 (深度無効化)
+		m_pContext->OMSetDepthStencilState(m_pDepthStencilState.Get(), 0);
+
+		// ラスタライザーステートを設定
+		ComPtr<ID3D11RasterizerState> pPreviousRasterizerState; // 設定前のラスタライザーステート
+		m_pContext->RSGetState(pPreviousRasterizerState.GetAddressOf());
+		m_pContext->RSSetState(m_pRasterizerState.Get());
+
+		// プリミティブトポロジ設定
+		m_pContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+		// ポリゴン描画命令発行
+		m_pContext->DrawIndexed(m_CharacterCount * 6, 0, 0);
+
+		// 描画後、ブレンドステートと深度ステンシルステートとラスタライザーステートを元に戻す
+		m_pContext->OMSetBlendState(pPreviousBlendState.Get(), previous_blend_factor, 0xffffffff);
+		m_pContext->OMSetDepthStencilState(pPreviousDepthStencilState.Get(), previous_stencil_ref);
+		m_pContext->RSSetState(pPreviousRasterizerState.Get());
+	}
+
 	void DebugText::Clear()
 	{
 		m_TextLines.clear();
@@ -427,6 +572,44 @@ namespace hal
 		m_pDevice->CreateBuffer(&bd, NULL, m_pIndexBuffer.ReleaseAndGetAddressOf());
 
 		m_BufferSourceCharacterCount = characterCount;
+	}
+
+	float calcCharacterWidth(std::string str)
+	{
+		// Split the input string by '\n' to get individual lines
+		size_t maxLength = 0;
+		size_t currentLength = 0;
+
+		for (char c : str) {
+			if (c == '\n') {
+				maxLength = max(maxLength, currentLength);
+				currentLength = 0; // Reset for the next line
+			} else {
+				currentLength++;
+			}
+		}
+		maxLength = max(maxLength, currentLength); // Check the last line
+
+		// Calculate the width using character spacing
+		return maxLength * 24.0f;
+	}
+
+	float calcCharacterHeight(std::string str)
+	{
+		// Count the number of lines in the input string
+		size_t lineCount = 0;
+
+		for (char c : str) {
+			if (c == '\n') {
+				lineCount++; // Increment for each newline character
+			}
+		}
+
+		// Add one to lineCount to account for the last line (if not empty)
+		lineCount = (str.empty() || str.back() == '\n') ? lineCount : lineCount + 1;
+
+		// Calculate the height using line spacing
+		return lineCount * 32.0f;
 	}
 
 }

@@ -11,6 +11,8 @@
 #include <d3d11.h>
 #include <DirectXMath.h>
 
+#include "SceneSprite.h"
+
 struct Transformation
 {
     DirectX::XMFLOAT2 position{0.0f, 0.0f};
@@ -18,8 +20,8 @@ struct Transformation
     DirectX::XMFLOAT2 size{128.0f, 128.0f};
     float rotation = 0;
 
-    DirectX::XMFLOAT2 uvStart {0.0f, 0.0f};
-    DirectX::XMFLOAT2 uvSize {128.0f, 128.0f};
+    DirectX::XMFLOAT2 uvStart{0.0f, 0.0f};
+    DirectX::XMFLOAT2 uvSize{128.0f, 128.0f};
 };
 
 void Sprite_Initialize(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
@@ -104,5 +106,9 @@ void Sprite_Draw(int texid, float display_x, float display_y, float uvcut_x, flo
                  float uvcut_h, float display_w, float display_h,
                  DirectX::XMMATRIX mat,
                  const DirectX::XMFLOAT4& color = {1.0f, 1.0f, 1.0f, 1.0f});
+
+
+void Sprite_Draw(int texid, SpriteState spriteState);
+void Sprite_Draw(int texid, SpriteState spriteState, float uvcut_x, float uvcut_y, float uvcut_w, float uvcut_h);
 
 #endif // SPRITE_H

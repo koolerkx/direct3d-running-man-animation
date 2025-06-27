@@ -43,7 +43,7 @@ void SpriteAnim_Initialize()
         data.m_TextureId = -1;
     }
 
-    for (AnimPlayData &data: g_AnimPlay)
+    for (AnimPlayData& data : g_AnimPlay)
     {
         data.m_PatternId = -1;
     }
@@ -93,11 +93,31 @@ void SpriteAnim_Draw(int playid, float dx, float dy, float dw, float dh)
     Sprite_Draw(
         pPatternData->m_TextureId,
         dx, dy,
-        static_cast<float>(pPatternData->m_StartPosition.x + pPatternData->m_PatternSize.x * (pattern_num % pPatternData->m_HPatternMax)),
-        static_cast<float>(pPatternData->m_StartPosition.y + pPatternData->m_PatternSize.y * (pattern_num / pPatternData->m_HPatternMax)),
+        static_cast<float>(pPatternData->m_StartPosition.x + pPatternData->m_PatternSize.x * (pattern_num % pPatternData
+            ->m_HPatternMax)),
+        static_cast<float>(pPatternData->m_StartPosition.y + pPatternData->m_PatternSize.y * (pattern_num / pPatternData
+            ->m_HPatternMax)),
         static_cast<float>(pPatternData->m_PatternSize.x),
         static_cast<float>(pPatternData->m_PatternSize.y),
         dw, dh
+    );
+}
+
+void SpriteAnim_Draw(int playid, SpriteState spriteState)
+{
+    const int pattern_id = g_AnimPlay[playid].m_PatternId;
+    const int pattern_num = g_AnimPlay[playid].m_PatternNum;
+    AnimPatternData* pPatternData = &g_AnimPattern[pattern_id];
+
+    Sprite_Draw(
+        pPatternData->m_TextureId,
+        spriteState,
+        static_cast<float>(pPatternData->m_StartPosition.x + pPatternData->m_PatternSize.x * (pattern_num % pPatternData
+            ->m_HPatternMax)),
+        static_cast<float>(pPatternData->m_StartPosition.y + pPatternData->m_PatternSize.y * (pattern_num / pPatternData
+            ->m_HPatternMax)),
+        static_cast<float>(pPatternData->m_PatternSize.x),
+        static_cast<float>(pPatternData->m_PatternSize.y)
     );
 }
 

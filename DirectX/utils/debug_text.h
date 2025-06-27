@@ -16,6 +16,9 @@
 #include <list>
 #include <wrl/client.h> // Microsoft::WRL::ComPtrを使用する場合は必要
 #include <DirectXMath.h>
+#include <map>
+
+#include "SceneSprite.h"
 
 
 namespace hal
@@ -82,6 +85,7 @@ namespace hal
 		void SetText(const char* pText, DirectX::XMFLOAT4 color = { 1.0f, 1.0f, 1.0f, 1.0f });
 
 		void Draw();
+		void Draw(const SpriteState& spriteState);
 
 		void Clear(); // 登録されているテキストをクリア
 
@@ -96,5 +100,8 @@ namespace hal
 
 		void createBuffer(ULONG characterCount);
 	};
+
+	float calcCharacterWidth(std::string str);
+	float calcCharacterHeight(std::string str);
 }
 #endif // DEBUG_TEXT_H

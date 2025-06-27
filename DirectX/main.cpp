@@ -18,6 +18,7 @@
 #include "system_timer.h"
 
 #include "Scene.h"
+#include "SceneManager.h"
 
 int APIENTRY WinMain(
     _In_ HINSTANCE hInstance,
@@ -37,7 +38,7 @@ int APIENTRY WinMain(
     Sprite_Initialize(Direct3D_GetDevice(), Direct3D_GetContext());
     Texture_Initialize(Direct3D_GetDevice(), Direct3D_GetContext());
     SpriteAnim_Initialize();
-    
+
     // デバッグテキスト
     hal::DebugText debugText(
         Direct3D_GetDevice(),
@@ -53,6 +54,18 @@ int APIENTRY WinMain(
         0.0f
     );
 
+    hal::DebugText titlePresentsText(
+        Direct3D_GetDevice(), Direct3D_GetContext(),
+        L"assets/major_mono_ascii_512.png", Direct3D_GetBackBufferWidth(), Direct3D_GetBackBufferHeight(),
+        0.0f, 0.0f, 0, 0, 0.0f, 24.0f
+    );
+
+    hal::DebugText runningmanText(
+        Direct3D_GetDevice(), Direct3D_GetContext(),
+        L"assets/ferrum_ascii_512.png", Direct3D_GetBackBufferWidth(), Direct3D_GetBackBufferHeight(),
+        0.0f, 0.0f, 0, 0, 0.0f, 24.0f
+    );
+
     ShowWindow(hWnd, nCmdShow);
     UpdateWindow(hWnd);
 
@@ -63,9 +76,10 @@ int APIENTRY WinMain(
     ULONG frame_count = 0;
     double fps = 0;
 
-    Scene scene;
-    scene.init();
-    scene.startSetup();
+    SceneInitialize({
+        &titlePresentsText,
+        &runningmanText,
+    });
 
     // ゲームループ＆メッセージループ
     MSG msg;
@@ -92,7 +106,8 @@ int APIENTRY WinMain(
             }
 
             elapsed_time = current_time - exec_last_time;
-            if (elapsed_time >= (1.0 / 60.0)) // 1/60秒ごとに実行
+            // if (elapsed_time >= (1.0 / 60.0)) // 1/60秒ごとに実行
+            if (elapsed_time >= (1.0 / 1000.0)) // 1/60秒ごとに実行
             // if (true)
             {
                 exec_last_time = current_time; // 処理した時刻を保存
@@ -101,7 +116,7 @@ int APIENTRY WinMain(
                 Direct3D_Clear();
                 Sprite_Begin();
 
-                scene.draw_loop();
+                SceneLoop();
 
 #if defined(DEBUG) || defined(_DEBUG)
                 std::stringstream ss;

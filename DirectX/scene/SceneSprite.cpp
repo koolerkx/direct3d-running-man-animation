@@ -3,13 +3,26 @@
 #include <algorithm>
 
 #include "debug_ostream.h"
-#include "sprite.h"
-#include "texture.h"
+#include "debug_text.h"
+#include "direct3d.h"
 using namespace DirectX;
 
-Sprite::Sprite(const wchar_t* texturePath)
+constexpr int DrawingIDDefaultPlaceholder = -1;
+
+Sprite::Sprite()
 {
-    textureId = Texture_Load(texturePath);
+    drawingId = DrawingIDDefaultPlaceholder;
+}
+
+Sprite::Sprite(int id)
+{
+    drawingId = id;
+}
+
+Sprite* Sprite::set_id(int id)
+{
+    drawingId = id;
+    return this;
 }
 
 Sprite* Sprite::init(const SpriteState& state)
@@ -44,7 +57,9 @@ Sprite* Sprite::rotateTo(float rotation, double duration, EaseType easing)
 
 Sprite* Sprite::fadeTo(float alpha, double duration, EaseType easing)
 {
-    AnimationKeyframe keyframe(AnimProperty::Alpha, alpha, duration, easing);
+    XMFLOAT4 color = currentState.color;
+    color.w = alpha;
+    AnimationKeyframe keyframe(AnimProperty::Alpha, color, duration, easing);
     addKeyframe(keyframe);
     return this;
 }
@@ -90,7 +105,7 @@ Sprite* Sprite::endParallel()
         }
 
         totalDuration = max(totalDuration, parallelGroupStartTime + maxDuration);
-        
+
         parallelGroups.push_back({
             currentParallelKeyframes,
             parallelGroupStartTime,
@@ -216,8 +231,8 @@ SpriteState Sprite::getState(double timeOffset)
             }
         case AnimProperty::Alpha:
             {
-                float start = (keyframe.startTime == 0.0) ? initialState.alpha : state.alpha;
-                state.color.w = interpolate(start, keyframe.targetValue.x, easedProgress);
+                float start = (keyframe.startTime == 0.0) ? initialState.color.w : state.color.w;
+                state.color.w = interpolate(start, keyframe.targetValue.w, easedProgress);
                 break;
             }
         case AnimProperty::Color:
@@ -232,19 +247,36 @@ SpriteState Sprite::getState(double timeOffset)
     return state;
 }
 
-void Sprite::draw(double timeOffset)
+const double Sprite::getDuration()
 {
-    SpriteState state = getState(timeOffset);
+    return totalDuration;
+}
 
-    constexpr float width = 64.0f;
-    constexpr float height = 64.0f;
+Sprite* Sprite::initBackground(XMFLOAT4 color)
+{
+    const int SCREEN_WIDTH = static_cast<int>(Direct3D_GetBackBufferWidth());
+    const int SCREEN_HEIGHT = static_cast<int>(Direct3D_GetBackBufferHeight());
 
-    Sprite_Draw(textureId,
-                state.position.x, state.position.y,
-                width * state.scale.x, height * state.scale.y,
-                XMConvertToRadians(state.rotation),
-                state.color
-    );
+    return init({
+        {static_cast<float>(SCREEN_WIDTH), static_cast<float>(SCREEN_HEIGHT)}, {0.0f, 0.0f}, {1.0f, 1.0f},
+        0.0f, color
+    });
+}
+
+Sprite* Sprite::initCenterTitle(std::string text, XMFLOAT4 color)
+{
+    const int SCREEN_WIDTH = static_cast<int>(Direct3D_GetBackBufferWidth());
+    const int SCREEN_HEIGHT = static_cast<int>(Direct3D_GetBackBufferHeight());
+    float title_width = hal::calcCharacterWidth(text);
+    float title_height = hal::calcCharacterHeight(text);
+
+    hal::dout << text << " " << title_width << " " << title_height << std::endl;
+
+    return init({
+        {0.0f, 0.0f}, {SCREEN_WIDTH / 2.0f - title_width / 2, SCREEN_HEIGHT / 2.0f - title_height / 2},
+        {1.0f, 1.0f},
+        0.0f, color
+    });
 }
 
 void Sprite::addKeyframe(AnimationKeyframe keyframe)

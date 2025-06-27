@@ -179,3 +179,31 @@ void Sprite_Draw(int texid, float display_x, float display_y, float uvcut_x, flo
     // ポリゴン描画命令発行
     g_pContext->Draw(NUM_VERTEX, 0);
 }
+
+void Sprite_Draw(int texid, SpriteState spriteState)
+{
+    float IMAGE_WIDTH = static_cast<float>(Texture_Width(texid));
+    float IMAGE_HEIGHT = static_cast<float>(Texture_Height(texid));
+
+    Sprite_Draw(texid, spriteState, 0.0f, 0.0f, IMAGE_WIDTH, IMAGE_HEIGHT);
+}
+
+void Sprite_Draw(int texid, SpriteState spriteState, float uvcut_x, float uvcut_y, float uvcut_w, float uvcut_h)
+{
+    XMMATRIX mat = XMMatrixTransformation2D(
+        XMVectorSet(0, 0, 0, 0), // 拡大縮小ピボットポイント
+        0.0f, // 拡大縮小軸
+        XMVectorSet(spriteState.size.x, spriteState.size.y, 0, 0), // 拡大縮小
+        XMVectorSet(0, 0, 0, 0), // 回転ピボットポイント
+        spriteState.rotation, // 回転角度
+        XMVectorSet(spriteState.position.x + spriteState.size.x / 2, spriteState.position.y + spriteState.size.y / 2, 0,
+                    0) // 平行移動
+    );
+
+    Sprite_Draw(texid, spriteState.position.x, spriteState.position.y,
+                uvcut_x, uvcut_y,
+                uvcut_w, uvcut_h,
+                spriteState.size.x, spriteState.size.y,
+                mat,
+                spriteState.color);
+}

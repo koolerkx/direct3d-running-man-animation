@@ -1,24 +1,42 @@
 #pragma once
+#include <map>
 #include <vector>
+#include <xstring>
 
+#include "debug_text.h"
 #include "Scene.h"
 
-class SceneManager
+static std::vector<Scene> scenes;
+static int sceneIndex = 0;
+static bool isPrevSceneEnd = true;
+
+enum class Texture
 {
-public:
-    static SceneManager& getInstance();
-    SceneManager(const SceneManager&) = delete;
-    SceneManager& operator=(const SceneManager&) = delete;
-
-    void registerScene(Scene scene);
-
-    void start();
-
-    void drawFrame();
-    
-private:
-    SceneManager() = default;
-    std::vector<Scene> scenes;
-
-    double startTime;
+    Background
 };
+
+static std::map<Texture, std::wstring> texturePaths{
+    {Texture::Background, L"assets/white.png"}
+};
+
+static std::map<Texture, int> textureMap; 
+
+struct SceneManagerConfig
+{
+    hal::DebugText* titlePresentsText;
+    hal::DebugText* runningmanText;
+};
+
+/**
+ * @brief シーンを定義する
+ */
+void SceneInitialize(SceneManagerConfig config);
+
+void SceneDefinition(SceneManagerConfig config);
+
+/**
+ * @brief シーンを追加する
+ */
+void RegisterScene(Scene scene);
+
+void SceneLoop();
