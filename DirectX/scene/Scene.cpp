@@ -1,19 +1,23 @@
 #include "Scene.h"
 
-#include "debug_ostream.h"
 #include "SceneSprite.h"
+#include "sprite.h"
 
 #include "system_timer.h"
 
+int texId = -1;
+
 void Scene::init()
 {
-    spriteMap["background"] = Sprite(L"assets/white.png");
+    Sprite whiteSprite(L"assets/white.png");
+    whiteSprite.init({{100, 200}, {1, 1}, 0.0f, 1.0f, {1, 1, 1, 1}})
+               ->moveTo({400, 300}, 2.0) // Move right once
+               ->scaleTo({1.5f, 1.5f}, 2) // Scale up
+               ->rotateTo(45.0f, 1.0f) // Rotate
+               ->fadeTo(0.5f, 2.0f) // Fade
+               ->moveTo({300, 400}, 1.0); // Move down once at the end
+    spriteMap["white"] = whiteSprite;
 
-    spriteMap["background"]
-        .init({{300, 300}, {256, 256}, {1, 1, 1, 0}, 0})
-        ->delay(5)->fadeInOut(0, 1, 10.0);
-
-    // sum up the duration in sprite map
     duration = 20;
 }
 
@@ -27,7 +31,10 @@ void Scene::draw_loop()
     double now = SystemTimer_GetTime();
     timeOffset = now - startTime;
 
-    spriteMap["background"].draw(timeOffset);
+    for (auto& [key, sprite] : spriteMap)
+    {
+        sprite.draw(timeOffset);
+    }
 
     if (timeOffset >= duration)
     {

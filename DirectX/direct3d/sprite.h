@@ -11,6 +11,17 @@
 #include <d3d11.h>
 #include <DirectXMath.h>
 
+struct Transformation
+{
+    DirectX::XMFLOAT2 position{0.0f, 0.0f};
+    DirectX::XMFLOAT2 scale{1.0f, 1.0f};
+    DirectX::XMFLOAT2 size{128.0f, 128.0f};
+    float rotation = 0;
+
+    DirectX::XMFLOAT2 uvStart {0.0f, 0.0f};
+    DirectX::XMFLOAT2 uvSize {128.0f, 128.0f};
+};
+
 void Sprite_Initialize(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 
 void Sprite_Finalize(void);

@@ -1,98 +1,156 @@
 #include "SceneSprite.h"
 
-#include "debug_ostream.h"
+#include <algorithm>
+
 #include "sprite.h"
-#include "sprite_anim.h"
 #include "texture.h"
+using namespace DirectX;
 
-Sprite::Sprite(): textureId(-1)
+Sprite::Sprite(const wchar_t* texturePath)
 {
+    textureId = Texture_Load(texturePath);
 }
 
-Sprite::Sprite(const wchar_t* pFilename)
+Sprite* Sprite::init(const SpriteState& state)
 {
-    textureId = Texture_Load(pFilename);
-}
-
-Sprite* Sprite::init(TransProps props)
-{
-    initialStatus = props;
+    initialState = currentState = state;
+    timeline.clear();
+    totalDuration = 0.0;
 
     return this;
 }
 
-void Sprite::draw(double offset)
+Sprite* Sprite::moveTo(XMFLOAT2 pos, double duration, EaseType easing)
 {
-    double durationApplied = 0.0;
+    AnimationKeyframe keyframe(AnimProperty::Position, pos, duration, easing);
+    addKeyframe(keyframe);
+    return this;
+}
 
-    DirectX::XMFLOAT4 color = initialStatus.color;
-    DirectX::XMMATRIX transMat = DirectX::XMMatrixTransformation2D(
-        DirectX::XMVectorSet(0, 0, 0, 0), // 拡大縮小ピボットポイント
-        0.0f, // 拡大縮小軸
-        DirectX::XMVectorSet(initialStatus.size.x, initialStatus.size.y, 0, 0), // 拡大縮小
-        DirectX::XMVectorSet(0, 0, 0, 0), // 回転ピボットポイント
-        initialStatus.angle, // 回転角度
-        DirectX::XMVectorSet(initialStatus.position.x + initialStatus.size.x / 2, initialStatus.position.y + initialStatus.size.y / 2, 0, 0) // 平行移動
-    );
+Sprite* Sprite::scaleTo(XMFLOAT2 scale, double duration, EaseType easing)
+{
+    AnimationKeyframe keyframe(AnimProperty::Scale, scale, duration, easing);
+    addKeyframe(keyframe);
+    return this;
+}
 
-    for (auto action : actions)
-    {
-        // calculate value changes of offset / duration
-        double actionProgress = (offset - durationApplied) / action.duration;
-        durationApplied += min(actionProgress, 1) * action.duration;
+Sprite* Sprite::rotateTo(float rotation, double duration, EaseType easing)
+{
+    AnimationKeyframe keyframe(AnimProperty::Rotation, rotation, duration, easing);
+    addKeyframe(keyframe);
+    return this;
+}
 
-        if (actionProgress > 1)
-        {
-            // this action already end
-            transMat = transMat * action.trasnMat;
-            color.w = min(color.w + action.opacity, 1);
-        }
-        else
-        {
-            // this action need calculate
-            color.w = min(color.w + action.opacity * actionProgress, 1);
-            transMat = transMat * (action.trasnMat * actionProgress);
+Sprite* Sprite::fadeTo(float alpha, double duration, EaseType easing)
+{
+    AnimationKeyframe keyframe(AnimProperty::Alpha, alpha, duration, easing);
+    addKeyframe(keyframe);
+    return this;
+}
 
-            break;
-        }
-    }
-
-    hal::dout << color.w << std::endl;
-
-    float IMAGE_WIDTH = static_cast<float>(Texture_Width(textureId));
-    float IMAGE_HEIGHT = static_cast<float>(Texture_Height(textureId));
-
-    Sprite_Draw(textureId,
-                initialStatus.position.x, initialStatus.position.y,
-                0.0f, 0.0f,
-                IMAGE_WIDTH, IMAGE_HEIGHT,
-                initialStatus.size.x, initialStatus.size.y,
-                transMat,
-                color
-    );
+Sprite* Sprite::colorTo(XMFLOAT4 color, double duration, EaseType easing)
+{
+    AnimationKeyframe keyframe(AnimProperty::Color, color, duration, easing);
+    addKeyframe(keyframe);
+    return this;
 }
 
 Sprite* Sprite::delay(double duration)
 {
     totalDuration += duration;
-
-    actions.emplace_back(duration, 0, DirectX::XMMatrixIdentity());
-
     return this;
 }
 
-Sprite* Sprite::fadeInOut(float from, float to, double duration)
+SpriteState Sprite::getState(double timeOffset)
 {
-    totalDuration += duration;
+    if (timeOffset <= 0.0) return initialState;
 
-    actions.emplace_back(duration, to - from, DirectX::XMMatrixIdentity());
+    SpriteState state = initialState;
 
-    return this;
+    for (const AnimationKeyframe& keyframe : timeline)
+    {
+        if (keyframe.startTime > timeOffset) continue;
+
+        double progress = min(1.0, (timeOffset - keyframe.startTime) / keyframe.duration);
+
+        switch (keyframe.property)
+        {
+        case AnimProperty::Position:
+            {
+                XMFLOAT2 start = (keyframe.startTime == 0.0) ? initialState.position : state.position;
+                XMFLOAT2 target = {keyframe.targetValue.x, keyframe.targetValue.y};
+                state.position = interpolate(start, target, progress);
+                break;
+            }
+        case AnimProperty::Scale:
+            {
+                XMFLOAT2 start = (keyframe.startTime == 0.0) ? initialState.scale : state.scale;
+                XMFLOAT2 target = {keyframe.targetValue.x, keyframe.targetValue.y};
+                state.scale = interpolate(start, target, progress);
+                break;
+            }
+        case AnimProperty::Rotation:
+            {
+                float start = (keyframe.startTime == 0.0) ? initialState.rotation : state.rotation;
+                state.rotation = interpolate(start, keyframe.targetValue.x, progress);
+                break;
+            }
+        case AnimProperty::Alpha:
+            {
+                float start = (keyframe.startTime == 0.0) ? initialState.alpha : state.alpha;
+                state.color.w = interpolate(start, keyframe.targetValue.x, progress);
+                break;
+            }
+        case AnimProperty::Color:
+            {
+                XMFLOAT4 start = (keyframe.startTime == 0.0) ? initialState.color : state.color;
+                state.color = interpolate(start, keyframe.targetValue, progress);
+                break;
+            }
+        }
+    }
+
+    return state;
 }
 
-Sprite* Sprite::move(DirectX::XMFLOAT2 from, DirectX::XMFLOAT2 to, double duration)
+void Sprite::draw(double timeOffset)
 {
-    totalDuration += duration;
+    SpriteState state = getState(timeOffset);
 
-    return this;
+    constexpr float width = 128.0f;
+    constexpr float height = 128.0f;
+
+    Sprite_Draw(textureId,
+                state.position.x, state.position.y,
+                width * state.scale.x, height * state.scale.y, XMConvertToRadians(state.rotation), state.color);
+}
+
+void Sprite::addKeyframe(AnimationKeyframe keyframe)
+{
+    keyframe.startTime = totalDuration;
+    timeline.push_back(keyframe);
+    totalDuration += keyframe.duration;
+}
+
+float Sprite::interpolate(float start, float end, float t)
+{
+    return start + (end - start) * t;
+}
+
+XMFLOAT2 Sprite::interpolate(XMFLOAT2 start, XMFLOAT2 end, float t)
+{
+    return {
+        interpolate(start.x, end.x, t),
+        interpolate(start.y, end.y, t)
+    };
+}
+
+XMFLOAT4 Sprite::interpolate(XMFLOAT4 start, XMFLOAT4 end, float t)
+{
+    return {
+        interpolate(start.x, end.x, t),
+        interpolate(start.y, end.y, t),
+        interpolate(start.z, end.z, t),
+        interpolate(start.w, end.w, t)
+    };
 }

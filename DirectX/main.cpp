@@ -37,11 +37,7 @@ int APIENTRY WinMain(
     Sprite_Initialize(Direct3D_GetDevice(), Direct3D_GetContext());
     Texture_Initialize(Direct3D_GetDevice(), Direct3D_GetContext());
     SpriteAnim_Initialize();
-
-    // todo: to remove
-    CircleRenderer circle(Direct3D_GetDevice(), Direct3D_GetContext(), { 500.0f, 500.0f, 200.0f});
-    int texid_white = Texture_Load(L"assets/white.png");
-
+    
     // デバッグテキスト
     hal::DebugText debugText(
         Direct3D_GetDevice(),
@@ -57,30 +53,6 @@ int APIENTRY WinMain(
         0.0f
     );
 
-    // テクスチャ読み込み
-    int texid_knight_winter = Texture_Load(L"assets/knight_3.png");
-    int texid_kokosozai = Texture_Load(L"assets/kokosozai.png");
-    int texid_runningman001 = Texture_Load(L"assets/runningman001.png");
-
-    std::vector<int> ids;
-
-    ids.emplace_back(SpriteAnim_CreatePlayer(SpriteAnim_RegisterPattern(texid_kokosozai, 13, 16, 0.1,
-                                                                        {32, 32}, {0, 32 * 0})));
-    ids.emplace_back(SpriteAnim_CreatePlayer(SpriteAnim_RegisterPattern(texid_kokosozai, 13, 16, 0.5,
-                                                                        {32, 32}, {0, 32 * 1})));
-    ids.emplace_back(SpriteAnim_CreatePlayer(SpriteAnim_RegisterPattern(texid_kokosozai, 6, 16, 0.2,
-                                                                        {32, 32}, {0, 32 * 2})));
-    ids.emplace_back(SpriteAnim_CreatePlayer(SpriteAnim_RegisterPattern(texid_kokosozai, 8, 16, 0.2,
-                                                                        {32, 32}, {0, 32 * 3})));
-    ids.emplace_back(SpriteAnim_CreatePlayer(SpriteAnim_RegisterPattern(texid_kokosozai, 15, 16, 0.2,
-                                                                        {32, 32}, {0, 32 * 4})));
-    ids.emplace_back(SpriteAnim_CreatePlayer(SpriteAnim_RegisterPattern(texid_kokosozai, 4, 16, 0.2,
-                                                                        {32, 32}, {32 * 2, 32 * 5}, false)));
-
-    int patternIdRun = SpriteAnim_RegisterPattern(texid_runningman001, 10, 5, 0.1,
-                                                  {140, 200}, {0, 0}, true);
-    int playIdRun = SpriteAnim_CreatePlayer(patternIdRun);
-
     ShowWindow(hWnd, nCmdShow);
     UpdateWindow(hWnd);
 
@@ -90,9 +62,6 @@ int APIENTRY WinMain(
     double current_time = 0.0;
     ULONG frame_count = 0;
     double fps = 0;
-
-    // 回転
-    double angle = 0.0f;
 
     Scene scene;
     scene.init();
@@ -133,35 +102,6 @@ int APIENTRY WinMain(
                 Sprite_Begin();
 
                 scene.draw_loop();
-
-                // Sprite_Draw(texid_knight_winter, 0, 0, 128, 128);
-                //
-                // angle += DirectX::XM_PI * elapsed_time;
-                // Sprite_Draw(texid_knight_winter,
-                //             500 - 256 / 2, 500 - 256 / 2,
-                //             0, 0, 512, 512,
-                //             256, 256
-                //             , static_cast<float>(angle)
-                // );
-                //
-                // for (int i = 0; i < ids.size(); i++)
-                // {
-                //     SpriteAnim_Draw(ids[i], static_cast<float>((32 + 128) * i), 32.0f, 128.0f, 128.0f);
-                // }
-                // SpriteAnim_Draw(playIdRun, 0, static_cast<float>(32 + 128 + 32), 140.0f, 200.0f);
-                //
-                //
-                // SpriteAnim_Update(elapsed_time);
-                //
-                // Texture_SetTexture(texid_white);
-                // circle.draw(200.0f);
-                
-                // DirectX::XMFLOAT4 color = {1.0f, 1.0f, 1.0f, 1.0f};
-                //
-                // Sprite_Draw(texid_knight_winter, 32.0f, 32.0f, color);
-                // Sprite_Draw(texid_knight_winter, 512.0f, 32.0f, 256, 256, color);
-                // Sprite_Draw(texid_kokosozai, 800.0f, 32.0f, 32.0f, 64.0f, 32.0f, 32.0f, color);
-                // Sprite_Draw(texid_kokosozai, 864.0f, 32.0f, 32.0f, 32.0f * 2, 32.0f, 32.0f, 256.0f, 256.0f, color);
 
 #if defined(DEBUG) || defined(_DEBUG)
                 std::stringstream ss;
