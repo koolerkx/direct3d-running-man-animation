@@ -22,15 +22,6 @@ enum class AnimProperty
     Color
 };
 
-enum class LoopType
-{
-    None,
-    Repeat,
-    PingPong,
-    Mirror,
-    Incremental
-};
-
 enum class RepeatMode
 {
     Normal,
@@ -76,6 +67,13 @@ struct RepeatGroup
     int repeatCount;
 };
 
+struct ParallelGroup
+{
+    std::vector<AnimationKeyframe> keyframes;
+    double groupStartTime;
+    double groupDuration;
+};
+
 class Sprite
 {
 public:
@@ -92,13 +90,17 @@ public:
     Sprite* fadeTo(float alpha, double duration, EaseType easing = EaseType::Linear);
     Sprite* colorTo(DirectX::XMFLOAT4 color, double duration, EaseType easing = EaseType::Linear);
 
+    // 他
+    Sprite* delay(double duration);
+
+    // 非同期動きグループ
+    Sprite* beginParallel();
+    Sprite* endParallel();
+    
     // 繰り返しグループ
     Sprite* beginRepeat(RepeatMode mode = RepeatMode::Normal, int times = -1);
     Sprite* endRepeat();
     
-    // 他
-    Sprite* delay(double duration);
-
     // 出力
     SpriteState getState(double timeOffset);
     void draw(double timeOffset);
@@ -111,6 +113,13 @@ private:
     std::vector<AnimationKeyframe> timeline;
     double totalDuration = 0.0;
 
+    // 非同期動きグループ状態
+    bool inParallelGroup = false;
+    double parallelGroupStartTime = 0.0;
+    std::vector<AnimationKeyframe> currentParallelKeyframes;
+    std::vector<ParallelGroup> parallelGroups;
+
+    // 繰り返すグループ状態
     bool inRepeatGroup = false;
     RepeatGroup currentRepeatGroup;
     std::vector<RepeatGroup> repeatGroups;

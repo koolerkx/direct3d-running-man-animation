@@ -56,6 +56,52 @@ Sprite* Sprite::colorTo(XMFLOAT4 color, double duration, EaseType easing)
     return this;
 }
 
+Sprite* Sprite::delay(double duration)
+{
+    totalDuration += duration;
+    return this;
+}
+
+// 非同期動きグループ
+Sprite* Sprite::beginParallel()
+{
+    if (inParallelGroup) return this;
+
+    inParallelGroup = true;
+    parallelGroupStartTime = totalDuration;
+    currentParallelKeyframes.clear();
+
+    return this;
+}
+
+Sprite* Sprite::endParallel()
+{
+    if (inParallelGroup)
+    {
+        inParallelGroup = false;
+
+        double maxDuration = 0.0;
+        for (AnimationKeyframe& keyframe : currentParallelKeyframes)
+        {
+            keyframe.startTime = parallelGroupStartTime;
+            keyframe.isParallel = true;
+            timeline.push_back(keyframe);
+            maxDuration = max(maxDuration, keyframe.duration);
+        }
+
+        totalDuration = max(totalDuration, parallelGroupStartTime + maxDuration);
+        
+        parallelGroups.push_back({
+            currentParallelKeyframes,
+            parallelGroupStartTime,
+            maxDuration,
+        });
+        currentParallelKeyframes.clear();
+    }
+    return this;
+}
+
+// 繰り返しグループ
 Sprite* Sprite::beginRepeat(RepeatMode mode, int times)
 {
     if (inRepeatGroup) return this;
@@ -95,12 +141,6 @@ Sprite* Sprite::endRepeat()
 
     currentRepeatGroup.keyframes.clear();
 
-    return this;
-}
-
-Sprite* Sprite::delay(double duration)
-{
-    totalDuration += duration;
     return this;
 }
 
@@ -209,16 +249,25 @@ void Sprite::draw(double timeOffset)
 
 void Sprite::addKeyframe(AnimationKeyframe keyframe)
 {
-    keyframe.startTime = totalDuration;
-
     if (inRepeatGroup)
     {
         keyframe.repeatGroupIndex = static_cast<int>(repeatGroups.size());
         currentRepeatGroup.keyframes.push_back(keyframe);
+        timeline.push_back(keyframe);
+        totalDuration += keyframe.duration;
     }
-
-    timeline.push_back(keyframe);
-    totalDuration += keyframe.duration;
+    else if (inParallelGroup)
+    {
+        keyframe.startTime = parallelGroupStartTime;
+        keyframe.isParallel = true;
+        currentParallelKeyframes.push_back(keyframe);
+    }
+    else
+    {
+        keyframe.startTime = totalDuration;
+        timeline.push_back(keyframe);
+        totalDuration += keyframe.duration;
+    }
 }
 
 
