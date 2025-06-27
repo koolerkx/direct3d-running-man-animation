@@ -4,7 +4,13 @@
 
 enum class EaseType
 {
-    Linear
+    Linear,
+    EaseIn,
+    EaseOut,
+    EaseInOut,
+    Bounce,
+    Elastic,
+    Back
 };
 
 enum class AnimProperty
@@ -32,7 +38,7 @@ struct SpriteState
     DirectX::XMFLOAT2 scale = {1.0f, 1.0f};
     float rotation = 0.0f;
     float alpha = 1.0f;
-    DirectX::XMFLOAT4 color{0.0f, 0.0f, 0.0f, 1.0f};
+    DirectX::XMFLOAT4 color{1.0f, 1.0f, 1.0f, 1.0f};
 };
 
 struct AnimationKeyframe
@@ -86,6 +92,7 @@ private:
 
     void addKeyframe(AnimationKeyframe keyframe);
 
+    static float applyEasing(float t, EaseType easing);
     static float interpolate(float start, float end, float t);
     static DirectX::XMFLOAT2 interpolate(DirectX::XMFLOAT2 start, DirectX::XMFLOAT2 end, float t);
     static DirectX::XMFLOAT4 interpolate(DirectX::XMFLOAT4 start, DirectX::XMFLOAT4 end, float t);

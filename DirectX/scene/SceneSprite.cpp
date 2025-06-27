@@ -72,6 +72,7 @@ SpriteState Sprite::getState(double timeOffset)
         if (keyframe.startTime > timeOffset) continue;
 
         double progress = min(1.0, (timeOffset - keyframe.startTime) / keyframe.duration);
+        float easedProgress = applyEasing(static_cast<float>(progress), keyframe.easing);
 
         switch (keyframe.property)
         {
@@ -79,32 +80,32 @@ SpriteState Sprite::getState(double timeOffset)
             {
                 XMFLOAT2 start = (keyframe.startTime == 0.0) ? initialState.position : state.position;
                 XMFLOAT2 target = {keyframe.targetValue.x, keyframe.targetValue.y};
-                state.position = interpolate(start, target, progress);
+                state.position = interpolate(start, target, easedProgress);
                 break;
             }
         case AnimProperty::Scale:
             {
                 XMFLOAT2 start = (keyframe.startTime == 0.0) ? initialState.scale : state.scale;
                 XMFLOAT2 target = {keyframe.targetValue.x, keyframe.targetValue.y};
-                state.scale = interpolate(start, target, progress);
+                state.scale = interpolate(start, target, easedProgress);
                 break;
             }
         case AnimProperty::Rotation:
             {
                 float start = (keyframe.startTime == 0.0) ? initialState.rotation : state.rotation;
-                state.rotation = interpolate(start, keyframe.targetValue.x, progress);
+                state.rotation = interpolate(start, keyframe.targetValue.x, easedProgress);
                 break;
             }
         case AnimProperty::Alpha:
             {
                 float start = (keyframe.startTime == 0.0) ? initialState.alpha : state.alpha;
-                state.color.w = interpolate(start, keyframe.targetValue.x, progress);
+                state.color.w = interpolate(start, keyframe.targetValue.x, easedProgress);
                 break;
             }
         case AnimProperty::Color:
             {
                 XMFLOAT4 start = (keyframe.startTime == 0.0) ? initialState.color : state.color;
-                state.color = interpolate(start, keyframe.targetValue, progress);
+                state.color = interpolate(start, keyframe.targetValue, easedProgress);
                 break;
             }
         }
@@ -117,8 +118,8 @@ void Sprite::draw(double timeOffset)
 {
     SpriteState state = getState(timeOffset);
 
-    constexpr float width = 128.0f;
-    constexpr float height = 128.0f;
+    constexpr float width = 64.0f;
+    constexpr float height = 64.0f;
 
     Sprite_Draw(textureId,
                 state.position.x, state.position.y,
@@ -130,6 +131,68 @@ void Sprite::addKeyframe(AnimationKeyframe keyframe)
     keyframe.startTime = totalDuration;
     timeline.push_back(keyframe);
     totalDuration += keyframe.duration;
+}
+
+
+float Sprite::applyEasing(float t, EaseType easing)
+{
+    t = max(0.0f, min(1.0f, t));
+    
+    switch (easing)
+    {
+    case EaseType::Linear:
+        return t;
+            
+    case EaseType::EaseIn:
+        return t * t;
+            
+    case EaseType::EaseOut:
+        return 1.0f - (1.0f - t) * (1.0f - t);
+            
+    case EaseType::EaseInOut:
+        return t < 0.5f ? 2.0f * t * t : 1.0f - 2.0f * (1.0f - t) * (1.0f - t);
+            
+    case EaseType::Bounce:
+        {
+            if (t < 1.0f / 2.75f)
+                return 7.5625f * t * t;
+            else if (t < 2.0f / 2.75f)
+            {
+                t -= 1.5f / 2.75f;
+                return 7.5625f * t * t + 0.75f;
+            }
+            else if (t < 2.5f / 2.75f)
+            {
+                t -= 2.25f / 2.75f;
+                return 7.5625f * t * t + 0.9375f;
+            }
+            else
+            {
+                t -= 2.625f / 2.75f;
+                return 7.5625f * t * t + 0.984375f;
+            }
+        }
+        
+    case EaseType::Elastic:
+        {
+            if (t == 0.0f) return 0.0f;
+            if (t == 1.0f) return 1.0f;
+            
+            float p = 0.3f;
+            float s = p / 4.0f;
+            return pow(2.0f, -10.0f * t) * sin((t - s) * (2.0f * 3.14159f) / p) + 1.0f;
+        }
+        
+    case EaseType::Back:
+        {
+            const float c1 = 1.70158f;
+            const float c3 = c1 + 1.0f;
+            return c3 * t * t * t - c1 * t * t;
+        }
+        
+    default:
+        return t;
+    }
 }
 
 float Sprite::interpolate(float start, float end, float t)
