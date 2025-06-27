@@ -24,12 +24,17 @@ enum class AnimProperty
 
 enum class LoopType
 {
-    None
+    None,
+    Repeat,
+    PingPong,
+    Mirror,
+    Incremental
 };
 
 enum class RepeatMode
 {
-    Normal
+    Normal,
+    PingPong
 };
 
 struct SpriteState
@@ -48,6 +53,9 @@ struct AnimationKeyframe
     double duration;
     EaseType easing;
     double startTime;
+    
+    bool isParallel = false;
+    int repeatGroupIndex = -1; ///< @brief -1は繰り返さない
 
     AnimationKeyframe(AnimProperty prop, DirectX::XMFLOAT4 target, double dur, EaseType ease)
         : property(prop), targetValue(target), duration(dur), easing(ease), startTime(0.0) {}
@@ -57,6 +65,15 @@ struct AnimationKeyframe
 
     AnimationKeyframe(AnimProperty prop, float target, double dur, EaseType ease)
         : property(prop), targetValue({target, 0, 0, 0}), duration(dur), easing(ease), startTime(0.0) {}
+};
+
+struct RepeatGroup
+{
+    std::vector<AnimationKeyframe> keyframes;
+    double startTime;
+    double duration;
+    RepeatMode mode;
+    int repeatCount;
 };
 
 class Sprite
@@ -75,6 +92,10 @@ public:
     Sprite* fadeTo(float alpha, double duration, EaseType easing = EaseType::Linear);
     Sprite* colorTo(DirectX::XMFLOAT4 color, double duration, EaseType easing = EaseType::Linear);
 
+    // 繰り返しグループ
+    Sprite* beginRepeat(RepeatMode mode = RepeatMode::Normal, int times = -1);
+    Sprite* endRepeat();
+    
     // 他
     Sprite* delay(double duration);
 
@@ -90,6 +111,10 @@ private:
     std::vector<AnimationKeyframe> timeline;
     double totalDuration = 0.0;
 
+    bool inRepeatGroup = false;
+    RepeatGroup currentRepeatGroup;
+    std::vector<RepeatGroup> repeatGroups;
+    
     void addKeyframe(AnimationKeyframe keyframe);
 
     static float applyEasing(float t, EaseType easing);
