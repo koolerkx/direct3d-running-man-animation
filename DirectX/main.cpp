@@ -118,6 +118,8 @@ int APIENTRY WinMain(
 
                 SceneLoop();
 
+                SpriteAnim_Update(elapsed_time);
+
 #if defined(DEBUG) || defined(_DEBUG)
                 std::stringstream ss;
                 ss << fps;
