@@ -8,6 +8,8 @@
 #include "sprite.h"
 #include <d3d11.h>
 #include <DirectXMath.h>
+
+#include "debug_helper.h"
 #include "DirectXTex.h"
 using namespace DirectX;
 #include "direct3d.h"
@@ -193,7 +195,7 @@ void Sprite_Draw(int texid, SpriteState spriteState, float uvcut_x, float uvcut_
     XMMATRIX mat = XMMatrixTransformation2D(
         XMVectorSet(0, 0, 0, 0), // 拡大縮小ピボットポイント
         0.0f, // 拡大縮小軸
-        XMVectorSet(spriteState.size.x, spriteState.size.y, 0, 0), // 拡大縮小
+        XMVectorSet(spriteState.size.x * spriteState.scale.x, spriteState.size.y * spriteState.scale.x, 0, 0), // 拡大縮小
         XMVectorSet(0, 0, 0, 0), // 回転ピボットポイント
         spriteState.rotation, // 回転角度
         XMVectorSet(spriteState.position.x + spriteState.size.x / 2, spriteState.position.y + spriteState.size.y / 2, 0,

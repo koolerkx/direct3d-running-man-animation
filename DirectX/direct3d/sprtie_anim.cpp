@@ -6,22 +6,12 @@
  */
 #include "sprite_anim.h"
 #include "sprite.h"
-#include "texture.h"
 #include <DirectXMath.h>
 
+#include "debug_helper.h"
 #include "debug_ostream.h"
-using namespace DirectX;
 
-struct AnimPatternData
-{
-    int m_TextureId{1}; ///> テクスチャID @retval -1 登録されていない 
-    int m_PatternMax{0}; // パターン数
-    int m_HPatternMax{0}; // 一列（横）のパターン最大数
-    XMUINT2 m_StartPosition{0, 0}; // アニメーションのスタート座標
-    XMUINT2 m_PatternSize{0, 0}; // 1パターンサイズ
-    double m_seconds_per_pattern = 0.1;
-    bool m_IsLooped{false}; // ループするか
-};
+using namespace DirectX;
 
 struct AnimPlayData
 {
@@ -141,6 +131,19 @@ int SpriteAnim_RegisterPattern(int textureId, int patternMax, int m_HPatternMax,
     }
 
     return -1;
+}
+
+int SpriteAnim_RegisterPattern(int textureId, AnimPatternData patternData)
+{
+    return SpriteAnim_RegisterPattern(
+        textureId,
+        patternData.m_PatternMax,
+        patternData.m_HPatternMax,
+        patternData.m_seconds_per_pattern,
+        patternData.m_PatternSize,
+        patternData.m_StartPosition,
+        patternData.m_IsLooped
+    );
 }
 
 int SpriteAnim_CreatePlayer(int anim_pattern_id)

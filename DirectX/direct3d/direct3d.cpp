@@ -62,7 +62,8 @@ bool Direct3D_Initialize(HWND hWnd, int width, int height)
     swap_chain_desc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT; // 何に使う、ここは絵を各場所で使う
     swap_chain_desc.SampleDesc.Count = 1;
     swap_chain_desc.SampleDesc.Quality = 0;
-    swap_chain_desc.SwapEffect = DXGI_SWAP_EFFECT_FLIP_SEQUENTIAL;
+    // swap_chain_desc.SwapEffect = DXGI_SWAP_EFFECT_FLIP_SEQUENTIAL;
+    swap_chain_desc.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD;
     // swap_chain_desc.SwapEffect = DXGI_SWAP_EFFECT_DISCARD; // 0: 垂直同期なし
     swap_chain_desc.AlphaMode = DXGI_ALPHA_MODE_PREMULTIPLIED;
 
@@ -166,8 +167,10 @@ bool Direct3D_Initialize(HWND hWnd, int width, int height)
 
     // A
     bd.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_SRC_ALPHA;
-    bd.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_INV_SRC_ALPHA;
+    // bd.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_INV_SRC_ALPHA;
+    bd.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_DEST_ALPHA;
     bd.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
+    // bd.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_MAX;
     // SrcBlendAlpha * 1 + DestBlendAlpha * 0
 
     bd.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
@@ -216,7 +219,8 @@ void Direct3D_Present()
     // スワップチェーンの表示
     // 貯まった描画コマンドをグラフィックに転送
     // 0: 垂直同期なし
-    g_pSwapChain->Present(1, 0);
+    // g_pSwapChain->Present(1, 0);
+    g_pSwapChain->Present(0, 0);
 }
 
 unsigned int Direct3D_GetBackBufferWidth()
@@ -297,7 +301,8 @@ bool configureBackBuffer()
     depth_stencil_view_desc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
     depth_stencil_view_desc.Texture2D.MipSlice = 0;
     depth_stencil_view_desc.Flags = 0;
-    hr = g_pDevice->CreateDepthStencilView(g_pDepthStencilBuffer.Get(), &depth_stencil_view_desc, g_pDepthStencilView.GetAddressOf());
+    hr = g_pDevice->CreateDepthStencilView(g_pDepthStencilBuffer.Get(), &depth_stencil_view_desc,
+                                           g_pDepthStencilView.GetAddressOf());
 
     if (FAILED(hr))
     {

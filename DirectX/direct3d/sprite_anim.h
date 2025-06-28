@@ -12,6 +12,18 @@
 
 #include "SceneSprite.h"
 
+
+struct AnimPatternData
+{
+    int m_TextureId{1}; ///> テクスチャID @retval -1 登録されていない 
+    int m_PatternMax{0}; // パターン数
+    int m_HPatternMax{0}; // 一列（横）のパターン最大数
+    double m_seconds_per_pattern = 0.1;
+    DirectX::XMUINT2 m_PatternSize{0, 0}; // 1パターンサイズ
+    DirectX::XMUINT2 m_StartPosition{0, 0}; // アニメーションのスタート座標
+    bool m_IsLooped{false}; // ループするか
+};
+
 void SpriteAnim_Initialize();
 void SpriteAnim_Finalize(void);
 
@@ -42,6 +54,10 @@ int SpriteAnim_RegisterPattern(
     DirectX::XMUINT2 patternStartPosition,
     bool isLoop = true
 );
+
+int SpriteAnim_RegisterPattern(
+    int textureId,
+    AnimPatternData patternData);
 
 int SpriteAnim_CreatePlayer(int anim_pattern_id);
 

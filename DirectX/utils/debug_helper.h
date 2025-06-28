@@ -5,7 +5,7 @@
 
 using namespace DirectX;
 
-void PrintMatrix(const XMMATRIX& m)
+inline void PrintMatrix(const XMMATRIX& m)
 {
     XMFLOAT4X4 mat;
     XMStoreFloat4x4(&mat, m);
@@ -22,7 +22,7 @@ void PrintMatrix(const XMMATRIX& m)
     }
 }
 
-void PrintXMFLOAT4(const XMFLOAT4& v)
+inline void PrintXMFLOAT4(const XMFLOAT4& v)
 {
     hal::dout << "XMFLOAT4: ("
         << v.x << ", "
@@ -32,10 +32,20 @@ void PrintXMFLOAT4(const XMFLOAT4& v)
         << std::endl;
 }
 
-void PrintXMFLOAT2(const XMFLOAT2& v)
+inline void PrintXMFLOAT2(const XMFLOAT2& v)
 {
     hal::dout << "XMFLOAT2: ("
         << v.x << ", "
         << v.y << ")"
         << std::endl;
+}
+
+inline void PrintSpriteState(const SpriteState& s)
+{
+    hal::dout << "SpriteState:" << std::endl;
+    hal::dout << "  size: (" << s.size.x << ", " << s.size.y << ")" << std::endl;
+    hal::dout << "  position: (" << s.position.x << ", " << s.position.y << ")" << std::endl;
+    hal::dout << "  scale: (" << s.scale.x << ", " << s.scale.y << ")" << std::endl;
+    hal::dout << "  rotation: " << s.rotation << std::endl;
+    hal::dout << "  color: (" << s.color.x << ", " << s.color.y << ", " << s.color.z << ", " << s.color.w << ")" << std::endl;
 }

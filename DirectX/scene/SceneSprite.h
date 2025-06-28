@@ -121,7 +121,7 @@ public:
     // 他
     Sprite& initBackground(DirectX::XMFLOAT4 color = {1.0f, 1.0f, 1.0f, 1.0f});
     Sprite& initCenterTitle(std::string text, DirectX::XMFLOAT4 color = {1.0f, 1.0f, 1.0f, 1.0f});
-
+    
 private:
     SpriteState initialState;
     SpriteState currentState;
