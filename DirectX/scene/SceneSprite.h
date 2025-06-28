@@ -92,26 +92,26 @@ public:
 
 
     // 初期化
-    Sprite* set_id(int id); ///< @param id texId or play id
-    Sprite* init(const SpriteState& state);
+    Sprite& set_id(int id); ///< @param id texId or play id
+    Sprite& init(const SpriteState& state);
 
     // 変換
-    Sprite* moveTo(DirectX::XMFLOAT2 pos, double duration, EaseType easing = EaseType::Linear);
-    Sprite* scaleTo(DirectX::XMFLOAT2 scale, double duration, EaseType easing = EaseType::Linear);
-    Sprite* rotateTo(float rotation, double duration, EaseType easing = EaseType::Linear);
-    Sprite* fadeTo(float alpha, double duration, EaseType easing = EaseType::Linear);
-    Sprite* colorTo(DirectX::XMFLOAT4 color, double duration, EaseType easing = EaseType::Linear);
+    Sprite& moveTo(DirectX::XMFLOAT2 pos, double duration, EaseType easing = EaseType::Linear);
+    Sprite& scaleTo(DirectX::XMFLOAT2 scale, double duration, EaseType easing = EaseType::Linear);
+    Sprite& rotateTo(float rotation, double duration, EaseType easing = EaseType::Linear);
+    Sprite& fadeTo(float alpha, double duration, EaseType easing = EaseType::Linear);
+    Sprite& colorTo(DirectX::XMFLOAT4 color, double duration, EaseType easing = EaseType::Linear);
 
     // 他
-    Sprite* delay(double duration);
+    Sprite& delay(double duration);
 
     // 非同期動きグループ
-    Sprite* beginParallel();
-    Sprite* endParallel();
+    Sprite& beginParallel();
+    Sprite& endParallel();
 
     // 繰り返しグループ
-    Sprite* beginRepeat(RepeatMode mode = RepeatMode::Normal, int times = -1);
-    Sprite* endRepeat();
+    Sprite& beginRepeat(RepeatMode mode = RepeatMode::Normal, int times = -1);
+    Sprite& endRepeat();
 
     // 出力
     SpriteState getState(double timeOffset);
@@ -119,8 +119,8 @@ public:
     const double getDuration();
 
     // 他
-    Sprite* initBackground(DirectX::XMFLOAT4 color = {1.0f, 1.0f, 1.0f, 1.0f});
-    Sprite* initCenterTitle(std::string text, DirectX::XMFLOAT4 color = {1.0f, 1.0f, 1.0f, 1.0f});
+    Sprite& initBackground(DirectX::XMFLOAT4 color = {1.0f, 1.0f, 1.0f, 1.0f});
+    Sprite& initCenterTitle(std::string text, DirectX::XMFLOAT4 color = {1.0f, 1.0f, 1.0f, 1.0f});
 
 private:
     SpriteState initialState;

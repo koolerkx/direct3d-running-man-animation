@@ -19,77 +19,77 @@ Sprite::Sprite(int id)
     drawingId = id;
 }
 
-Sprite* Sprite::set_id(int id)
+Sprite& Sprite::set_id(int id)
 {
     drawingId = id;
-    return this;
+    return *this;
 }
 
-Sprite* Sprite::init(const SpriteState& state)
+Sprite& Sprite::init(const SpriteState& state)
 {
     initialState = currentState = state;
     timeline.clear();
     totalDuration = 0.0;
 
-    return this;
+    return *this;
 }
 
-Sprite* Sprite::moveTo(XMFLOAT2 pos, double duration, EaseType easing)
+Sprite& Sprite::moveTo(XMFLOAT2 pos, double duration, EaseType easing)
 {
     AnimationKeyframe keyframe(AnimProperty::Position, pos, duration, easing);
     addKeyframe(keyframe);
-    return this;
+    return *this;
 }
 
-Sprite* Sprite::scaleTo(XMFLOAT2 scale, double duration, EaseType easing)
+Sprite& Sprite::scaleTo(XMFLOAT2 scale, double duration, EaseType easing)
 {
     AnimationKeyframe keyframe(AnimProperty::Scale, scale, duration, easing);
     addKeyframe(keyframe);
-    return this;
+    return *this;
 }
 
-Sprite* Sprite::rotateTo(float rotation, double duration, EaseType easing)
+Sprite& Sprite::rotateTo(float rotation, double duration, EaseType easing)
 {
     AnimationKeyframe keyframe(AnimProperty::Rotation, rotation, duration, easing);
     addKeyframe(keyframe);
-    return this;
+    return *this;
 }
 
-Sprite* Sprite::fadeTo(float alpha, double duration, EaseType easing)
+Sprite& Sprite::fadeTo(float alpha, double duration, EaseType easing)
 {
     XMFLOAT4 color = currentState.color;
     color.w = alpha;
     AnimationKeyframe keyframe(AnimProperty::Alpha, color, duration, easing);
     addKeyframe(keyframe);
-    return this;
+    return *this;
 }
 
-Sprite* Sprite::colorTo(XMFLOAT4 color, double duration, EaseType easing)
+Sprite& Sprite::colorTo(XMFLOAT4 color, double duration, EaseType easing)
 {
     AnimationKeyframe keyframe(AnimProperty::Color, color, duration, easing);
     addKeyframe(keyframe);
-    return this;
+    return *this;
 }
 
-Sprite* Sprite::delay(double duration)
+Sprite& Sprite::delay(double duration)
 {
     totalDuration += duration;
-    return this;
+    return *this;
 }
 
 // 非同期動きグループ
-Sprite* Sprite::beginParallel()
+Sprite& Sprite::beginParallel()
 {
-    if (inParallelGroup) return this;
+    if (inParallelGroup) return *this;
 
     inParallelGroup = true;
     parallelGroupStartTime = totalDuration;
     currentParallelKeyframes.clear();
 
-    return this;
+    return *this;
 }
 
-Sprite* Sprite::endParallel()
+Sprite& Sprite::endParallel()
 {
     if (inParallelGroup)
     {
@@ -113,13 +113,13 @@ Sprite* Sprite::endParallel()
         });
         currentParallelKeyframes.clear();
     }
-    return this;
+    return *this;
 }
 
 // 繰り返しグループ
-Sprite* Sprite::beginRepeat(RepeatMode mode, int times)
+Sprite& Sprite::beginRepeat(RepeatMode mode, int times)
 {
-    if (inRepeatGroup) return this;
+    if (inRepeatGroup) return *this;
 
     inRepeatGroup = true;
     currentRepeatGroup.keyframes.clear();
@@ -128,12 +128,12 @@ Sprite* Sprite::beginRepeat(RepeatMode mode, int times)
     currentRepeatGroup.mode = mode;
     currentRepeatGroup.repeatCount = times;
 
-    return this;
+    return *this;
 }
 
-Sprite* Sprite::endRepeat()
+Sprite& Sprite::endRepeat()
 {
-    if (!inRepeatGroup) return this;
+    if (!inRepeatGroup) return *this;
 
     inRepeatGroup = false;
     double groupDuration = 0.0;
@@ -156,7 +156,7 @@ Sprite* Sprite::endRepeat()
 
     currentRepeatGroup.keyframes.clear();
 
-    return this;
+    return *this;
 }
 
 SpriteState Sprite::getState(double timeOffset)
@@ -252,7 +252,7 @@ const double Sprite::getDuration()
     return totalDuration;
 }
 
-Sprite* Sprite::initBackground(XMFLOAT4 color)
+Sprite& Sprite::initBackground(XMFLOAT4 color)
 {
     const int SCREEN_WIDTH = static_cast<int>(Direct3D_GetBackBufferWidth());
     const int SCREEN_HEIGHT = static_cast<int>(Direct3D_GetBackBufferHeight());
@@ -263,7 +263,7 @@ Sprite* Sprite::initBackground(XMFLOAT4 color)
     });
 }
 
-Sprite* Sprite::initCenterTitle(std::string text, XMFLOAT4 color)
+Sprite& Sprite::initCenterTitle(std::string text, XMFLOAT4 color)
 {
     const int SCREEN_WIDTH = static_cast<int>(Direct3D_GetBackBufferWidth());
     const int SCREEN_HEIGHT = static_cast<int>(Direct3D_GetBackBufferHeight());
