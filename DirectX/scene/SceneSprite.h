@@ -117,7 +117,7 @@ public:
     SceneSprite& delay(double duration);
     SceneSprite& flip();
     SceneSprite& ShaderTo(ShaderType shader);
-    
+
     // 非同期動きグループ
     SceneSprite& beginParallel();
     SceneSprite& endParallel();
@@ -134,7 +134,7 @@ public:
     // 他
     SceneSprite& initBackground(DirectX::XMFLOAT4 color = {1.0f, 1.0f, 1.0f, 1.0f});
     SceneSprite& initCenterTitle(std::string text, DirectX::XMFLOAT4 color = {1.0f, 1.0f, 1.0f, 1.0f});
-    
+
 private:
     SpriteState initialState;
     SpriteState currentState;
@@ -164,30 +164,35 @@ private:
 using COLOR = DirectX::XMFLOAT4;
 
 // 基本色
-constexpr COLOR BLACK           = {0.0f, 0.0f, 0.0f, 1.0f}; // 黒
-constexpr COLOR WHITE           = {1.0f, 1.0f, 1.0f, 1.0f}; // 白
+constexpr COLOR BLACK = {0.0f, 0.0f, 0.0f, 1.0f}; // 黒
+constexpr COLOR WHITE = {1.0f, 1.0f, 1.0f, 1.0f}; // 白
 constexpr COLOR INVISIBLE_BLACK = {0.0f, 0.0f, 0.0f, 0.0f}; // 透明黒
 constexpr COLOR INVISIBLE_WHITE = {1.0f, 1.0f, 1.0f, 0.0f}; // 透明白
 
+constexpr COLOR DARK_GRAY = {0.1f, 0.1f, 0.1f, 1.0f}; // 濃いグレー（黒の代用におすすめ）
+constexpr COLOR ALMOST_BLACK = {0.05f, 0.05f, 0.05f, 1.0f}; // ほぼ黒（完全な黒の代用）
+constexpr COLOR INVISIBLE_DARK_GRAY = {0.1f, 0.1f, 0.1f, 1.0f}; // 濃いグレー（黒の代用におすすめ）
+constexpr COLOR INVISIBLE_ALMOST_BLACK = {0.05f, 0.05f, 0.05f, 1.0f}; // ほぼ黒（完全な黒の代用）
+
 // 純色
-constexpr COLOR RED    = {1.0f, 0.0f, 0.0f, 1.0f}; // 赤
-constexpr COLOR GREEN  = {0.0f, 1.0f, 0.0f, 1.0f}; // 緑
-constexpr COLOR BLUE   = {0.0f, 0.0f, 1.0f, 1.0f}; // 青
+constexpr COLOR RED = {1.0f, 0.0f, 0.0f, 1.0f}; // 赤
+constexpr COLOR GREEN = {0.0f, 1.0f, 0.0f, 1.0f}; // 緑
+constexpr COLOR BLUE = {0.0f, 0.0f, 1.0f, 1.0f}; // 青
 constexpr COLOR YELLOW = {1.0f, 1.0f, 0.0f, 1.0f}; // 黄
-constexpr COLOR CYAN   = {0.0f, 1.0f, 1.0f, 1.0f}; // シアン
-constexpr COLOR MAGENTA= {1.0f, 0.0f, 1.0f, 1.0f}; // マゼンタ
+constexpr COLOR CYAN = {0.0f, 1.0f, 1.0f, 1.0f}; // シアン
+constexpr COLOR MAGENTA = {1.0f, 0.0f, 1.0f, 1.0f}; // マゼンタ
 
 // 明るい色・特殊色
-constexpr COLOR NEON   = {0.22f, 1.0f, 0.078f, 1.0f}; // 蛍光グリーン
-constexpr COLOR AQUA   = {0.0f, 1.0f, 1.0f, 1.0f};    // アクア（水色）
-constexpr COLOR GOLD   = {1.0f, 0.84f, 0.0f, 1.0f};   // 金
+constexpr COLOR NEON = {0.22f, 1.0f, 0.078f, 1.0f}; // 蛍光グリーン
+constexpr COLOR AQUA = {0.0f, 1.0f, 1.0f, 1.0f}; // アクア（水色）
+constexpr COLOR GOLD = {1.0f, 0.84f, 0.0f, 1.0f}; // 金
 constexpr COLOR SILVER = {0.75f, 0.75f, 0.75f, 1.0f}; // 銀
 
 // 淡色・中性色
-constexpr COLOR GRAY   = {0.5f, 0.5f, 0.5f, 1.0f}; // グレー
-constexpr COLOR BROWN  = {0.6f, 0.3f, 0.1f, 1.0f}; // ブラウン
+constexpr COLOR GRAY = {0.5f, 0.5f, 0.5f, 1.0f}; // グレー
+constexpr COLOR BROWN = {0.6f, 0.3f, 0.1f, 1.0f}; // ブラウン
 
 // その他のよく使う色
 constexpr COLOR ORANGE = {1.0f, 0.5f, 0.0f, 1.0f}; // オレンジ
 constexpr COLOR PURPLE = {0.5f, 0.0f, 0.5f, 1.0f}; // 紫
-constexpr COLOR PINK   = {1.0f, 0.0f, 0.5f, 1.0f}; // ピンク
+constexpr COLOR PINK = {1.0f, 0.0f, 0.5f, 1.0f}; // ピンク
