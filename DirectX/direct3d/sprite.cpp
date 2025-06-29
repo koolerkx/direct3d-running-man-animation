@@ -123,9 +123,9 @@ void Sprite_Draw(int texid, float display_x, float display_y, float uvcut_x, flo
 }
 
 
-void Sprite_Draw(int texid, float display_x, float display_y, float uvcut_x, float uvcut_y, float uvcut_w,
-                 float uvcut_h, float display_w, float display_h,
-                 XMMATRIX mat,
+void Sprite_Draw(int texid, float, float, float uvcut_x, float uvcut_y, float uvcut_w,
+                 float uvcut_h, float, float,
+                 const XMMATRIX& mat,
                  const XMFLOAT4& color, bool flipY, ShaderType shader)
 {
     // テクスチャ設定

@@ -106,8 +106,8 @@ int APIENTRY WinMain(
             }
 
             elapsed_time = current_time - exec_last_time;
-            // if (elapsed_time >= (1.0 / 60.0)) // 1/60秒ごとに実行
-            if (elapsed_time >= (1.0 / 1000.0)) // 1/60秒ごとに実行
+            if (elapsed_time >= (1.0 / 60.0)) // 1/60秒ごとに実行
+            // if (elapsed_time >= (1.0 / 1000.0)) // 1/60秒ごとに実行
             // if (true)
             {
                 exec_last_time = current_time; // 処理した時刻を保存

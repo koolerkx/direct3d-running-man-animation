@@ -66,7 +66,7 @@ ScreenScprite& ScreenScprite::fadeTo(float alpha, double duration, EaseType easi
 
 ScreenScprite& ScreenScprite::colorTo(XMFLOAT4 color, double duration, EaseType easing)
 {
-    AnimationKeyframe keyframe(AnimProperty::Color, 0, duration, easing);
+    AnimationKeyframe keyframe(AnimProperty::Color, color, duration, easing);
     addKeyframe(keyframe);
     return *this;
 }
@@ -86,7 +86,7 @@ ScreenScprite& ScreenScprite::flip()
 
 ScreenScprite& ScreenScprite::ShaderTo(ShaderType shader)
 {
-    AnimationKeyframe keyframe(AnimProperty::Shader, static_cast<int>(shader), 0, EaseType::Linear);
+    AnimationKeyframe keyframe(AnimProperty::Shader, static_cast<float>(shader), 0, EaseType::Linear);
     addKeyframe(keyframe);
     return *this;
 }

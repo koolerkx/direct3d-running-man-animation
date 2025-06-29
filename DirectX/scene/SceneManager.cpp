@@ -86,7 +86,7 @@ void SceneDefinition(SceneManagerConfig config)
 
     ScreenScprite s2_running000(assetsMap[Asset::RunningMan000].id);
     s2_running000
-        .init({{100, 200}, GetScreenCenterPosition({100, 200}, SCREEN_WIDTH, SCREEN_HEIGHT), {0, 0}})
+        .init({{100, 200}, GetScreenCenterPosition({100, 200}, static_cast<float>(SCREEN_WIDTH), static_cast<float>(SCREEN_HEIGHT)), {0, 0}})
         .delay(1)
         .scaleTo({2, 2}, 3, EaseType::EaseIn)
         .delay(0.5)
