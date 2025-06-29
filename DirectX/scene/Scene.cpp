@@ -44,7 +44,7 @@ void Scene::draw_loop()
     }
 }
 
-void Scene::addSprite(ScreenScprite sprite, std::function<void(int, SpriteState)> drawFunction)
+void Scene::addSprite(SceneSprite sprite, std::function<void(int, SpriteState)> drawFunction)
 {
     sprites.push_back({sprite, drawFunction});
 }

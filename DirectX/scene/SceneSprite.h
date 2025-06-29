@@ -93,38 +93,38 @@ struct ParallelGroup
     double groupDuration;
 };
 
-class ScreenScprite
+class SceneSprite
 {
 public:
     int drawingId;
 
-    ScreenScprite();
-    ScreenScprite(int id);
+    SceneSprite();
+    SceneSprite(int id);
 
 
     // 初期化
-    ScreenScprite& set_id(int id); ///< @param id texId or play id
-    ScreenScprite& init(const SpriteState& state);
+    SceneSprite& set_id(int id); ///< @param id texId or play id
+    SceneSprite& init(const SpriteState& state);
 
     // 変換
-    ScreenScprite& moveTo(DirectX::XMFLOAT2 pos, double duration, EaseType easing = EaseType::Linear);
-    ScreenScprite& scaleTo(DirectX::XMFLOAT2 scale, double duration, EaseType easing = EaseType::Linear);
-    ScreenScprite& rotateTo(float rotation, double duration, EaseType easing = EaseType::Linear);
-    ScreenScprite& fadeTo(float alpha, double duration, EaseType easing = EaseType::Linear);
-    ScreenScprite& colorTo(DirectX::XMFLOAT4 color, double duration, EaseType easing = EaseType::Linear);
+    SceneSprite& moveTo(DirectX::XMFLOAT2 pos, double duration, EaseType easing = EaseType::Linear);
+    SceneSprite& scaleTo(DirectX::XMFLOAT2 scale, double duration, EaseType easing = EaseType::Linear);
+    SceneSprite& rotateTo(float rotation, double duration, EaseType easing = EaseType::Linear);
+    SceneSprite& fadeTo(float alpha, double duration, EaseType easing = EaseType::Linear);
+    SceneSprite& colorTo(DirectX::XMFLOAT4 color, double duration, EaseType easing = EaseType::Linear);
 
     // 他
-    ScreenScprite& delay(double duration);
-    ScreenScprite& flip();
-    ScreenScprite& ShaderTo(ShaderType shader);
+    SceneSprite& delay(double duration);
+    SceneSprite& flip();
+    SceneSprite& ShaderTo(ShaderType shader);
     
     // 非同期動きグループ
-    ScreenScprite& beginParallel();
-    ScreenScprite& endParallel();
+    SceneSprite& beginParallel();
+    SceneSprite& endParallel();
 
     // 繰り返しグループ
-    ScreenScprite& beginRepeat(RepeatMode mode = RepeatMode::Normal, int times = -1);
-    ScreenScprite& endRepeat();
+    SceneSprite& beginRepeat(RepeatMode mode = RepeatMode::Normal, int times = -1);
+    SceneSprite& endRepeat();
 
     // 出力
     SpriteState getState(double timeOffset);
@@ -132,8 +132,8 @@ public:
     const double getDuration();
 
     // 他
-    ScreenScprite& initBackground(DirectX::XMFLOAT4 color = {1.0f, 1.0f, 1.0f, 1.0f});
-    ScreenScprite& initCenterTitle(std::string text, DirectX::XMFLOAT4 color = {1.0f, 1.0f, 1.0f, 1.0f});
+    SceneSprite& initBackground(DirectX::XMFLOAT4 color = {1.0f, 1.0f, 1.0f, 1.0f});
+    SceneSprite& initCenterTitle(std::string text, DirectX::XMFLOAT4 color = {1.0f, 1.0f, 1.0f, 1.0f});
     
 private:
     SpriteState initialState;

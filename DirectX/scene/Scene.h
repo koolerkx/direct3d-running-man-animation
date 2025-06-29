@@ -6,7 +6,7 @@
 
 struct SpriteWithDrawFunction
 {
-    ScreenScprite sprite;
+    SceneSprite sprite;
     std::function<void(int, SpriteState)>drawFunction;
 };
 
@@ -20,7 +20,7 @@ public:
     void startSetup();
     void draw_loop();
 
-    void addSprite(ScreenScprite sprite, std::function<void(int, SpriteState)> drawFunction);
+    void addSprite(SceneSprite sprite, std::function<void(int, SpriteState)> drawFunction);
 private:
     double startTime = 0;
     double timeOffset = 0;
