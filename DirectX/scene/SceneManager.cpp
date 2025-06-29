@@ -407,7 +407,7 @@ void SceneDefinition(SceneManagerConfig config)
 
     SceneSprite s6_penguin;
     s6_penguin.set_id(assetsMap[Asset::Penguin].id)
-              .init({{200.0f, 200.0f}, {700, -200.0f}, {1.0f, 1.0f}, 0.0f, WHITE, false})
+              .init({{200.0f, 200.0f}, {700, -200.0f}, {1.0f, 1.0f}, 0.0f, WHITE, false, ShaderType::RainbowStroke})
               .moveTo({700, 100}, 1, EaseType::Bounce)
               .delay(0.5)
               .moveTo({500, 100}, 2, EaseType::EaseIn).flip()
@@ -449,7 +449,7 @@ void SceneDefinition(SceneManagerConfig config)
     SceneSprite s6_running001_rainbowStroke;
     s6_running001_rainbowStroke.set_id(assetsMap[Asset::RunningMan001].id)
                                .init({{210, 300}, {1000, 500}, {1.0f, 1.0f}, 0, INVISIBLE_WHITE})
-                               .ShaderTo(ShaderType::RainbowStroke)
+                               .ShaderTo(ShaderType::RainbowStrokeOnly)
                                .delay(12.4).fadeTo(1, 0.6)
                                .moveTo({700, 500}, 2, EaseType::EaseIn)
                                .moveTo({900, 500}, 2, EaseType::EaseInOut)
@@ -474,7 +474,7 @@ void SceneDefinition(SceneManagerConfig config)
 
     SceneSprite s6_apple;
     s6_apple.set_id(assetsMap[Asset::Apple].id)
-            .init({{100, 100}, {750, 200}, {1.0f, 1.0f}, 0, INVISIBLE_WHITE})
+            .init({{100, 100}, {750, 200}, {1.0f, 1.0f}, 0, INVISIBLE_WHITE, false, ShaderType::RainbowTexture})
             .delay(1.5)
             .fadeTo(1, 1)
             .beginParallel()
@@ -485,7 +485,7 @@ void SceneDefinition(SceneManagerConfig config)
 
     SceneSprite s6_banana;
     s6_banana.set_id(assetsMap[Asset::Banana].id)
-             .init({{100, 100}, {750, 200}, {1.0f, 1.0f}, 0, INVISIBLE_WHITE})
+             .init({{100, 100}, {750, 200}, {1.0f, 1.0f}, 0, INVISIBLE_WHITE, false,  ShaderType::RainbowTexture})
              .delay(8)
              .fadeTo(1, 1)
              .beginParallel()
@@ -496,7 +496,7 @@ void SceneDefinition(SceneManagerConfig config)
 
     SceneSprite s6_suica;
     s6_suica.set_id(assetsMap[Asset::Suica].id)
-            .init({{100, 100}, {750, 200}, {1.0f, 1.0f}, 0, INVISIBLE_WHITE})
+            .init({{100, 100}, {750, 200}, {1.0f, 1.0f}, 0, INVISIBLE_WHITE, false,  ShaderType::RainbowTexture})
             .delay(15)
             .fadeTo(1, 1)
             .beginParallel()
@@ -938,11 +938,11 @@ void SceneDefinition(SceneManagerConfig config)
     // RegisterScene(s2);
     // RegisterScene(s3);
     // RegisterScene(s4);
-    RegisterScene(s5);
-    // RegisterScene(s6);
-    // RegisterScene(s7);
-    // RegisterScene(s8);
-    // RegisterScene(s9);
+    // RegisterScene(s5);
+    RegisterScene(s6);
+    RegisterScene(s7);
+    RegisterScene(s8);
+    RegisterScene(s9);
 }
 
 

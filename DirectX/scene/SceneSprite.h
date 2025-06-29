@@ -8,6 +8,7 @@ enum class ShaderType: unsigned int
     Normal = 0,
     RainbowTexture = 1,
     RainbowStroke = 2,
+    RainbowStrokeOnly = 3
 };
 
 enum class EaseType

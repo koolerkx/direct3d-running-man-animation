@@ -19,6 +19,7 @@ static ID3D11VertexShader* g_pVertexShader = nullptr;
 static ID3D11InputLayout* g_pInputLayout = nullptr;
 static ID3D11PixelShader* g_pPixelShader = nullptr;
 static ID3D11PixelShader* g_pPixelShaderRainbowStroke = nullptr;
+static ID3D11PixelShader* g_pPixelShaderRainbowStrokeOnly = nullptr;
 static ID3D11PixelShader* g_pPixelShaderRainbowTex = nullptr;
 static ID3D11SamplerState* g_pSamplerState = nullptr;
 
@@ -130,10 +131,10 @@ bool Shader_Initialize(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
     delete[] psbinary_pointer; // バイナリデータのバッファを解放
 
     // 事前コンパイル済みピクセルシェーダーの読み込み
-    std::ifstream ifs_ps2("assets/shader/shader_pixel_2d_rainbow_stoke.cso", std::ios::binary);
+    std::ifstream ifs_ps2("assets/shader/shader_pixel_2d_rainbow_stroke.cso", std::ios::binary);
     if (!ifs_ps2)
     {
-        MessageBox(nullptr, "ピクセルシェーダーの読み込みに失敗しました\n\nshader_pixel_2d_rainbow_stoke.cso", "エラー", MB_OK);
+        MessageBox(nullptr, "ピクセルシェーダーの読み込みに失敗しました\n\nshader_pixel_2d_rainbow_stroke.cso", "エラー", MB_OK);
         return false;
     }
 
@@ -165,11 +166,32 @@ bool Shader_Initialize(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
     unsigned char* psbinary_pointer3 = new unsigned char[filesize];
     ifs_ps3.read((char*)psbinary_pointer3, filesize);
     ifs_ps3.close();
-
-    // ピクセルシェーダーの作成
+    
     hr = g_pDevice->CreatePixelShader(psbinary_pointer3, filesize, nullptr, &g_pPixelShaderRainbowTex);
 
     delete[] psbinary_pointer3; // バイナリデータのバッファを解放
+
+
+    // 事前コンパイル済みピクセルシェーダーの読み込み
+    std::ifstream ifs_ps4("assets/shader/shader_pixel_2d_rainbow_stroke_only.cso", std::ios::binary);
+    if (!ifs_ps4)
+    {
+        MessageBox(nullptr, "ピクセルシェーダーの読み込みに失敗しました\n\nshader_pixel_2d_rainbow_stroke_only.cso", "エラー", MB_OK);
+        return false;
+    }
+
+    ifs_ps4.seekg(0, std::ios::end);
+    filesize = ifs_ps4.tellg();
+    ifs_ps4.seekg(0, std::ios::beg);
+
+    unsigned char* psbinary_pointer4 = new unsigned char[filesize];
+    ifs_ps4.read((char*)psbinary_pointer4, filesize);
+    ifs_ps4.close();
+
+    // ピクセルシェーダーの作成
+    hr = g_pDevice->CreatePixelShader(psbinary_pointer4, filesize, nullptr, &g_pPixelShaderRainbowStrokeOnly);
+
+    delete[] psbinary_pointer4; // バイナリデータのバッファを解放
 
     if (FAILED(hr))
     {
@@ -203,6 +225,7 @@ void Shader_Finalize()
     SAFE_RELEASE(g_pSamplerState);
     SAFE_RELEASE(g_pPixelShader);
     SAFE_RELEASE(g_pPixelShaderRainbowStroke);
+    SAFE_RELEASE(g_pPixelShaderRainbowStrokeOnly);
     SAFE_RELEASE(g_pPixelShaderRainbowTex);
     SAFE_RELEASE(g_pVSConstantBuffer0);
     SAFE_RELEASE(g_pVSConstantBuffer1);
@@ -239,10 +262,16 @@ void Shader_Begin(ShaderType shader)
     if (shader == ShaderType::Normal)
     {
         g_pContext->PSSetShader(g_pPixelShader, nullptr, 0);
-    }else if (shader == ShaderType::RainbowStroke)
+    }
+    else if (shader == ShaderType::RainbowStroke)
     {
         g_pContext->PSSetShader(g_pPixelShaderRainbowStroke, nullptr, 0);
-    } else
+    }
+    else if (shader == ShaderType::RainbowStrokeOnly)
+    {
+        g_pContext->PSSetShader(g_pPixelShaderRainbowStrokeOnly, nullptr, 0);
+    }
+    else
     {
         g_pContext->PSSetShader(g_pPixelShaderRainbowTex, nullptr, 0);
     }
