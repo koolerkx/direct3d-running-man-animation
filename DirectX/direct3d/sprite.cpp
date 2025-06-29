@@ -126,7 +126,7 @@ void Sprite_Draw(int texid, float display_x, float display_y, float uvcut_x, flo
 void Sprite_Draw(int texid, float display_x, float display_y, float uvcut_x, float uvcut_y, float uvcut_w,
                  float uvcut_h, float display_w, float display_h,
                  XMMATRIX mat,
-                 const XMFLOAT4& color)
+                 const XMFLOAT4& color, bool flipY)
 {
     // テクスチャ設定
     Texture_SetTexture(texid);
@@ -160,6 +160,8 @@ void Sprite_Draw(int texid, float display_x, float display_y, float uvcut_x, flo
     float v0 = uvcut_y / static_cast<float>(IMAGE_HEIGHT);
     float u1 = (uvcut_x + uvcut_w) / static_cast<float>(IMAGE_WIDTH);
     float v1 = (uvcut_y + uvcut_h) / static_cast<float>(IMAGE_HEIGHT);
+
+    if (flipY) std::swap(u0, u1);
 
     v[0].uv = {u0, v0};
     v[1].uv = {u1, v0};
@@ -207,5 +209,5 @@ void Sprite_Draw(int texid, SpriteState spriteState, float uvcut_x, float uvcut_
                 uvcut_w, uvcut_h,
                 spriteState.size.x, spriteState.size.y,
                 mat,
-                spriteState.color);
+                spriteState.color, spriteState.flipY);
 }

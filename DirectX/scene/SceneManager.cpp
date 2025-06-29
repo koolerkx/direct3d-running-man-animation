@@ -334,6 +334,14 @@ void SceneDefinition(SceneManagerConfig config)
                 .delay(5)
                 .moveTo({0, -55}, 3, EaseType::EaseInOut);
 
+    Sprite s5_train_door_left;
+    s5_train_door_left.set_id(assetsMap[Asset::TrainDoor].id)
+                .init({{800, 900}, {0, 0}, {1.0f, 1.0f}, 0, BLACK});
+
+    Sprite s5_train_door_right;
+    s5_train_door_right.set_id(assetsMap[Asset::TrainDoor].id)
+                .init({{800, 900}, {800, 0}, {1.0f, 1.0f}, 0, BLACK, true});
+
 
     s5.addSprite(s5_bg_1, assetsMap[Asset::BackgroundShinjyuku01].drawFunction);
     s5.addSprite(s5_bg_2, assetsMap[Asset::BackgroundShinjyuku02].drawFunction);
@@ -344,6 +352,9 @@ void SceneDefinition(SceneManagerConfig config)
     s5.addSprite(s5_train_mid, assetsMap[Asset::TrainMid].drawFunction);
 
     s5.addSprite(s5_fg, assetsMap[Asset::ForegroundShinjyuku].drawFunction);
+    
+    s5.addSprite(s5_train_door_left, assetsMap[Asset::TrainDoor].drawFunction);
+    s5.addSprite(s5_train_door_right, assetsMap[Asset::TrainDoor].drawFunction);
 
     s5.addSprite(s5_white, assetsMap[Asset::ForegroundShinjyuku].drawFunction);
 
