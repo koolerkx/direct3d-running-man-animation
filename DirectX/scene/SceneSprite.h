@@ -162,11 +162,32 @@ private:
 
 // 色
 using COLOR = DirectX::XMFLOAT4;
-constexpr COLOR BLACK = {0.0f, 0.0f, 0.0f, 1.0f};
-constexpr COLOR INVISIBLE_BLACK = {0.0f, 0.0f, 0.0f, 0.0f};
-constexpr COLOR WHITE = {1.0f, 1.0f, 1.0f, 1.0f};
-constexpr COLOR INVISIBLE_WHITE = {1.0f, 1.0f, 1.0f, 0.0f};
-constexpr COLOR BLUE = {0.0f, 0.0f, 1.0f, 1.0f};
-constexpr COLOR RED = {1.0f, 0.0f, 0.0f, 1.0f};
-constexpr COLOR NEON = { 0.22f, 1.0f, 0.078f, 1.0f};
-constexpr COLOR AQUA = { 0.0f, 1.0f, 1, 1.0f};
+
+// 基本色
+constexpr COLOR BLACK           = {0.0f, 0.0f, 0.0f, 1.0f}; // 黒
+constexpr COLOR WHITE           = {1.0f, 1.0f, 1.0f, 1.0f}; // 白
+constexpr COLOR INVISIBLE_BLACK = {0.0f, 0.0f, 0.0f, 0.0f}; // 透明黒
+constexpr COLOR INVISIBLE_WHITE = {1.0f, 1.0f, 1.0f, 0.0f}; // 透明白
+
+// 純色
+constexpr COLOR RED    = {1.0f, 0.0f, 0.0f, 1.0f}; // 赤
+constexpr COLOR GREEN  = {0.0f, 1.0f, 0.0f, 1.0f}; // 緑
+constexpr COLOR BLUE   = {0.0f, 0.0f, 1.0f, 1.0f}; // 青
+constexpr COLOR YELLOW = {1.0f, 1.0f, 0.0f, 1.0f}; // 黄
+constexpr COLOR CYAN   = {0.0f, 1.0f, 1.0f, 1.0f}; // シアン
+constexpr COLOR MAGENTA= {1.0f, 0.0f, 1.0f, 1.0f}; // マゼンタ
+
+// 明るい色・特殊色
+constexpr COLOR NEON   = {0.22f, 1.0f, 0.078f, 1.0f}; // 蛍光グリーン
+constexpr COLOR AQUA   = {0.0f, 1.0f, 1.0f, 1.0f};    // アクア（水色）
+constexpr COLOR GOLD   = {1.0f, 0.84f, 0.0f, 1.0f};   // 金
+constexpr COLOR SILVER = {0.75f, 0.75f, 0.75f, 1.0f}; // 銀
+
+// 淡色・中性色
+constexpr COLOR GRAY   = {0.5f, 0.5f, 0.5f, 1.0f}; // グレー
+constexpr COLOR BROWN  = {0.6f, 0.3f, 0.1f, 1.0f}; // ブラウン
+
+// その他のよく使う色
+constexpr COLOR ORANGE = {1.0f, 0.5f, 0.0f, 1.0f}; // オレンジ
+constexpr COLOR PURPLE = {0.5f, 0.0f, 0.5f, 1.0f}; // 紫
+constexpr COLOR PINK   = {1.0f, 0.0f, 0.5f, 1.0f}; // ピンク

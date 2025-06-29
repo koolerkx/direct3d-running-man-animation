@@ -86,7 +86,11 @@ void SceneDefinition(SceneManagerConfig config)
 
     SceneSprite s2_running000(assetsMap[Asset::RunningMan000].id);
     s2_running000
-        .init({{100, 200}, GetScreenCenterPosition({100, 200}, static_cast<float>(SCREEN_WIDTH), static_cast<float>(SCREEN_HEIGHT)), {0, 0}})
+        .init({
+            {100, 200},
+            GetScreenCenterPosition({100, 200}, static_cast<float>(SCREEN_WIDTH), static_cast<float>(SCREEN_HEIGHT)),
+            {0, 0}
+        })
         .delay(1)
         .scaleTo({2, 2}, 3, EaseType::EaseIn)
         .delay(0.5)
@@ -231,17 +235,21 @@ void SceneDefinition(SceneManagerConfig config)
            .beginParallel()
            .moveTo({500, 150}, 1.5, EaseType::Elastic)
            .rotateTo(DirectX::XMConvertToRadians(-25), 2, EaseType::EaseIn)
+           .colorTo(RED, 2, EaseType::Linear)
            .endParallel()
            .beginParallel()
-           .moveTo({700, 300}, 2.5, EaseType::Back)
+           .moveTo({700, 200}, 2.5, EaseType::Back)
            .rotateTo(DirectX::XMConvertToRadians(45), 2.5, EaseType::Bounce)
+           .colorTo(MAGENTA, 2, EaseType::Linear)
            .endParallel()
            .beginParallel()
            .moveTo({900, 50}, 1.5, EaseType::EaseOut)
            .rotateTo(DirectX::XMConvertToRadians(-15), 1.5, EaseType::EaseInOut)
+           .colorTo(PINK, 2, EaseType::Linear)
            .endParallel()
            .moveTo({1700, 400}, 1, EaseType::Back)
            .rotateTo(DirectX::XMConvertToRadians(-30), 2, EaseType::Elastic)
+           .colorTo(GOLD, 2, EaseType::Linear)
            .endParallel();
 
     SceneSprite s4_ufo2;
@@ -250,18 +258,22 @@ void SceneDefinition(SceneManagerConfig config)
            .beginParallel()
            .moveTo({400, 250}, 2, EaseType::Back)
            .rotateTo(DirectX::XMConvertToRadians(-45), 2, EaseType::EaseInOut)
+           .colorTo(SILVER, 2, EaseType::Linear)
            .endParallel()
            .beginParallel()
            .moveTo({650, 400}, 3, EaseType::Bounce)
            .rotateTo(DirectX::XMConvertToRadians(25), 1.5, EaseType::Elastic)
+           .colorTo(CYAN, 2, EaseType::Linear)
            .endParallel()
            .beginParallel()
            .moveTo({1000, 200}, 1, EaseType::EaseIn)
            .rotateTo(DirectX::XMConvertToRadians(-15), 2, EaseType::Elastic)
+           .colorTo(YELLOW, 2, EaseType::Linear)
            .endParallel()
            .beginParallel()
            .moveTo({1700, 0}, 1, EaseType::EaseInOut)
            .rotateTo(DirectX::XMConvertToRadians(30), 2, EaseType::Elastic)
+           .colorTo(PURPLE, 2, EaseType::Linear)
            .endParallel();
 
 
@@ -915,21 +927,22 @@ void SceneDefinition(SceneManagerConfig config)
 
     // Scene 9
     SceneSprite s9_stageClose;
-    s9_stageClose.set_id(assetsMap[Asset::StageClose].id).initBackground(INVISIBLE_WHITE).fadeTo(1, 0.5).delay(2).fadeTo(0, 0.5);
+    s9_stageClose.set_id(assetsMap[Asset::StageClose].id).initBackground(INVISIBLE_WHITE).fadeTo(1, 0.5).delay(2).
+                  fadeTo(0, 0.5);
 
     Scene s9;
     s9.addSprite(s8_bg, assetsMap[Asset::Background].drawFunction);
     s9.addSprite(s9_stageClose, assetsMap[Asset::StageClose].drawFunction);
 
-    RegisterScene(s1);
-    RegisterScene(s2);
-    RegisterScene(s3);
+    // RegisterScene(s1);
+    // RegisterScene(s2);
+    // RegisterScene(s3);
     RegisterScene(s4);
-    RegisterScene(s5);
-    RegisterScene(s6);
-    RegisterScene(s7);
-    RegisterScene(s8);
-    RegisterScene(s9);
+    // RegisterScene(s5);
+    // RegisterScene(s6);
+    // RegisterScene(s7);
+    // RegisterScene(s8);
+    // RegisterScene(s9);
 }
 
 
