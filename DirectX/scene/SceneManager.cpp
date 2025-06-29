@@ -304,14 +304,14 @@ void SceneDefinition(SceneManagerConfig config)
          .init({{2000.0f, 950.0f}, {-400.0f, SCREEN_HEIGHT - 950.0f}, {1.0f, 1.0f}, 0.0f, WHITE})
          .moveTo({0, SCREEN_HEIGHT - 950.0f}, 3)
          .delay(7)
-         .moveTo({-1600, SCREEN_HEIGHT - 800.0f}, 3)
+         .moveTo({-1600, SCREEN_HEIGHT - 800.0f}, 1)
          .fadeTo(0, 0);
 
     SceneSprite s5_bg_1;
     s5_bg_1.set_id(assetsMap[Asset::BackgroundShinjyuku01].id)
            .init({{1600.0f, 950.0f}, {0.0f, .0f}, {1.0f, 1.0f}, 0.0f, WHITE})
            .delay(10)
-           .moveTo({-1600, 0}, 3)
+           .moveTo({-1600, 0}, 1)
            .fadeTo(0, 0);
 
     SceneSprite s5_bg_2;
@@ -319,7 +319,7 @@ void SceneDefinition(SceneManagerConfig config)
            .init({{1700.0f, 850.0f}, {-50.0f, 5.0f}, {1.0f, 1.0f}, 0.0f, WHITE})
            .moveTo({0, 5}, 3)
            .delay(7)
-           .moveTo({-1600, 5}, 3)
+           .moveTo({-1600, 5}, 1)
            .fadeTo(0, 0);
 
     SceneSprite s5_running003;
@@ -934,15 +934,15 @@ void SceneDefinition(SceneManagerConfig config)
     s9.addSprite(s8_bg, assetsMap[Asset::Background].drawFunction);
     s9.addSprite(s9_stageClose, assetsMap[Asset::StageClose].drawFunction);
 
-    RegisterScene(s1);
-    RegisterScene(s2);
-    RegisterScene(s3);
-    RegisterScene(s4);
+    // RegisterScene(s1);
+    // RegisterScene(s2);
+    // RegisterScene(s3);
+    // RegisterScene(s4);
     RegisterScene(s5);
-    RegisterScene(s6);
-    RegisterScene(s7);
-    RegisterScene(s8);
-    RegisterScene(s9);
+    // RegisterScene(s6);
+    // RegisterScene(s7);
+    // RegisterScene(s8);
+    // RegisterScene(s9);
 }
 
 
