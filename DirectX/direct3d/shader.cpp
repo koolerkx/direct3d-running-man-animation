@@ -7,6 +7,8 @@
 
 #include <d3d11.h>
 #include <DirectXMath.h>
+
+#include "SceneSprite.h"
 using namespace DirectX;
 #include "direct3d.h"
 #include "debug_ostream.h"
@@ -16,6 +18,8 @@ using namespace DirectX;
 static ID3D11VertexShader* g_pVertexShader = nullptr;
 static ID3D11InputLayout* g_pInputLayout = nullptr;
 static ID3D11PixelShader* g_pPixelShader = nullptr;
+static ID3D11PixelShader* g_pPixelShaderRainbowStroke = nullptr;
+static ID3D11PixelShader* g_pPixelShaderRainbowTex = nullptr;
 static ID3D11SamplerState* g_pSamplerState = nullptr;
 
 // 定数バッファー
@@ -125,12 +129,54 @@ bool Shader_Initialize(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 
     delete[] psbinary_pointer; // バイナリデータのバッファを解放
 
+    // 事前コンパイル済みピクセルシェーダーの読み込み
+    std::ifstream ifs_ps2("assets/shader/shader_pixel_2d_rainbow_stoke.cso", std::ios::binary);
+    if (!ifs_ps2)
+    {
+        MessageBox(nullptr, "ピクセルシェーダーの読み込みに失敗しました\n\nshader_pixel_2d_rainbow_stoke.cso", "エラー", MB_OK);
+        return false;
+    }
+
+    ifs_ps2.seekg(0, std::ios::end);
+    filesize = ifs_ps2.tellg();
+    ifs_ps2.seekg(0, std::ios::beg);
+
+    unsigned char* psbinary_pointer2 = new unsigned char[filesize];
+    ifs_ps2.read((char*)psbinary_pointer2, filesize);
+    ifs_ps2.close();
+
+    // ピクセルシェーダーの作成
+    hr = g_pDevice->CreatePixelShader(psbinary_pointer2, filesize, nullptr, &g_pPixelShaderRainbowStroke);
+
+    delete[] psbinary_pointer2; // バイナリデータのバッファを解放
+
+    // 事前コンパイル済みピクセルシェーダーの読み込み
+    std::ifstream ifs_ps3("assets/shader/shader_pixel_2d_rainbow_tex.cso", std::ios::binary);
+    if (!ifs_ps3)
+    {
+        MessageBox(nullptr, "ピクセルシェーダーの読み込みに失敗しました\n\nshader_pixel_2d_rainbow_tex.cso", "エラー", MB_OK);
+        return false;
+    }
+
+    ifs_ps3.seekg(0, std::ios::end);
+    filesize = ifs_ps3.tellg();
+    ifs_ps3.seekg(0, std::ios::beg);
+
+    unsigned char* psbinary_pointer3 = new unsigned char[filesize];
+    ifs_ps3.read((char*)psbinary_pointer3, filesize);
+    ifs_ps3.close();
+
+    // ピクセルシェーダーの作成
+    hr = g_pDevice->CreatePixelShader(psbinary_pointer3, filesize, nullptr, &g_pPixelShaderRainbowTex);
+
+    delete[] psbinary_pointer3; // バイナリデータのバッファを解放
+
     if (FAILED(hr))
     {
         hal::dout << "Shader_Initialize() : ピクセルシェーダーの作成に失敗しました" << std::endl;
         return false;
     }
-    
+
     // サンプラーステート設定
     D3D11_SAMPLER_DESC sampler_desc{};
 
@@ -156,6 +202,8 @@ void Shader_Finalize()
 {
     SAFE_RELEASE(g_pSamplerState);
     SAFE_RELEASE(g_pPixelShader);
+    SAFE_RELEASE(g_pPixelShaderRainbowStroke);
+    SAFE_RELEASE(g_pPixelShaderRainbowTex);
     SAFE_RELEASE(g_pVSConstantBuffer0);
     SAFE_RELEASE(g_pVSConstantBuffer1);
     SAFE_RELEASE(g_pInputLayout);
@@ -183,11 +231,21 @@ void Shader_SetWorldMatrix(const DirectX::XMMATRIX& matrix)
     g_pContext->UpdateSubresource(g_pVSConstantBuffer1, 0, nullptr, &transpose, 0, 0);
 }
 
-void Shader_Begin()
+void Shader_Begin(ShaderType shader)
 {
     // 頂点シェーダーとピクセルシェーダーを描画パイプラインに設定
     g_pContext->VSSetShader(g_pVertexShader, nullptr, 0);
-    g_pContext->PSSetShader(g_pPixelShader, nullptr, 0);
+
+    if (shader == ShaderType::Normal)
+    {
+        g_pContext->PSSetShader(g_pPixelShader, nullptr, 0);
+    }else if (shader == ShaderType::RainbowStroke)
+    {
+        g_pContext->PSSetShader(g_pPixelShaderRainbowStroke, nullptr, 0);
+    } else
+    {
+        g_pContext->PSSetShader(g_pPixelShaderRainbowTex, nullptr, 0);
+    }
 
     // 頂点レイアウトを描画パイプラインに設定
     g_pContext->IASetInputLayout(g_pInputLayout);

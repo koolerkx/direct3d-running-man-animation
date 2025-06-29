@@ -84,6 +84,13 @@ Sprite& Sprite::flip()
     return *this;
 }
 
+Sprite& Sprite::ShaderTo(ShaderType shader)
+{
+    AnimationKeyframe keyframe(AnimProperty::Shader, static_cast<int>(shader), 0, EaseType::Linear);
+    addKeyframe(keyframe);
+    return *this;
+}
+
 // 非同期動きグループ
 Sprite& Sprite::beginParallel()
 {
@@ -251,6 +258,11 @@ SpriteState Sprite::getState(double timeOffset)
         case AnimProperty::Flip:
             {
                 state.flipY = !state.flipY;
+                break;
+            }
+        case AnimProperty::Shader:
+            {
+                state.shaderType = static_cast<ShaderType>(keyframe.targetValue.x);
                 break;
             }
         }

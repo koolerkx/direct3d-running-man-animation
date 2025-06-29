@@ -126,13 +126,13 @@ void Sprite_Draw(int texid, float display_x, float display_y, float uvcut_x, flo
 void Sprite_Draw(int texid, float display_x, float display_y, float uvcut_x, float uvcut_y, float uvcut_w,
                  float uvcut_h, float display_w, float display_h,
                  XMMATRIX mat,
-                 const XMFLOAT4& color, bool flipY)
+                 const XMFLOAT4& color, bool flipY, ShaderType shader)
 {
     // テクスチャ設定
     Texture_SetTexture(texid);
 
     // シェーダーを描画パイプラインに設定
-    Shader_Begin();
+    Shader_Begin(shader);
 
     // 頂点バッファをロックする
     D3D11_MAPPED_SUBRESOURCE msr;
@@ -209,5 +209,5 @@ void Sprite_Draw(int texid, SpriteState spriteState, float uvcut_x, float uvcut_
                 uvcut_w, uvcut_h,
                 spriteState.size.x, spriteState.size.y,
                 mat,
-                spriteState.color, spriteState.flipY);
+                spriteState.color, spriteState.flipY, spriteState.shaderType);
 }

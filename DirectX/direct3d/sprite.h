@@ -105,7 +105,7 @@ void Sprite_Draw(int texid, float display_x, float display_y, float uvcut_x, flo
 void Sprite_Draw(int texid, float display_x, float display_y, float uvcut_x, float uvcut_y, float uvcut_w,
                  float uvcut_h, float display_w, float display_h,
                  DirectX::XMMATRIX mat,
-                 const DirectX::XMFLOAT4& color = {1.0f, 1.0f, 1.0f, 1.0f}, bool flipY = false);
+                 const DirectX::XMFLOAT4& color = {1.0f, 1.0f, 1.0f, 1.0f}, bool flipY = false, ShaderType shader = ShaderType::Normal);
 
 
 void Sprite_Draw(int texid, SpriteState spriteState);

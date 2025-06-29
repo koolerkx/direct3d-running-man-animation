@@ -17,7 +17,7 @@ void Shader_Finalize();
 void Shader_SetProjectionMatrix(const DirectX::XMMATRIX& matrix);
 void Shader_SetWorldMatrix(const DirectX::XMMATRIX& matrix);
 
-void Shader_Begin();
+void Shader_Begin(ShaderType shader = ShaderType::Normal);
 
 #endif // SHADER_H
 

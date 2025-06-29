@@ -3,6 +3,13 @@
 #include <string>
 #include <vector>
 
+enum class ShaderType: unsigned int
+{
+    Normal = 0,
+    RainbowTexture = 1,
+    RainbowStroke = 2,
+};
+
 enum class EaseType
 {
     Linear,
@@ -21,7 +28,8 @@ enum class AnimProperty
     Rotation,
     Alpha,
     Color,
-    Flip
+    Flip,
+    Shader
 };
 
 enum class RepeatMode
@@ -39,6 +47,7 @@ struct SpriteState
     float rotation = 0.0f;
     DirectX::XMFLOAT4 color{1.0f, 1.0f, 1.0f, 1.0f};
     bool flipY = false;
+    ShaderType shaderType = ShaderType::Normal;
 };
 
 struct AnimationKeyframe
@@ -107,6 +116,7 @@ public:
     // 他
     Sprite& delay(double duration);
     Sprite& flip();
+    Sprite& ShaderTo(ShaderType shader);
     
     // 非同期動きグループ
     Sprite& beginParallel();

@@ -609,7 +609,7 @@ namespace hal
 		lineCount = (str.empty() || str.back() == '\n') ? lineCount : lineCount + 1;
 
 		// Calculate the height using line spacing
-		return lineCount * 32.0f;
+		return lineCount * 48.0f;
 	}
 
 }
