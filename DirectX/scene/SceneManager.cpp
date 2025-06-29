@@ -53,7 +53,7 @@ void SceneDefinition(SceneManagerConfig config)
     int SCREEN_HEIGHT = Direct3D_GetBackBufferHeight();
     int SCREEN_WIDTH = Direct3D_GetBackBufferWidth();
 
-    // Title 1: Kooler Presents
+    // Scene 1: 作者タイトル
     SceneSprite s1_bg;
     s1_bg.set_id(assetsMap[Asset::Background].id)
          .initBackground(ALMOST_BLACK);
@@ -75,7 +75,7 @@ void SceneDefinition(SceneManagerConfig config)
     s1.addSprite(s1_title, makeTextDrawFunction(s1_title_text, config.titlePresentsText));
     s1.addSprite(s1_stageOpen, assetsMap[Asset::StageOpen].drawFunction);
 
-    // Scene 2: Running Man Title
+    // Scene 2: アニメタイトル
     std::string s2_title_text = "RUNNING\n  MAN";
     SceneSprite s2_title;
     s2_title.initCenterTitle(s2_title_text, INVISIBLE_WHITE)
@@ -131,7 +131,7 @@ void SceneDefinition(SceneManagerConfig config)
     s2.addSprite(s2_ground, assetsMap[Asset::Ground].drawFunction);
     s2.addSprite(s2_title, makeTextDrawFunction(s2_title_text, config.runningmanText));
 
-    // Scene 3
+    // Scene 3: 日常の日本、敵来襲
     SceneSprite s3_background;
     s3_background.set_id(assetsMap[Asset::BackgroundJapan].id)
                  .init({{4000.0f, 900.0f}, {-1600.0f, 0.0f}, {1.0f, 1.0f}, 0.0f, WHITE})
@@ -194,7 +194,7 @@ void SceneDefinition(SceneManagerConfig config)
 
     s3.addSprite(s3_explo02, assetsMap[Asset::Explosion2].drawFunction);
 
-    // Scene 4
+    // Scene 4: 火山噴火、他の次元に行く
     SceneSprite s4_white;
     s4_white.set_id(assetsMap[Asset::Background].id)
             .initBackground(WHITE)
@@ -298,7 +298,7 @@ void SceneDefinition(SceneManagerConfig config)
 
     s4.addSprite(s4_white, assetsMap[Asset::Background].drawFunction);
 
-    // Scene 5
+    // Scene 5: 現実世界、新宿に着く、電車に轢かれる
     Scene s5;
 
     SceneSprite s5_white;
@@ -401,7 +401,7 @@ void SceneDefinition(SceneManagerConfig config)
 
     s5.addSprite(s5_white, assetsMap[Asset::ForegroundShinjyuku].drawFunction);
 
-    // Scene 6
+    // Scene 6: 透明世界に入り、デスクトップ透過、虹色アイテムを入手
     Scene s6;
 
     SceneSprite s6_ground;
@@ -492,7 +492,7 @@ void SceneDefinition(SceneManagerConfig config)
 
     SceneSprite s6_banana;
     s6_banana.set_id(assetsMap[Asset::Banana].id)
-             .init({{100, 100}, {750, 200}, {1.0f, 1.0f}, 0, INVISIBLE_WHITE, false,  ShaderType::RainbowTexture})
+             .init({{100, 100}, {750, 200}, {1.0f, 1.0f}, 0, INVISIBLE_WHITE, false, ShaderType::RainbowTexture})
              .delay(8)
              .fadeTo(1, 1)
              .beginParallel()
@@ -503,7 +503,7 @@ void SceneDefinition(SceneManagerConfig config)
 
     SceneSprite s6_suica;
     s6_suica.set_id(assetsMap[Asset::Suica].id)
-            .init({{100, 100}, {750, 200}, {1.0f, 1.0f}, 0, INVISIBLE_WHITE, false,  ShaderType::RainbowTexture})
+            .init({{100, 100}, {750, 200}, {1.0f, 1.0f}, 0, INVISIBLE_WHITE, false, ShaderType::RainbowTexture})
             .delay(15)
             .fadeTo(1, 1)
             .beginParallel()
@@ -768,7 +768,7 @@ void SceneDefinition(SceneManagerConfig config)
 
     s6.addSprite(s6_map, assetsMap[Asset::Map].drawFunction);
 
-    // Scene 7
+    // Scene 7: 地図、新宿から北海道へ行く
     Scene s7;
 
     SceneSprite s7_map;
@@ -905,8 +905,7 @@ void SceneDefinition(SceneManagerConfig config)
     s7.addSprite(s7_wrap, assetsMap[Asset::Wrap].drawFunction);
     s7.addSprite(s7_fubuki, assetsMap[Asset::Fubuki].drawFunction);
 
-    // Scene 8
-    // Title 1: Kooler Presents
+    // Scene 8: エンディング
     SceneSprite s8_bg;
     s8_bg.set_id(assetsMap[Asset::Background].id)
          .initBackground(ALMOST_BLACK);
@@ -932,7 +931,7 @@ void SceneDefinition(SceneManagerConfig config)
     s8.addSprite(s8_title, makeTextDrawFunction(s8_title_text, config.titlePresentsText));
     s8.addSprite(s8_credit, makeTextDrawFunction(s8_credit_text, config.titlePresentsText));
 
-    // Scene 9
+    // Scene 9: 幕締め、ループに繋がる
     SceneSprite s9_stageClose;
     s9_stageClose.set_id(assetsMap[Asset::StageClose].id).initBackground(INVISIBLE_WHITE).fadeTo(1, 0.5).delay(2).
                   fadeTo(0, 0.5);
@@ -941,15 +940,15 @@ void SceneDefinition(SceneManagerConfig config)
     s9.addSprite(s8_bg, assetsMap[Asset::Background].drawFunction);
     s9.addSprite(s9_stageClose, assetsMap[Asset::StageClose].drawFunction);
 
-    RegisterScene(s1);
-    RegisterScene(s2);
-    RegisterScene(s3);
-    RegisterScene(s4);
-    RegisterScene(s5);
-    RegisterScene(s6);
-    RegisterScene(s7);
-    RegisterScene(s8);
-    RegisterScene(s9);
+    RegisterScene(s1); // Scene 1: 作者タイトル
+    RegisterScene(s2); // Scene 2: アニメタイトル
+    RegisterScene(s3); // Scene 3: 日常の日本、敵来襲
+    RegisterScene(s4); // Scene 4: 火山噴火、他の次元に行く
+    RegisterScene(s5); // Scene 5: 現実世界、新宿に着く、電車に轢かれる
+    RegisterScene(s6); // Scene 6: 透明世界に入り、デスクトップ透過、虹色アイテムを入手
+    RegisterScene(s7); // Scene 7: 地図、新宿から北海道へ行く
+    RegisterScene(s8); // Scene 8: エンディング
+    RegisterScene(s9); // Scene 9: 幕締め、ループに繋がる
 }
 
 
