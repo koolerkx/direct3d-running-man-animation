@@ -70,7 +70,6 @@ struct AnimationKeyframe
     double startTime;
 
     bool isParallel = false;
-    int repeatGroupIndex = -1; ///< @brief -1??J???????
 
     AnimationKeyframe(AnimProperty prop, DirectX::XMFLOAT4 target, double dur, EaseType ease)
         : property(prop), targetValue(target), duration(dur), easing(ease), startTime(0.0)
@@ -133,10 +132,6 @@ public:
     SceneSprite& beginParallel();
     SceneSprite& endParallel();
 
-    // 繰り返しグループ
-    SceneSprite& beginRepeat(RepeatMode mode = RepeatMode::Normal, int times = -1);
-    SceneSprite& endRepeat();
-
     // 出力
     SpriteState getState(double timeOffset);
 
@@ -158,15 +153,11 @@ private:
     std::vector<AnimationKeyframe> currentParallelKeyframes;
     std::vector<ParallelGroup> parallelGroups;
 
-    bool inRepeatGroup = false;
-    RepeatGroup currentRepeatGroup{};
-    std::vector<RepeatGroup> repeatGroups;
-
     void addKeyframe(AnimationKeyframe keyframe);
 
-    static float applyEasing(float t, EaseType easing);
+    static float applyEasing(float time, EaseType easing);
     static float interpolate(float start, float end, float t);
-    static DirectX::XMFLOAT2 interpolate(DirectX::XMFLOAT2 start, DirectX::XMFLOAT2 end, float t);
+    static DirectX::XMFLOAT2 interpolate(DirectX::XMFLOAT2 start, DirectX::XMFLOAT2 end, float time);
     static DirectX::XMFLOAT4 interpolate(DirectX::XMFLOAT4 start, DirectX::XMFLOAT4 end, float t);
 };
 

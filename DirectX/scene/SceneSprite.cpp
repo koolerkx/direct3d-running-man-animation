@@ -99,7 +99,6 @@ SceneSprite& SceneSprite::ShaderTo(ShaderType shader)
     return *this;
 }
 
-// ????????O???[?v
 SceneSprite& SceneSprite::beginParallel()
 {
     if (inParallelGroup) return *this;
@@ -138,49 +137,6 @@ SceneSprite& SceneSprite::endParallel()
     return *this;
 }
 
-// ?J?????O???[?v
-SceneSprite& SceneSprite::beginRepeat(RepeatMode mode, int times)
-{
-    if (inRepeatGroup) return *this;
-
-    inRepeatGroup = true;
-    currentRepeatGroup.keyframes.clear();
-    currentRepeatGroup.startTime = totalDuration;
-    currentRepeatGroup.duration = 0.0;
-    currentRepeatGroup.mode = mode;
-    currentRepeatGroup.repeatCount = times;
-
-    return *this;
-}
-
-SceneSprite& SceneSprite::endRepeat()
-{
-    if (!inRepeatGroup) return *this;
-
-    inRepeatGroup = false;
-    double groupDuration = 0.0;
-    for (const AnimationKeyframe& keyframe : currentRepeatGroup.keyframes)
-    {
-        groupDuration = max(groupDuration, (keyframe.startTime - currentRepeatGroup.startTime) + keyframe.duration);
-    }
-    currentRepeatGroup.duration = groupDuration;
-
-    repeatGroups.push_back(currentRepeatGroup);
-
-    if (currentRepeatGroup.repeatCount < 0)
-    {
-        totalDuration = currentRepeatGroup.startTime + currentRepeatGroup.duration;
-    }
-    else
-    {
-        totalDuration = currentRepeatGroup.startTime + (groupDuration * currentRepeatGroup.repeatCount);
-    }
-
-    currentRepeatGroup.keyframes.clear();
-
-    return *this;
-}
-
 SpriteState SceneSprite::getState(double timeOffset)
 {
     if (timeOffset <= 0.0) return initialState;
@@ -190,39 +146,6 @@ SpriteState SceneSprite::getState(double timeOffset)
     for (const AnimationKeyframe& keyframe : timeline)
     {
         double effectiveTime = timeOffset;
-
-        if (keyframe.repeatGroupIndex >= 0 && keyframe.repeatGroupIndex < repeatGroups.size())
-        {
-            const RepeatGroup& repeatGroup = repeatGroups[keyframe.repeatGroupIndex];
-
-            double groupTime = timeOffset - repeatGroup.startTime;
-            if (groupTime <= 0) continue;
-
-            if (repeatGroup.repeatCount == -1 || groupTime < (repeatGroup.duration * repeatGroup.repeatCount))
-            {
-                int cycle = static_cast<int>(groupTime / repeatGroup.duration);
-                double cycleTime = fmod(groupTime, repeatGroup.duration);
-
-                if (repeatGroup.mode == RepeatMode::PingPong)
-                {
-                    if (cycle % 2 == 1)
-                    {
-                        cycleTime = repeatGroup.duration - cycleTime;
-                    }
-                }
-
-                effectiveTime = repeatGroup.startTime + cycleTime;
-            }
-            else if (timeOffset > repeatGroup.startTime + (repeatGroup.duration * repeatGroup.repeatCount))
-            {
-                double finalCycleTime = 0.0;
-                if (repeatGroup.mode == RepeatMode::PingPong)
-                {
-                    finalCycleTime = (repeatGroup.repeatCount % 2 != 0) ? repeatGroup.duration : 0.0;
-                }
-                effectiveTime = repeatGroup.startTime + finalCycleTime;
-            }
-        }
 
         if (keyframe.startTime > effectiveTime) continue;
 
@@ -313,14 +236,7 @@ SceneSprite& SceneSprite::initCenterTitle(std::string text, XMFLOAT4 color)
 
 void SceneSprite::addKeyframe(AnimationKeyframe keyframe)
 {
-    if (inRepeatGroup)
-    {
-        keyframe.repeatGroupIndex = static_cast<int>(repeatGroups.size());
-        currentRepeatGroup.keyframes.push_back(keyframe);
-        timeline.push_back(keyframe);
-        totalDuration += keyframe.duration;
-    }
-    else if (inParallelGroup)
+    if (inParallelGroup)
     {
         keyframe.startTime = parallelGroupStartTime;
         keyframe.isParallel = true;
@@ -335,77 +251,77 @@ void SceneSprite::addKeyframe(AnimationKeyframe keyframe)
 }
 
 
-float SceneSprite::applyEasing(float t, EaseType easing)
+float SceneSprite::applyEasing(float time, EaseType easing)
 {
-    t = max(0.0f, min(1.0f, t));
+    time = max(0.0f, min(1.0f, time));
 
     switch (easing)
     {
     case EaseType::Linear:
-        return t;
+        return time;
 
     case EaseType::EaseIn:
-        return t * t;
+        return time * time;
 
     case EaseType::EaseOut:
-        return 1.0f - (1.0f - t) * (1.0f - t);
+        return 1.0f - (1.0f - time) * (1.0f - time);
 
     case EaseType::EaseInOut:
-        return t < 0.5f ? 2.0f * t * t : 1.0f - 2.0f * (1.0f - t) * (1.0f - t);
+        return time < 0.5f ? 2.0f * time * time : 1.0f - 2.0f * (1.0f - time) * (1.0f - time);
 
     case EaseType::Bounce:
         {
-            if (t < 1.0f / 2.75f)
-                return 7.5625f * t * t;
-            else if (t < 2.0f / 2.75f)
+            if (time < 1.0f / 2.75f)
+                return 7.5625f * time * time;
+            else if (time < 2.0f / 2.75f)
             {
-                t -= 1.5f / 2.75f;
-                return 7.5625f * t * t + 0.75f;
+                time -= 1.5f / 2.75f;
+                return 7.5625f * time * time + 0.75f;
             }
-            else if (t < 2.5f / 2.75f)
+            else if (time < 2.5f / 2.75f)
             {
-                t -= 2.25f / 2.75f;
-                return 7.5625f * t * t + 0.9375f;
+                time -= 2.25f / 2.75f;
+                return 7.5625f * time * time + 0.9375f;
             }
             else
             {
-                t -= 2.625f / 2.75f;
-                return 7.5625f * t * t + 0.984375f;
+                time -= 2.625f / 2.75f;
+                return 7.5625f * time * time + 0.984375f;
             }
         }
 
     case EaseType::Elastic:
         {
-            if (t == 0.0f) return 0.0f;
-            if (t == 1.0f) return 1.0f;
+            if (time == 0.0f) return 0.0f;
+            if (time == 1.0f) return 1.0f;
 
             float p = 0.3f;
             float s = p / 4.0f;
-            return pow(2.0f, -10.0f * t) * sin((t - s) * (2.0f * 3.14159f) / p) + 1.0f;
+            return pow(2.0f, -10.0f * time) * sin((time - s) * (2.0f * 3.14159f) / p) + 1.0f;
         }
 
     case EaseType::Back:
         {
             const float c1 = 1.70158f;
             const float c3 = c1 + 1.0f;
-            return c3 * t * t * t - c1 * t * t;
+            return c3 * time * time * time - c1 * time * time;
         }
 
     default:
-        return t;
+        return time;
     }
 }
 
-float SceneSprite::interpolate(float start, float end, float t)
+float SceneSprite::interpolate(float start, float end, float time)
 {
-    return start + (end - start) * t;
+    return start + (end - start) * time;
 }
 
-XMFLOAT2 SceneSprite::interpolate(XMFLOAT2 start, XMFLOAT2 end, float t)
+XMFLOAT2 SceneSprite::interpolate(XMFLOAT2 start, XMFLOAT2 end, float time)
 {
     return {
-        interpolate(start.x, end.x, t),
-        interpolate(start.y, end.y, t)
+        interpolate(start.x, end.x, time),
+        interpolate(start.y, end.y, time)
     };
 }
 
