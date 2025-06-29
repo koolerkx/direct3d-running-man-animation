@@ -47,16 +47,16 @@ void SceneDefinition(SceneManagerConfig config)
     int SCREEN_WIDTH = Direct3D_GetBackBufferWidth();
 
     // Title 1: Kooler Presents
-    Sprite s1_bg;
+    ScreenScprite s1_bg;
     s1_bg.set_id(assetsMap[Asset::Background].id)
          .initBackground(BLACK);
 
-    Sprite s1_stageOpen;
+    ScreenScprite s1_stageOpen;
     s1_stageOpen.set_id(assetsMap[Asset::StageOpen].id)
                 .initBackground(WHITE).delay(1).fadeTo(0, 1);
 
     std::string s1_title_text = " KOOLER\nPresents";
-    Sprite s1_title;
+    ScreenScprite s1_title;
     s1_title.initCenterTitle(s1_title_text, INVISIBLE_WHITE)
             .delay(1)
             .fadeTo(1, 2, EaseType::EaseInOut)
@@ -70,21 +70,21 @@ void SceneDefinition(SceneManagerConfig config)
 
     // Scene 2: Running Man Title
     std::string s2_title_text = "RUNNING\n  MAN";
-    Sprite s2_title;
+    ScreenScprite s2_title;
     s2_title.initCenterTitle(s2_title_text, INVISIBLE_WHITE)
             .delay(1)
             .fadeTo(1, 2, EaseType::EaseIn)
             .delay(4.5)
             .fadeTo(0, 1.5, EaseType::EaseOut);
 
-    Sprite s2_bg;
+    ScreenScprite s2_bg;
     s2_bg.set_id(assetsMap[Asset::BackgroundStar].id)
          .initBackground(INVISIBLE_WHITE)
          .fadeTo(1, 1, EaseType::EaseOut)
          .delay(4.5)
          .fadeTo(0, 2, EaseType::EaseOut);
 
-    Sprite s2_running000(assetsMap[Asset::RunningMan000].id);
+    ScreenScprite s2_running000(assetsMap[Asset::RunningMan000].id);
     s2_running000
         .init({{100, 200}, GetScreenCenterPosition({100, 200}, SCREEN_WIDTH, SCREEN_HEIGHT), {0, 0}})
         .delay(1)
@@ -95,17 +95,17 @@ void SceneDefinition(SceneManagerConfig config)
         .moveTo({1800, 550}, 3, EaseType::EaseOut)
         .endParallel();
 
-    Sprite s2_background;
+    ScreenScprite s2_background;
     s2_background.set_id(assetsMap[Asset::BackgroundJapan].id)
                  .init({{4000.0f, 900.0f}, {-1600.0f, 0.0f}, {1.0f, 1.0f}, 0.0f, INVISIBLE_WHITE})
                  .delay(5.5)
                  .fadeTo(1, 2, EaseType::EaseIn);
-    Sprite s2_foregroundJapan;
+    ScreenScprite s2_foregroundJapan;
     s2_foregroundJapan.set_id(assetsMap[Asset::ForegroundJapan].id)
                       .init({{4000.0f, 900.0f}, {-2000.0f, 0.0f}, {1.0f, 1.0f}, 0.0f, INVISIBLE_WHITE})
                       .delay(5.5)
                       .fadeTo(1, 1.75, EaseType::EaseIn);
-    Sprite s2_ground;
+    ScreenScprite s2_ground;
     s2_ground.set_id(assetsMap[Asset::Ground].id)
              .init({{4000.0f, 900.0f}, {-2400.0f, 0.0f}, {1.0f, 1.0f}, 0.0f, INVISIBLE_WHITE})
              .delay(5.5)
@@ -121,29 +121,29 @@ void SceneDefinition(SceneManagerConfig config)
     s2.addSprite(s2_title, makeTextDrawFunction(s2_title_text, config.runningmanText));
 
     // Scene 3
-    Sprite s3_background;
+    ScreenScprite s3_background;
     s3_background.set_id(assetsMap[Asset::BackgroundJapan].id)
                  .init({{4000.0f, 900.0f}, {-1600.0f, 0.0f}, {1.0f, 1.0f}, 0.0f, WHITE})
                  .delay(1)
                  .moveTo({-1200, 0}, 11);
-    Sprite s3_foregroundJapan;
+    ScreenScprite s3_foregroundJapan;
     s3_foregroundJapan.set_id(assetsMap[Asset::ForegroundJapan].id)
                       .init({{4000.0f, 900.0f}, {-2000.0f, 0.0f}, {1.0f, 1.0f}, 0.0f, WHITE})
                       .delay(1)
                       .moveTo({-1200, 0}, 11);
 
-    Sprite s3_ground;
+    ScreenScprite s3_ground;
     s3_ground.set_id(assetsMap[Asset::Ground].id)
              .init({{4000.0f, 900.0f}, {-2400.0f, 0.0f}, {1.0f, 1.0f}, 0.0f, WHITE})
              .delay(1)
              .moveTo({-1200, 0}, 11);
 
-    Sprite s3_running003;
+    ScreenScprite s3_running003;
     s3_running003.set_id(assetsMap[Asset::RunningMan003].id)
                  .init({{210, 300}, {1700.0f, 500.0f}, {1.0f, 1.0f}, 0.0f, WHITE})
                  .moveTo({(SCREEN_WIDTH - 210) / 2.0f, 500}, 12);
 
-    Sprite s3_enemy01;
+    ScreenScprite s3_enemy01;
     s3_enemy01.set_id(assetsMap[Asset::Enemy1].id)
               .init({{384, 384}, {(SCREEN_WIDTH - 384) / 2.0f - 400, -100.0f}, {0.0f, 0.0f}, 0.0f, WHITE})
               .delay(1)
@@ -152,7 +152,7 @@ void SceneDefinition(SceneManagerConfig config)
               .moveTo({(SCREEN_WIDTH - 384) / 2.0f, 0}, 7, EaseType::Bounce)
               .endParallel();
 
-    Sprite s3_skill01;
+    ScreenScprite s3_skill01;
     s3_skill01.set_id(assetsMap[Asset::Skill1].id)
               .init({{1600, 1200}, {(SCREEN_WIDTH - 1600) / 2.0f, -250}, {1.0f, 1.0f}, 0.0f, INVISIBLE_WHITE})
               .delay(9)
@@ -160,7 +160,7 @@ void SceneDefinition(SceneManagerConfig config)
               .delay(2.3)
               .fadeTo(0, 0);
 
-    Sprite s3_explo02;
+    ScreenScprite s3_explo02;
     s3_explo02.set_id(assetsMap[Asset::Explosion2].id)
               .init({
                   {static_cast<float>(SCREEN_WIDTH), static_cast<float>(SCREEN_HEIGHT)}, {0, 0}, {1, 1}, 0.0f,
@@ -184,7 +184,7 @@ void SceneDefinition(SceneManagerConfig config)
     s3.addSprite(s3_explo02, assetsMap[Asset::Explosion2].drawFunction);
 
     // Scene 4
-    Sprite s4_white;
+    ScreenScprite s4_white;
     s4_white.set_id(assetsMap[Asset::Background].id)
             .initBackground(WHITE)
             .fadeTo(0, 0.5, EaseType::EaseIn)
@@ -192,22 +192,22 @@ void SceneDefinition(SceneManagerConfig config)
             .colorTo(INVISIBLE_BLACK, 0)
             .fadeTo(1, 0.5, EaseType::EaseIn);
 
-    Sprite s4_background;
+    ScreenScprite s4_background;
     s4_background.set_id(assetsMap[Asset::BackgroundWorldEnd].id)
                  .init({{4000.0f, 900.0f}, {-1200.0f, 0.0f}, {1.0f, 1.0f}, 0.0f, WHITE})
                  .moveTo({-800, 0}, 11);
 
-    Sprite s4_foregroundJapan;
+    ScreenScprite s4_foregroundJapan;
     s4_foregroundJapan.set_id(assetsMap[Asset::ForegroundJapan].id)
                       .init({{4000.0f, 900.0f}, {-1200.0f, 0.0f}, {1.0f, 1.0f}, 0.0f, WHITE})
                       .moveTo({-400, 0}, 11);
 
-    Sprite s4_ground;
+    ScreenScprite s4_ground;
     s4_ground.set_id(assetsMap[Asset::Ground].id)
              .init({{4000.0f, 900.0f}, {-1200.0f, 0.0f}, {1.0f, 1.0f}, 0.0f, WHITE})
              .moveTo({0, 0}, 11);
 
-    Sprite s4_running003;
+    ScreenScprite s4_running003;
     s4_running003.set_id(assetsMap[Asset::RunningMan003].id)
                  .init({{210, 300}, {700, 500}, {1.0f, 1.0f}, 0.0f, WHITE})
                  .moveTo({400, 500}, 6)
@@ -217,7 +217,7 @@ void SceneDefinition(SceneManagerConfig config)
                  .moveTo({400, 450}, 5)
                  .endParallel();
 
-    Sprite s4_door;
+    ScreenScprite s4_door;
     s4_door.set_id(assetsMap[Asset::Door].id)
            .init({{320, 240}, {-300, 500}, {1.0f, 1.0f}, DirectX::XMConvertToRadians(90.0f), WHITE})
            .delay(4)
@@ -225,7 +225,7 @@ void SceneDefinition(SceneManagerConfig config)
            .moveTo({400, 500}, 7)
            .endParallel();
 
-    Sprite s4_ufo1;
+    ScreenScprite s4_ufo1;
     s4_ufo1.set_id(assetsMap[Asset::UFO].id)
            .init({{150, 150}, {-100, 100}, {1.0f, 1.0f}, 0, NEON})
            .beginParallel()
@@ -244,7 +244,7 @@ void SceneDefinition(SceneManagerConfig config)
            .rotateTo(DirectX::XMConvertToRadians(-30), 2, EaseType::Elastic)
            .endParallel();
 
-    Sprite s4_ufo2;
+    ScreenScprite s4_ufo2;
     s4_ufo2.set_id(assetsMap[Asset::UFO].id)
            .init({{150, 150}, {-100, 300}, {1.0f, 1.0f}, 0, AQUA})
            .beginParallel()
@@ -282,12 +282,12 @@ void SceneDefinition(SceneManagerConfig config)
     // Scene 5
     Scene s5;
 
-    Sprite s5_white;
+    ScreenScprite s5_white;
     s5_white.set_id(assetsMap[Asset::Background].id)
             .initBackground(BLACK)
             .fadeTo(0, 0.5, EaseType::EaseIn);
 
-    Sprite s5_fg;
+    ScreenScprite s5_fg;
     s5_fg.set_id(assetsMap[Asset::ForegroundShinjyuku].id)
          .init({{2000.0f, 950.0f}, {-400.0f, SCREEN_HEIGHT - 950.0f}, {1.0f, 1.0f}, 0.0f, WHITE})
          .moveTo({0, SCREEN_HEIGHT - 950.0f}, 3)
@@ -295,14 +295,14 @@ void SceneDefinition(SceneManagerConfig config)
          .moveTo({-1600, SCREEN_HEIGHT - 800.0f}, 3)
          .fadeTo(0, 0);
 
-    Sprite s5_bg_1;
+    ScreenScprite s5_bg_1;
     s5_bg_1.set_id(assetsMap[Asset::BackgroundShinjyuku01].id)
            .init({{1600.0f, 950.0f}, {0.0f, .0f}, {1.0f, 1.0f}, 0.0f, WHITE})
            .delay(10)
            .moveTo({-1600, 0}, 3)
            .fadeTo(0, 0);
 
-    Sprite s5_bg_2;
+    ScreenScprite s5_bg_2;
     s5_bg_2.set_id(assetsMap[Asset::BackgroundShinjyuku02].id)
            .init({{1700.0f, 850.0f}, {-50.0f, 5.0f}, {1.0f, 1.0f}, 0.0f, WHITE})
            .moveTo({0, 5}, 3)
@@ -310,7 +310,7 @@ void SceneDefinition(SceneManagerConfig config)
            .moveTo({-1600, 5}, 3)
            .fadeTo(0, 0);
 
-    Sprite s5_running003;
+    ScreenScprite s5_running003;
     s5_running003.set_id(assetsMap[Asset::RunningMan003].id)
                  .init({{210, 300}, {1400, -300}, {1.0f, 1.0f}, DirectX::XMConvertToRadians(900), WHITE})
                  .beginParallel()
@@ -328,7 +328,7 @@ void SceneDefinition(SceneManagerConfig config)
                  .endParallel()
                  .fadeTo(0, 0);
 
-    Sprite s5_train_first;
+    ScreenScprite s5_train_first;
     s5_train_first.set_id(assetsMap[Asset::TrainFirst].id)
                   .init({{800, 800}, {-800, 0}, {1.0f, 1.0f}, 0, WHITE})
                   .delay(5)
@@ -336,7 +336,7 @@ void SceneDefinition(SceneManagerConfig config)
                   .delay(2)
                   .moveTo({-2000, 0}, 3);
 
-    Sprite s5_train_mid;
+    ScreenScprite s5_train_mid;
     s5_train_mid.set_id(assetsMap[Asset::TrainMid].id)
                 .init({{800, 800}, {-1550, -55}, {1.0f, 1.0f}, 0, WHITE})
                 .delay(5)
@@ -344,7 +344,7 @@ void SceneDefinition(SceneManagerConfig config)
                 .delay(2)
                 .moveTo({-2000, -55}, 3);
 
-    Sprite s5_train_door_left;
+    ScreenScprite s5_train_door_left;
     s5_train_door_left.set_id(assetsMap[Asset::TrainDoor].id)
                       .init({{800, 900}, {-800, 0}, {1.0f, 1.0f}, 0, BLACK})
                       .delay(8.5)
@@ -352,7 +352,7 @@ void SceneDefinition(SceneManagerConfig config)
                       .delay(3)
                       .moveTo({-800, 0}, 1.5, EaseType::Bounce);
 
-    Sprite s5_train_door_right;
+    ScreenScprite s5_train_door_right;
     s5_train_door_right.set_id(assetsMap[Asset::TrainDoor].id)
                        .init({{800, 900}, {1600, 0}, {1.0f, 1.0f}, 0, BLACK, true})
                        .delay(8.5)
@@ -360,7 +360,7 @@ void SceneDefinition(SceneManagerConfig config)
                        .delay(3)
                        .moveTo({1600, 0}, 1.5, EaseType::Bounce);
 
-    Sprite s5_laser_background;
+    ScreenScprite s5_laser_background;
     
     s5_laser_background.set_id(assetsMap[Asset::LaserBackground].id)
                        .initBackground(WHITE)
@@ -385,7 +385,7 @@ void SceneDefinition(SceneManagerConfig config)
     // Scene 6
     Scene s6;
 
-    Sprite s6_ground;
+    ScreenScprite s6_ground;
     s6_ground.set_id(assetsMap[Asset::Ground].id)
              .init({{4000.0f, 900.0f}, {-2400.0f, 200.0f}, {1.0f, 1.0f}, 0.0f, WHITE, true})
              .moveTo({-2400.0f, 0}, 1, EaseType::Bounce)
@@ -393,7 +393,7 @@ void SceneDefinition(SceneManagerConfig config)
              .moveTo({0, 0}, 20)
              .moveTo({-1200, 0}, 3.5);
 
-    Sprite s6_penguin;
+    ScreenScprite s6_penguin;
     s6_penguin.set_id(assetsMap[Asset::Penguin].id)
               .init({{200.0f, 200.0f}, {700, -200.0f}, {1.0f, 1.0f}, 0.0f, WHITE, false})
               .moveTo({700, 100}, 1, EaseType::Bounce)
@@ -416,7 +416,7 @@ void SceneDefinition(SceneManagerConfig config)
               .scaleTo({0, 0}, 1, EaseType::EaseOut)
               .endParallel();
 
-    Sprite s6_running003;
+    ScreenScprite s6_running003;
     s6_running003.set_id(assetsMap[Asset::RunningMan003].id)
                  .init({{210, 300}, {1600, 500}, {1.0f, 1.0f}, 0, WHITE})
                  .moveTo({1200, 500}, 1, EaseType::Elastic)
@@ -424,7 +424,7 @@ void SceneDefinition(SceneManagerConfig config)
                  .moveTo({1100, 500}, 2, EaseType::EaseInOut)
                  .fadeTo(0, 0.6);
 
-    Sprite s6_running001;
+    ScreenScprite s6_running001;
     s6_running001.set_id(assetsMap[Asset::RunningMan001].id)
                  .init({{210, 300}, {1100, 500}, {1.0f, 1.0f}, 0, INVISIBLE_WHITE})
                  .delay(5.4).fadeTo(1, 0.6)
@@ -434,7 +434,7 @@ void SceneDefinition(SceneManagerConfig config)
                  .delay(1)
                  .fadeTo(0, 0);
 
-    Sprite s6_running001_rainbowStroke;
+    ScreenScprite s6_running001_rainbowStroke;
     s6_running001_rainbowStroke.set_id(assetsMap[Asset::RunningMan001].id)
                                .init({{210, 300}, {1000, 500}, {1.0f, 1.0f}, 0, INVISIBLE_WHITE})
                                .ShaderTo(ShaderType::RainbowStroke)
@@ -445,7 +445,7 @@ void SceneDefinition(SceneManagerConfig config)
                                .delay(1)
                                .fadeTo(0, 0);
 
-    Sprite s6_running001_rainbowTexture;
+    ScreenScprite s6_running001_rainbowTexture;
     s6_running001_rainbowTexture.set_id(assetsMap[Asset::RunningMan001].id)
                                 .init({{210, 300}, {500, 500}, {1.0f, 1.0f}, 0, INVISIBLE_WHITE})
                                 .ShaderTo(ShaderType::RainbowTexture)
@@ -460,7 +460,7 @@ void SceneDefinition(SceneManagerConfig config)
                                 .scaleTo({0, 0}, 1, EaseType::EaseOut)
                                 .endParallel();
 
-    Sprite s6_apple;
+    ScreenScprite s6_apple;
     s6_apple.set_id(assetsMap[Asset::Apple].id)
             .init({{100, 100}, {750, 200}, {1.0f, 1.0f}, 0, INVISIBLE_WHITE})
             .delay(1.5)
@@ -471,7 +471,7 @@ void SceneDefinition(SceneManagerConfig config)
             .endParallel()
             .fadeTo(0, 0);
 
-    Sprite s6_banana;
+    ScreenScprite s6_banana;
     s6_banana.set_id(assetsMap[Asset::Banana].id)
              .init({{100, 100}, {750, 200}, {1.0f, 1.0f}, 0, INVISIBLE_WHITE})
              .delay(8)
@@ -482,7 +482,7 @@ void SceneDefinition(SceneManagerConfig config)
              .endParallel()
              .fadeTo(0, 0);
 
-    Sprite s6_suica;
+    ScreenScprite s6_suica;
     s6_suica.set_id(assetsMap[Asset::Suica].id)
             .init({{100, 100}, {750, 200}, {1.0f, 1.0f}, 0, INVISIBLE_WHITE})
             .delay(15)
@@ -493,7 +493,7 @@ void SceneDefinition(SceneManagerConfig config)
             .endParallel()
             .fadeTo(0, 0);
 
-    Sprite s6_henshin;
+    ScreenScprite s6_henshin;
     s6_henshin.set_id(assetsMap[Asset::Henshin].id)
               .init({{400, 400}, {1000, 400}, {1.0f, 1.0f}, 0, INVISIBLE_WHITE})
               .delay(5)
@@ -511,13 +511,13 @@ void SceneDefinition(SceneManagerConfig config)
               .delay(1)
               .fadeTo(0, 0);
 
-    Sprite s6_door;
+    ScreenScprite s6_door;
     s6_door.set_id(assetsMap[Asset::Door].id)
            .init({{640, 480}, {480, 0}, {1.0f, 1.0f}, 0, INVISIBLE_WHITE})
            .delay(25)
            .fadeTo(1, 1);
 
-    Sprite s6_map;
+    ScreenScprite s6_map;
     s6_map.set_id(assetsMap[Asset::Map].id)
           .init({{600, 480}, {480, 0}, {0.0f, 0.0f}, 0, INVISIBLE_WHITE})
           .delay(25)
@@ -530,7 +530,7 @@ void SceneDefinition(SceneManagerConfig config)
           .delay(0.5)
           .scaleTo({4.0f, 4.0f}, 1, EaseType::EaseInOut);
 
-    Sprite s6_meteor01;
+    ScreenScprite s6_meteor01;
     s6_meteor01.set_id(assetsMap[Asset::Meteor01].id)
                .init({{120, 120}, {100, 50}, {1.0f, 1.0f}, 0, INVISIBLE_WHITE, true})
                .fadeTo(1, 0.5)
@@ -548,7 +548,7 @@ void SceneDefinition(SceneManagerConfig config)
                .fadeTo(0, 2)
                .endParallel();
 
-    Sprite s6_meteor02;
+    ScreenScprite s6_meteor02;
     s6_meteor02.set_id(assetsMap[Asset::Meteor02].id)
                .init({{120, 120}, {1200, 0}, {1.0f, 1.0f}, 0, INVISIBLE_WHITE, true})
                .delay(0.5)
@@ -567,7 +567,7 @@ void SceneDefinition(SceneManagerConfig config)
                .fadeTo(0, 2)
                .endParallel();
 
-    Sprite s6_meteor03;
+    ScreenScprite s6_meteor03;
     s6_meteor03.set_id(assetsMap[Asset::Meteor03].id)
                .init({{150, 150}, {900, 100}, {1.0f, 1.0f}, 0, INVISIBLE_WHITE, true})
                .delay(1.25)
@@ -586,7 +586,7 @@ void SceneDefinition(SceneManagerConfig config)
                .fadeTo(0, 2)
                .endParallel();
 
-    Sprite s6_meteor04;
+    ScreenScprite s6_meteor04;
     s6_meteor04.set_id(assetsMap[Asset::Meteor04].id)
                .init({{120, 120}, {300, 0}, {1.25f, 1.25f}, 0, INVISIBLE_WHITE, true})
                .delay(1.5)
@@ -605,7 +605,7 @@ void SceneDefinition(SceneManagerConfig config)
                .fadeTo(0, 2)
                .endParallel();
 
-    Sprite s6_meteor05;
+    ScreenScprite s6_meteor05;
     s6_meteor05.set_id(assetsMap[Asset::Meteor05].id)
                .init({{100, 100}, {800, 100}, {1.0f, 1.0f}, 0, INVISIBLE_WHITE, true})
                .delay(2)
@@ -624,7 +624,7 @@ void SceneDefinition(SceneManagerConfig config)
                .fadeTo(0, 2)
                .endParallel();
 
-    Sprite s6_meteor06;
+    ScreenScprite s6_meteor06;
     s6_meteor06.set_id(assetsMap[Asset::Meteor06].id)
                .init({{120, 120}, {100, 0}, {1.0f, 1.0f}, 0, INVISIBLE_WHITE, true})
                .delay(2.5)
@@ -643,7 +643,7 @@ void SceneDefinition(SceneManagerConfig config)
                .fadeTo(0, 2)
                .endParallel();
 
-    Sprite s6_meteor07;
+    ScreenScprite s6_meteor07;
     s6_meteor07.set_id(assetsMap[Asset::Meteor07].id)
                .init({{150, 150}, {1200, 200}, {0.75f, 0.75f}, 0, INVISIBLE_WHITE, true})
                .delay(3)
@@ -663,7 +663,7 @@ void SceneDefinition(SceneManagerConfig config)
                .endParallel();
 
 
-    Sprite s6_meteor08;
+    ScreenScprite s6_meteor08;
     s6_meteor08.set_id(assetsMap[Asset::Meteor08].id)
                .init({{120, 150}, {1100, 0}, {0.75f, 0.75f}, 0, INVISIBLE_WHITE, true})
                .delay(3.5)
@@ -682,7 +682,7 @@ void SceneDefinition(SceneManagerConfig config)
                .fadeTo(0, 2)
                .endParallel();
 
-    Sprite s6_meteor09;
+    ScreenScprite s6_meteor09;
     s6_meteor09.set_id(assetsMap[Asset::Meteor09].id)
                .init({{100, 100}, {250, 0}, {1.0f, 1.0f}, 0, INVISIBLE_WHITE, true})
                .delay(4)
@@ -701,7 +701,7 @@ void SceneDefinition(SceneManagerConfig config)
                .fadeTo(0, 2)
                .endParallel();
 
-    Sprite s6_meteor10;
+    ScreenScprite s6_meteor10;
     s6_meteor10.set_id(assetsMap[Asset::Meteor10].id)
                .init({{150, 150}, {700, 0}, {1.0f, 1.0f}, 0, INVISIBLE_WHITE, true})
                .delay(4.5)
@@ -752,24 +752,24 @@ void SceneDefinition(SceneManagerConfig config)
     // Scene 7
     Scene s7;
 
-    Sprite s7_map;
+    ScreenScprite s7_map;
     s7_map.set_id(assetsMap[Asset::Map].id)
           .init({{600, 480}, {500, 150}, {4.0f, 4.0f}, 0, WHITE})
           .delay(3)
           .scaleTo({0, 0}, 1, EaseType::EaseInOut)
           .delay(15).fadeTo(0, 1);
 
-    Sprite s7_bg;
+    ScreenScprite s7_bg;
     s7_bg.set_id(assetsMap[Asset::Background].id)
          .initBackground(BLACK);
 
-    Sprite s7_backgroundIce;
+    ScreenScprite s7_backgroundIce;
     s7_backgroundIce.set_id(assetsMap[Asset::BackgroundIce].id)
                     .init({{1600, 900}, {0, 0}, {1.0f, 1.0f}, 0, WHITE})
                     .delay(18).fadeTo(0, 1);;
 
 
-    Sprite s7_running001_rainbowTexture;
+    ScreenScprite s7_running001_rainbowTexture;
     s7_running001_rainbowTexture.set_id(assetsMap[Asset::RunningMan001].id)
                                 .init({
                                     {210, 300}, {875, 500}, {0.0f, 0.0f}, DirectX::XMConvertToRadians(-90), WHITE, true,
@@ -786,7 +786,7 @@ void SceneDefinition(SceneManagerConfig config)
                                 .endParallel();
 
 
-    Sprite s7_running001_rainbowTexture2;
+    ScreenScprite s7_running001_rainbowTexture2;
     s7_running001_rainbowTexture2.set_id(assetsMap[Asset::RunningMan001].id)
                                  .init({
                                      {210, 300}, {1600, 500}, {1.0f, 1.0f}, 0, WHITE, false,
@@ -796,7 +796,7 @@ void SceneDefinition(SceneManagerConfig config)
                                  .moveTo({700, 500}, 3, EaseType::EaseOut)
                                  .fadeTo(0, 1);
 
-    Sprite s7_running001;
+    ScreenScprite s7_running001;
     s7_running001.set_id(assetsMap[Asset::RunningMan001].id)
                  .init({
                      {210, 300}, {700, 500}, {1.0f, 1.0f}, 0, INVISIBLE_WHITE, false
@@ -807,7 +807,7 @@ void SceneDefinition(SceneManagerConfig config)
                  .fadeTo(0, 0.6);
 
 
-    Sprite s7_running003;
+    ScreenScprite s7_running003;
     s7_running003.set_id(assetsMap[Asset::RunningMan003].id)
                  .init({
                      {210, 300}, {700, 500}, {1.0f, 1.0f}, 0, INVISIBLE_WHITE, false
@@ -817,7 +817,7 @@ void SceneDefinition(SceneManagerConfig config)
                  .delay(0.5)
                  .fadeTo(0, 0.6);
 
-    Sprite s7_running003_SLOW;
+    ScreenScprite s7_running003_SLOW;
     s7_running003_SLOW.set_id(assetsMap[Asset::RunningMan003_SLOW].id)
                       .init({
                           {210, 300}, {700, 500}, {1.0f, 1.0f}, 0, INVISIBLE_WHITE, false
@@ -828,7 +828,7 @@ void SceneDefinition(SceneManagerConfig config)
                       .fadeTo(0, 0.6);
 
 
-    Sprite s7_running003_STOP;
+    ScreenScprite s7_running003_STOP;
     s7_running003_STOP.set_id(assetsMap[Asset::RunningMan003_STOP].id)
                       .init({
                           {210, 300}, {700, 500}, {1.0f, 1.0f}, 0, INVISIBLE_WHITE, false
@@ -838,13 +838,13 @@ void SceneDefinition(SceneManagerConfig config)
                       .delay(1)
                       .fadeTo(0, 0.5);
 
-    Sprite s7_ground;
+    ScreenScprite s7_ground;
     s7_ground.set_id(assetsMap[Asset::Ground].id)
              .init({{4000.0f, 900.0f}, {-1200.0f, 0.0f}, {1.0f, 1.0f}, 0.0f, WHITE, false}).delay(18).fadeTo(0, 1)
              ;
 
 
-    Sprite s7_wing;
+    ScreenScprite s7_wing;
     s7_wing.set_id(assetsMap[Asset::Wing].id)
            .init({{320.0f, 320.0f}, {640.0f, 500.0f}, {1.0f, 1.0f}, 0.0f, INVISIBLE_WHITE, false})
            .delay(13)
@@ -853,7 +853,7 @@ void SceneDefinition(SceneManagerConfig config)
            .fadeTo(0, 0);
 
 
-    Sprite s7_wrap;
+    ScreenScprite s7_wrap;
     s7_wrap.set_id(assetsMap[Asset::Wrap].id)
            .init({{320.0f, 320.0f}, {640.0f, 500.0f}, {1.0f, 1.0f}, 0.0f, INVISIBLE_WHITE, false})
            .delay(13)
@@ -861,7 +861,7 @@ void SceneDefinition(SceneManagerConfig config)
            .delay(0.9)
            .fadeTo(0, 0);
 
-    Sprite s7_fubuki;
+    ScreenScprite s7_fubuki;
     s7_fubuki.set_id(assetsMap[Asset::Fubuki].id)
              .initBackground()
              .fadeTo(0, 0)
@@ -889,20 +889,20 @@ void SceneDefinition(SceneManagerConfig config)
 
     // Scene 8
     // Title 1: Kooler Presents
-    Sprite s8_bg;
+    ScreenScprite s8_bg;
     s8_bg.set_id(assetsMap[Asset::Background].id)
          .initBackground(BLACK);
 
     std::string s8_title_text = "THE  END\n\n   BY   \n KOOLER\n";
     std::string s8_credit_text = "Assets from pipoya.net/dotown and generated by Adobe Firefly";
-    Sprite s8_title;
+    ScreenScprite s8_title;
     s8_title.initCenterTitle(s1_title_text, INVISIBLE_WHITE)
             .delay(1)
             .fadeTo(1, 2, EaseType::EaseInOut)
             .delay(8)
             .fadeTo(0, 2, EaseType::EaseInOut);
 
-    Sprite s8_credit;
+    ScreenScprite s8_credit;
     s8_credit
         .init({{0, 0}, {1600.0f, 700.0f}, {1.0f, 1.0f}, 0.0f, WHITE, false})
         .delay(1)
@@ -915,7 +915,7 @@ void SceneDefinition(SceneManagerConfig config)
     s8.addSprite(s8_credit, makeTextDrawFunction(s8_credit_text, config.titlePresentsText));
     
     // Scene 9
-    Sprite s9_stageClose;
+    ScreenScprite s9_stageClose;
     s9_stageClose.set_id(assetsMap[Asset::StageClose].id).initBackground(INVISIBLE_WHITE).fadeTo(1, 0.5);
     
     Scene s9;

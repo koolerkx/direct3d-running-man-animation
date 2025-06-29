@@ -9,23 +9,23 @@ using namespace DirectX;
 
 constexpr int DrawingIDDefaultPlaceholder = -1;
 
-Sprite::Sprite()
+ScreenScprite::ScreenScprite()
 {
     drawingId = DrawingIDDefaultPlaceholder;
 }
 
-Sprite::Sprite(int id)
+ScreenScprite::ScreenScprite(int id)
 {
     drawingId = id;
 }
 
-Sprite& Sprite::set_id(int id)
+ScreenScprite& ScreenScprite::set_id(int id)
 {
     drawingId = id;
     return *this;
 }
 
-Sprite& Sprite::init(const SpriteState& state)
+ScreenScprite& ScreenScprite::init(const SpriteState& state)
 {
     initialState = currentState = state;
     timeline.clear();
@@ -34,28 +34,28 @@ Sprite& Sprite::init(const SpriteState& state)
     return *this;
 }
 
-Sprite& Sprite::moveTo(XMFLOAT2 pos, double duration, EaseType easing)
+ScreenScprite& ScreenScprite::moveTo(XMFLOAT2 pos, double duration, EaseType easing)
 {
     AnimationKeyframe keyframe(AnimProperty::Position, pos, duration, easing);
     addKeyframe(keyframe);
     return *this;
 }
 
-Sprite& Sprite::scaleTo(XMFLOAT2 scale, double duration, EaseType easing)
+ScreenScprite& ScreenScprite::scaleTo(XMFLOAT2 scale, double duration, EaseType easing)
 {
     AnimationKeyframe keyframe(AnimProperty::Scale, scale, duration, easing);
     addKeyframe(keyframe);
     return *this;
 }
 
-Sprite& Sprite::rotateTo(float rotation, double duration, EaseType easing)
+ScreenScprite& ScreenScprite::rotateTo(float rotation, double duration, EaseType easing)
 {
     AnimationKeyframe keyframe(AnimProperty::Rotation, rotation, duration, easing);
     addKeyframe(keyframe);
     return *this;
 }
 
-Sprite& Sprite::fadeTo(float alpha, double duration, EaseType easing)
+ScreenScprite& ScreenScprite::fadeTo(float alpha, double duration, EaseType easing)
 {
     XMFLOAT4 color = currentState.color;
     color.w = alpha;
@@ -64,27 +64,27 @@ Sprite& Sprite::fadeTo(float alpha, double duration, EaseType easing)
     return *this;
 }
 
-Sprite& Sprite::colorTo(XMFLOAT4 color, double duration, EaseType easing)
+ScreenScprite& ScreenScprite::colorTo(XMFLOAT4 color, double duration, EaseType easing)
 {
     AnimationKeyframe keyframe(AnimProperty::Color, 0, duration, easing);
     addKeyframe(keyframe);
     return *this;
 }
 
-Sprite& Sprite::delay(double duration)
+ScreenScprite& ScreenScprite::delay(double duration)
 {
     totalDuration += duration;
     return *this;
 }
 
-Sprite& Sprite::flip()
+ScreenScprite& ScreenScprite::flip()
 {
     AnimationKeyframe keyframe(AnimProperty::Flip, 0, 0, EaseType::Linear);
     addKeyframe(keyframe);
     return *this;
 }
 
-Sprite& Sprite::ShaderTo(ShaderType shader)
+ScreenScprite& ScreenScprite::ShaderTo(ShaderType shader)
 {
     AnimationKeyframe keyframe(AnimProperty::Shader, static_cast<int>(shader), 0, EaseType::Linear);
     addKeyframe(keyframe);
@@ -92,7 +92,7 @@ Sprite& Sprite::ShaderTo(ShaderType shader)
 }
 
 // 非同期動きグループ
-Sprite& Sprite::beginParallel()
+ScreenScprite& ScreenScprite::beginParallel()
 {
     if (inParallelGroup) return *this;
 
@@ -103,7 +103,7 @@ Sprite& Sprite::beginParallel()
     return *this;
 }
 
-Sprite& Sprite::endParallel()
+ScreenScprite& ScreenScprite::endParallel()
 {
     if (inParallelGroup)
     {
@@ -131,7 +131,7 @@ Sprite& Sprite::endParallel()
 }
 
 // 繰り返しグループ
-Sprite& Sprite::beginRepeat(RepeatMode mode, int times)
+ScreenScprite& ScreenScprite::beginRepeat(RepeatMode mode, int times)
 {
     if (inRepeatGroup) return *this;
 
@@ -145,7 +145,7 @@ Sprite& Sprite::beginRepeat(RepeatMode mode, int times)
     return *this;
 }
 
-Sprite& Sprite::endRepeat()
+ScreenScprite& ScreenScprite::endRepeat()
 {
     if (!inRepeatGroup) return *this;
 
@@ -173,7 +173,7 @@ Sprite& Sprite::endRepeat()
     return *this;
 }
 
-SpriteState Sprite::getState(double timeOffset)
+SpriteState ScreenScprite::getState(double timeOffset)
 {
     if (timeOffset <= 0.0) return initialState;
 
@@ -271,12 +271,12 @@ SpriteState Sprite::getState(double timeOffset)
     return state;
 }
 
-const double Sprite::getDuration()
+const double ScreenScprite::getDuration()
 {
     return totalDuration;
 }
 
-Sprite& Sprite::initBackground(XMFLOAT4 color)
+ScreenScprite& ScreenScprite::initBackground(XMFLOAT4 color)
 {
     const int SCREEN_WIDTH = static_cast<int>(Direct3D_GetBackBufferWidth());
     const int SCREEN_HEIGHT = static_cast<int>(Direct3D_GetBackBufferHeight());
@@ -287,7 +287,7 @@ Sprite& Sprite::initBackground(XMFLOAT4 color)
     });
 }
 
-Sprite& Sprite::initCenterTitle(std::string text, XMFLOAT4 color)
+ScreenScprite& ScreenScprite::initCenterTitle(std::string text, XMFLOAT4 color)
 {
     const int SCREEN_WIDTH = static_cast<int>(Direct3D_GetBackBufferWidth());
     const int SCREEN_HEIGHT = static_cast<int>(Direct3D_GetBackBufferHeight());
@@ -303,7 +303,7 @@ Sprite& Sprite::initCenterTitle(std::string text, XMFLOAT4 color)
     });
 }
 
-void Sprite::addKeyframe(AnimationKeyframe keyframe)
+void ScreenScprite::addKeyframe(AnimationKeyframe keyframe)
 {
     if (inRepeatGroup)
     {
@@ -327,7 +327,7 @@ void Sprite::addKeyframe(AnimationKeyframe keyframe)
 }
 
 
-float Sprite::applyEasing(float t, EaseType easing)
+float ScreenScprite::applyEasing(float t, EaseType easing)
 {
     t = max(0.0f, min(1.0f, t));
 
@@ -388,12 +388,12 @@ float Sprite::applyEasing(float t, EaseType easing)
     }
 }
 
-float Sprite::interpolate(float start, float end, float t)
+float ScreenScprite::interpolate(float start, float end, float t)
 {
     return start + (end - start) * t;
 }
 
-XMFLOAT2 Sprite::interpolate(XMFLOAT2 start, XMFLOAT2 end, float t)
+XMFLOAT2 ScreenScprite::interpolate(XMFLOAT2 start, XMFLOAT2 end, float t)
 {
     return {
         interpolate(start.x, end.x, t),
@@ -401,7 +401,7 @@ XMFLOAT2 Sprite::interpolate(XMFLOAT2 start, XMFLOAT2 end, float t)
     };
 }
 
-XMFLOAT4 Sprite::interpolate(XMFLOAT4 start, XMFLOAT4 end, float t)
+XMFLOAT4 ScreenScprite::interpolate(XMFLOAT4 start, XMFLOAT4 end, float t)
 {
     return {
         interpolate(start.x, end.x, t),
