@@ -1,7 +1,14 @@
+/**
+ * @file Scene.cpp
+ * @brief シーンクラスの実装
+ * @details スプライトをまとめて、管理するクラス
+ * @author KOOLER FAN
+ * @date 2025/06/30
+ */
+
 #include "Scene.h"
 
 #include "debug_ostream.h"
-#include "SceneManager.h"
 #include "SceneSprite.h"
 
 #include "system_timer.h"
@@ -13,7 +20,7 @@ void Scene::init()
 
 void Scene::startSetup()
 {
-    // get max duration
+    // シーンの長さを取得
     duration = 0.0;
     for (SpriteWithDrawFunction& sprite : sprites)
     {
@@ -23,7 +30,6 @@ void Scene::startSetup()
             duration = spriteDuration;
         }
     }
-    hal::dout << duration << std::endl;
 
     startTime = SystemTimer_GetTime();
 }

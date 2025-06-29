@@ -1,3 +1,11 @@
+/**
+ * @file SceneSprite.cpp
+ * @brief スプライトの状態管理
+ * @details Keyframeシステムに近く、動きを登録して、特定の時間の状態を計算する
+ * @author KOOLER FAN
+ * @date 2025/06/30
+ */
+
 #include "SceneSprite.h"
 
 #include <algorithm>
@@ -91,7 +99,7 @@ SceneSprite& SceneSprite::ShaderTo(ShaderType shader)
     return *this;
 }
 
-// 非同期動きグループ
+// ????????O???[?v
 SceneSprite& SceneSprite::beginParallel()
 {
     if (inParallelGroup) return *this;
@@ -130,7 +138,7 @@ SceneSprite& SceneSprite::endParallel()
     return *this;
 }
 
-// 繰り返しグループ
+// ?J?????O???[?v
 SceneSprite& SceneSprite::beginRepeat(RepeatMode mode, int times)
 {
     if (inRepeatGroup) return *this;
@@ -188,7 +196,7 @@ SpriteState SceneSprite::getState(double timeOffset)
             const RepeatGroup& repeatGroup = repeatGroups[keyframe.repeatGroupIndex];
 
             double groupTime = timeOffset - repeatGroup.startTime;
-            if (groupTime <= 0) continue; // まだ始まっていない
+            if (groupTime <= 0) continue;
 
             if (repeatGroup.repeatCount == -1 || groupTime < (repeatGroup.duration * repeatGroup.repeatCount))
             {

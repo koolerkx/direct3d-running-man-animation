@@ -1,4 +1,13 @@
-#pragma once
+/**
+ * @file SceneManager.h
+ * @brief シーンを管理する関数
+ * @details 
+ * @author KOOLER FAN
+ * @date 2025/06/30
+ */
+
+#ifndef DirectXSceneManager_h
+#define DirectXSceneManager_h
 #include <map>
 #include <variant>
 #include <vector>
@@ -8,9 +17,9 @@
 #include "Scene.h"
 #include "sprite_anim.h"
 
-static std::vector<Scene> scenes;
-static int sceneIndex = 0;
-static bool isPrevSceneEnd = true;
+static std::vector<Scene> scenes; ///< 全部シーン
+static int sceneIndex = 0; ///< 今のシーン
+static bool isPrevSceneEnd = true; ///< シーンが終わったかフラグ変数
 
 struct AnimPatternDataWithPath
 {
@@ -78,11 +87,13 @@ enum class Asset
     LaserBackground
 };
 
+// 動かないスプライトと動くスプリト
 using AssetDataType = std::variant<std::wstring, AnimPatternDataWithPath>;
 
+// 使うのテクスチャの設定
 static std::map<Asset, AssetDataType> AssetsSetting
 {
-    {Asset::Background, L"assets/white.png"},
+    // ランニングマン
     {
         Asset::RunningMan000, AnimPatternDataWithPath{
             L"assets/runningman000.png", {
@@ -118,6 +129,8 @@ static std::map<Asset, AssetDataType> AssetsSetting
             }
         }
     },
+
+    // 他のスプライト
     {
         Asset::BackgroundStar, AnimPatternDataWithPath{
             L"assets/starburst_640x480-min.png", {
@@ -280,6 +293,7 @@ static std::map<Asset, AssetDataType> AssetsSetting
         }
     },
 
+    // 小物
     {Asset::UFO, L"assets/UFO.png"},
     {Asset::TrainFirst, L"assets/train_first.png"},
     {Asset::TrainMid, L"assets/train_mid.png"},
@@ -290,7 +304,8 @@ static std::map<Asset, AssetDataType> AssetsSetting
     {Asset::Banana, L"assets/banana.png"},
     {Asset::Suica, L"assets/suica.png"},
 
-    // Background
+    // 背景
+    {Asset::Background, L"assets/white.png"},
     {Asset::ForegroundJapan, L"assets/S1_FG1.png"},
     {Asset::BackgroundJapan, L"assets/S1_BB1.png"},
     {Asset::BackgroundWorldEnd, L"assets/S1_BB2.png"},
@@ -302,12 +317,14 @@ static std::map<Asset, AssetDataType> AssetsSetting
     {Asset::Map, L"assets/map.png"},
 };
 
+// 描画用データ構造
 struct AssetsDrawData
 {
     int id;
     std::function<void(int, SpriteState)> drawFunction;
 };
 
+// 描画用データ構造マップ
 static std::map<Asset, AssetsDrawData> assetsMap;
 
 struct SceneManagerConfig
@@ -316,18 +333,14 @@ struct SceneManagerConfig
     hal::DebugText* runningmanText;
 };
 
-/**
- * @brief シーンを定義する
- */
 void SceneInitialize(SceneManagerConfig config);
 
+// シーンの定義、ハードコードしたもの
 void SceneDefinition(SceneManagerConfig config);
 
-/**
- * @brief シーンを追加する
- */
 void RegisterScene(Scene scene);
 
 void SceneLoop();
 
 DirectX::XMFLOAT2 GetScreenCenterPosition(const DirectX::XMFLOAT2& size, float screenWidth, float screenHeight);
+#endif

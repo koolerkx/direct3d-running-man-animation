@@ -1,4 +1,14 @@
-#pragma once
+/**
+* @file SceneSprite.h
+ * @brief スプライトの状態管理
+ * @details Keyframeシステムに近く、動きを登録して、特定の時間の状態を計算する
+ * @author KOOLER FAN
+ * @date 2025/06/30
+ */
+
+#ifndef SceneSprite_h
+#define SceneSprite_h
+
 #include <DirectXMath.h>
 #include <string>
 #include <vector>
@@ -60,7 +70,7 @@ struct AnimationKeyframe
     double startTime;
 
     bool isParallel = false;
-    int repeatGroupIndex = -1; ///< @brief -1は繰り返さない
+    int repeatGroupIndex = -1; ///< @brief -1??J???????
 
     AnimationKeyframe(AnimProperty prop, DirectX::XMFLOAT4 target, double dur, EaseType ease)
         : property(prop), targetValue(target), duration(dur), easing(ease), startTime(0.0)
@@ -148,7 +158,6 @@ private:
     std::vector<AnimationKeyframe> currentParallelKeyframes;
     std::vector<ParallelGroup> parallelGroups;
 
-    // 繰り返すグループ状態
     bool inRepeatGroup = false;
     RepeatGroup currentRepeatGroup{};
     std::vector<RepeatGroup> repeatGroups;
@@ -197,3 +206,5 @@ constexpr COLOR BROWN = {0.6f, 0.3f, 0.1f, 1.0f}; // ブラウン
 constexpr COLOR ORANGE = {1.0f, 0.5f, 0.0f, 1.0f}; // オレンジ
 constexpr COLOR PURPLE = {0.5f, 0.0f, 0.5f, 1.0f}; // 紫
 constexpr COLOR PINK = {1.0f, 0.0f, 0.5f, 1.0f}; // ピンク
+
+#endif

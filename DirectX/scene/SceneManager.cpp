@@ -1,3 +1,10 @@
+/**
+ * @file SceneManager.cpp
+ * @brief シーンを管理するクラスの実装
+ * @author KOOLER FAN
+ * @date 2025/06/30
+ */
+
 #include "SceneManager.h"
 
 #include "debug_ostream.h"
