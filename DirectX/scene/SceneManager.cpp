@@ -858,7 +858,7 @@ void SceneDefinition(SceneManagerConfig config)
     SceneSprite s7_wing;
     s7_wing.set_id(assetsMap[Asset::Wing].id)
            .init({{320.0f, 320.0f}, {640.0f, 500.0f}, {1.0f, 1.0f}, 0.0f, INVISIBLE_WHITE, false})
-           .delay(13)
+           .delay(12.8)
            .fadeTo(1, 0)
            .delay(0.9)
            .fadeTo(0, 0);
@@ -867,7 +867,7 @@ void SceneDefinition(SceneManagerConfig config)
     SceneSprite s7_wrap;
     s7_wrap.set_id(assetsMap[Asset::Wrap].id)
            .init({{320.0f, 320.0f}, {640.0f, 500.0f}, {1.0f, 1.0f}, 0.0f, INVISIBLE_WHITE, false})
-           .delay(13)
+           .delay(12.8)
            .fadeTo(1, 0)
            .delay(0.9)
            .fadeTo(0, 0);
@@ -934,11 +934,11 @@ void SceneDefinition(SceneManagerConfig config)
     s9.addSprite(s8_bg, assetsMap[Asset::Background].drawFunction);
     s9.addSprite(s9_stageClose, assetsMap[Asset::StageClose].drawFunction);
 
-    // RegisterScene(s1);
-    // RegisterScene(s2);
-    // RegisterScene(s3);
-    // RegisterScene(s4);
-    // RegisterScene(s5);
+    RegisterScene(s1);
+    RegisterScene(s2);
+    RegisterScene(s3);
+    RegisterScene(s4);
+    RegisterScene(s5);
     RegisterScene(s6);
     RegisterScene(s7);
     RegisterScene(s8);
