@@ -153,3 +153,7 @@ constexpr COLOR BLACK = {0.0f, 0.0f, 0.0f, 1.0f};
 constexpr COLOR INVISIBLE_BLACK = {0.0f, 0.0f, 0.0f, 0.0f};
 constexpr COLOR WHITE = {1.0f, 1.0f, 1.0f, 1.0f};
 constexpr COLOR INVISIBLE_WHITE = {1.0f, 1.0f, 1.0f, 0.0f};
+constexpr COLOR BLUE = {0.0f, 0.0f, 1.0f, 1.0f};
+constexpr COLOR RED = {1.0f, 0.0f, 0.0f, 1.0f};
+constexpr COLOR NEON = { 0.22f, 1.0f, 0.078f, 1.0f};
+constexpr COLOR AQUA = { 0.0f, 1.0f, 1, 1.0f};

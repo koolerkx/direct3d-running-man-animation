@@ -36,7 +36,17 @@ enum class Asset
 
     ForegroundShinjyuku,
     BackgroundShinjyuku01,
-    BackgroundShinjyuku02
+    BackgroundShinjyuku02,
+
+    Enemy1,
+    Skill1,
+    Explosion1,
+    Explosion2,
+    Door,
+
+    UFO,
+    TrainFirst,
+    TrainMid
 };
 
 using AssetDataType = std::variant<std::wstring, AnimPatternDataWithPath>;
@@ -61,7 +71,7 @@ static std::map<Asset, AssetDataType> AssetsSetting
     {
         Asset::RunningMan003, AnimPatternDataWithPath{
             L"assets/runningman003.png", {
-                -1, 10, 5, 0.1, {140, 200}, {0, 0}, true
+                -1, 10, 5, 0.08, {140, 200}, {0, 0}, true
             }
         }
     },
@@ -86,6 +96,43 @@ static std::map<Asset, AssetDataType> AssetsSetting
             }
         }
     },
+    {
+        Asset::Enemy1, AnimPatternDataWithPath{
+            L"assets/pipo-nazoobj05a.png", {
+                -1, 6, 5, 0.08, {192, 192}, {0, 0}, true
+            }
+        }
+    },{
+        Asset::Skill1, AnimPatternDataWithPath{
+            L"assets/pipo-btleffect141.png", {
+                -1, 30, 3, 0.1, {640, 480}, {0, 0}, true
+            }
+        }
+    },{
+        Asset::Explosion1, AnimPatternDataWithPath{
+            L"assets/pipo-mapeffect005.png", {
+                -1, 10, 10, 0.1, {360, 360}, {0, 0}, true
+            }
+        }
+    },{
+        Asset::Explosion2, AnimPatternDataWithPath{
+            L"assets/pipo-btleffect126.png", {
+                -1, 16, 2, 0.06, {640, 480}, {0, 0}, true
+            }
+        }
+    },{
+        Asset::Door, AnimPatternDataWithPath{
+            L"assets/pipo-mapeffect016_320.png", {
+                -1, 20, 4, 0.05, {320, 240}, {0, 0}, true
+            }
+        }
+    },
+
+    {Asset::UFO, L"assets/UFO.png"},
+    {Asset::TrainFirst, L"assets/train_first.png"},
+    {Asset::TrainMid, L"assets/train_mid.png"},
+    
+    // Background
     {Asset::ForegroundJapan, L"assets/S1_FG1.png"},
     {Asset::BackgroundJapan, L"assets/S1_BB1.png"},
     {Asset::BackgroundWorldEnd, L"assets/S1_BB2.png"},
