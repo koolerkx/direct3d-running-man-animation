@@ -361,11 +361,11 @@ void SceneDefinition(SceneManagerConfig config)
                        .moveTo({1600, 0}, 1.5, EaseType::Bounce);
 
     ScreenScprite s5_laser_background;
-    
+
     s5_laser_background.set_id(assetsMap[Asset::LaserBackground].id)
                        .initBackground(WHITE)
                        .delay(15).fadeTo(0, 2);
-    
+
     s5.addSprite(s5_laser_background, assetsMap[Asset::LaserBackground].drawFunction);
     s5.addSprite(s5_bg_1, assetsMap[Asset::BackgroundShinjyuku01].drawFunction);
     s5.addSprite(s5_bg_2, assetsMap[Asset::BackgroundShinjyuku02].drawFunction);
@@ -731,7 +731,7 @@ void SceneDefinition(SceneManagerConfig config)
     s6.addSprite(s6_meteor08, assetsMap[Asset::Meteor08].drawFunction);
     s6.addSprite(s6_meteor09, assetsMap[Asset::Meteor09].drawFunction);
     s6.addSprite(s6_meteor10, assetsMap[Asset::Meteor10].drawFunction);
-    
+
     s6.addSprite(s6_ground, assetsMap[Asset::TrainMid].drawFunction);
     s6.addSprite(s6_penguin, assetsMap[Asset::Penguin].drawFunction);
 
@@ -840,8 +840,7 @@ void SceneDefinition(SceneManagerConfig config)
 
     ScreenScprite s7_ground;
     s7_ground.set_id(assetsMap[Asset::Ground].id)
-             .init({{4000.0f, 900.0f}, {-1200.0f, 0.0f}, {1.0f, 1.0f}, 0.0f, WHITE, false}).delay(18).fadeTo(0, 1)
-             ;
+             .init({{4000.0f, 900.0f}, {-1200.0f, 0.0f}, {1.0f, 1.0f}, 0.0f, WHITE, false}).delay(18).fadeTo(0, 1);
 
 
     ScreenScprite s7_wing;
@@ -913,15 +912,15 @@ void SceneDefinition(SceneManagerConfig config)
     s8.addSprite(s8_bg, assetsMap[Asset::Background].drawFunction);
     s8.addSprite(s8_title, makeTextDrawFunction(s8_title_text, config.titlePresentsText));
     s8.addSprite(s8_credit, makeTextDrawFunction(s8_credit_text, config.titlePresentsText));
-    
+
     // Scene 9
     ScreenScprite s9_stageClose;
-    s9_stageClose.set_id(assetsMap[Asset::StageClose].id).initBackground(INVISIBLE_WHITE).fadeTo(1, 0.5);
-    
+    s9_stageClose.set_id(assetsMap[Asset::StageClose].id).initBackground(INVISIBLE_WHITE).fadeTo(1, 0.5).delay(2).fadeTo(0, 0.5);
+
     Scene s9;
     s9.addSprite(s8_bg, assetsMap[Asset::Background].drawFunction);
     s9.addSprite(s9_stageClose, assetsMap[Asset::StageClose].drawFunction);
-    
+
     RegisterScene(s1);
     RegisterScene(s2);
     RegisterScene(s3);
@@ -943,11 +942,14 @@ void SceneLoop()
     }
 
     scenes[sceneIndex].draw_loop();
-    if (scenes[sceneIndex].is_end && sceneIndex < (scenes.size() - 1))
+    if (scenes[sceneIndex].is_end)
     {
+        scenes[sceneIndex].is_end = false;
         sceneIndex++;
         isPrevSceneEnd = true;
     }
+
+    sceneIndex %= scenes.size();
 }
 
 void RegisterScene(Scene scene)
