@@ -94,7 +94,7 @@ void SceneDefinition(SceneManagerConfig config)
     s2_running000
         .init({{100, 200}, GetScreenCenterPosition({100, 200}, SCREEN_WIDTH, SCREEN_HEIGHT), {0, 0}})
         .delay(1)
-        .scaleTo({1.5, 1.5}, 3, EaseType::EaseIn)
+        .scaleTo({2, 2}, 3, EaseType::EaseIn)
         .delay(0.5)
         .beginParallel()
         .scaleTo({0.75, 0.75}, 3, EaseType::EaseOut)
@@ -285,6 +285,7 @@ void SceneDefinition(SceneManagerConfig config)
 
     s4.addSprite(s4_white, assetsMap[Asset::Background].drawFunction);
 
+    // Scene 5
     Scene s5;
 
     Sprite s5_white;
@@ -295,14 +296,25 @@ void SceneDefinition(SceneManagerConfig config)
     Sprite s5_fg;
     s5_fg.set_id(assetsMap[Asset::ForegroundShinjyuku].id)
          .init({{2000.0f, 950.0f}, {-400.0f, SCREEN_HEIGHT - 950.0f}, {1.0f, 1.0f}, 0.0f, WHITE})
-         .moveTo({0, SCREEN_HEIGHT - 950.0f}, 3);
+         .moveTo({0, SCREEN_HEIGHT - 950.0f}, 3)
+         .delay(7)
+         .moveTo({-1600, SCREEN_HEIGHT - 800.0f}, 3)
+         .fadeTo(0, 0);
+
     Sprite s5_bg_1;
     s5_bg_1.set_id(assetsMap[Asset::BackgroundShinjyuku01].id)
-           .init({{1600.0f, 950.0f}, {0.0f, .0f}, {1.0f, 1.0f}, 0.0f, WHITE});
+           .init({{1600.0f, 950.0f}, {0.0f, .0f}, {1.0f, 1.0f}, 0.0f, WHITE})
+           .delay(10)
+           .moveTo({-1600, 0}, 3)
+           .fadeTo(0, 0);
+
     Sprite s5_bg_2;
     s5_bg_2.set_id(assetsMap[Asset::BackgroundShinjyuku02].id)
            .init({{1700.0f, 850.0f}, {-50.0f, 5.0f}, {1.0f, 1.0f}, 0.0f, WHITE})
-           .moveTo({0, 5}, 3);
+           .moveTo({0, 5}, 3)
+           .delay(7)
+           .moveTo({-1600, 5}, 3)
+           .fadeTo(0, 0);
 
     Sprite s5_running003;
     s5_running003.set_id(assetsMap[Asset::RunningMan003].id)
@@ -318,7 +330,7 @@ void SceneDefinition(SceneManagerConfig config)
                  .moveTo({900, 400}, 2.5)
                  .beginParallel()
                  .rotateTo(DirectX::XMConvertToRadians(90), 1, EaseType::EaseOut)
-                 .moveTo({1200, 800}, 2)
+                 .moveTo({1200, 1000}, 2)
                  .endParallel()
                  .fadeTo(0, 0);
 
@@ -326,21 +338,33 @@ void SceneDefinition(SceneManagerConfig config)
     s5_train_first.set_id(assetsMap[Asset::TrainFirst].id)
                   .init({{800, 800}, {-800, 0}, {1.0f, 1.0f}, 0, WHITE})
                   .delay(5)
-                  .moveTo({800, 0}, 3, EaseType::EaseInOut);
+                  .moveTo({800, 0}, 3, EaseType::EaseInOut)
+                  .delay(2)
+                  .moveTo({-2000, 0}, 3);
 
     Sprite s5_train_mid;
     s5_train_mid.set_id(assetsMap[Asset::TrainMid].id)
                 .init({{800, 800}, {-1550, -55}, {1.0f, 1.0f}, 0, WHITE})
                 .delay(5)
-                .moveTo({0, -55}, 3, EaseType::EaseInOut);
+                .moveTo({0, -55}, 3, EaseType::EaseInOut)
+                .delay(2)
+                .moveTo({-2000, -55}, 3);
 
     Sprite s5_train_door_left;
     s5_train_door_left.set_id(assetsMap[Asset::TrainDoor].id)
-                .init({{800, 900}, {0, 0}, {1.0f, 1.0f}, 0, BLACK});
+                      .init({{800, 900}, {-800, 0}, {1.0f, 1.0f}, 0, BLACK})
+                      .delay(8.5)
+                      .moveTo({0, 0}, 1.5, EaseType::Bounce)
+                      .delay(3)
+                      .fadeTo(0, 2);
 
     Sprite s5_train_door_right;
     s5_train_door_right.set_id(assetsMap[Asset::TrainDoor].id)
-                .init({{800, 900}, {800, 0}, {1.0f, 1.0f}, 0, BLACK, true});
+                       .init({{800, 900}, {1600, 0}, {1.0f, 1.0f}, 0, BLACK, true})
+                       .delay(8.5)
+                       .moveTo({800, 0}, 1.5, EaseType::Bounce)
+                       .delay(3)
+                       .fadeTo(0, 2);
 
 
     s5.addSprite(s5_bg_1, assetsMap[Asset::BackgroundShinjyuku01].drawFunction);
@@ -352,17 +376,117 @@ void SceneDefinition(SceneManagerConfig config)
     s5.addSprite(s5_train_mid, assetsMap[Asset::TrainMid].drawFunction);
 
     s5.addSprite(s5_fg, assetsMap[Asset::ForegroundShinjyuku].drawFunction);
-    
+
     s5.addSprite(s5_train_door_left, assetsMap[Asset::TrainDoor].drawFunction);
     s5.addSprite(s5_train_door_right, assetsMap[Asset::TrainDoor].drawFunction);
 
     s5.addSprite(s5_white, assetsMap[Asset::ForegroundShinjyuku].drawFunction);
 
+    // Scene 6
+    Scene s6;
+
+    Sprite s6_ground;
+    s6_ground.set_id(assetsMap[Asset::Ground].id)
+             .init({{4000.0f, 900.0f}, {-2400.0f, 200.0f}, {1.0f, 1.0f}, 0.0f, WHITE, true})
+             .moveTo({-2400.0f, 0}, 1, EaseType::Bounce)
+             .delay(0.5)
+             .moveTo({-1200, 0}, 10);
+
+    Sprite s6_penguin;
+    s6_penguin.set_id(assetsMap[Asset::Penguin].id)
+              .init({{200.0f, 200.0f}, {700, -200.0f}, {1.0f, 1.0f}, 0.0f, WHITE, false})
+              .moveTo({700, 100}, 1, EaseType::Bounce)
+              .delay(0.5)
+              .moveTo({500, 100}, 1).flip()
+              .moveTo({900, 100}, 2).flip()
+              .moveTo({500, 100}, 2).flip()
+              .moveTo({900, 100}, 2);
+
+    Sprite s6_running003;
+    s6_running003.set_id(assetsMap[Asset::RunningMan003].id)
+                 .init({{210, 300}, {1600, 500}, {1.0f, 1.0f}, 0, WHITE})
+                 .moveTo({1200, 500}, 1, EaseType::Elastic)
+                 .moveTo({900, 500}, 2, EaseType::EaseInOut)
+                 .moveTo({1100, 500}, 2, EaseType::EaseInOut)
+                 .fadeTo(0, 0.6);
+
+    Sprite s6_running001;
+    s6_running001.set_id(assetsMap[Asset::RunningMan001].id)
+                 .init({{210, 300}, {1100, 500}, {1.0f, 1.0f}, 0, INVISIBLE_WHITE})
+                 .delay(5.4).fadeTo(1, 0.6)
+                 .moveTo({1400, 500}, 2, EaseType::EaseIn)
+                 .moveTo({800, 500}, 2, EaseType::EaseInOut)
+                 .moveTo({1000, 500}, 1.5, EaseType::EaseOut)
+    .fadeTo(0, 0.5);
+
+    Sprite s6_apple;
+    s6_apple.set_id(assetsMap[Asset::Apple].id)
+            .init({{100, 100}, {750, 200}, {1.0f, 1.0f}, 0, INVISIBLE_WHITE})
+            .delay(1.5)
+            .fadeTo(1, 1)
+            .beginParallel()
+            .moveTo({1100, 500}, 2.5, EaseType::EaseIn)
+            .rotateTo(DirectX::XMConvertToRadians(540), 2.5, EaseType::Back)
+            .endParallel()
+            .fadeTo(0, 0);
+
+    Sprite s6_banana;
+    s6_banana.set_id(assetsMap[Asset::Banana].id)
+             .init({{100, 100}, {750, 200}, {1.0f, 1.0f}, 0, INVISIBLE_WHITE})
+             .delay(8)
+             .fadeTo(1, 1)
+             .beginParallel()
+             .moveTo({1000, 500}, 3, EaseType::EaseIn)
+             .rotateTo(DirectX::XMConvertToRadians(-540), 3, EaseType::Back)
+             .endParallel()
+             .fadeTo(0, 0);
+
+    Sprite s6_henshin;
+    s6_henshin.set_id(assetsMap[Asset::Henshin].id)
+              .init({{400, 400}, {1000, 400}, {1.0f, 1.0f}, 0, INVISIBLE_WHITE})
+              .delay(5)
+              .fadeTo(1, 0)
+              .delay(1)
+              .fadeTo(0, 0)
+              .moveTo({900, 400}, 0)
+              .delay(6)
+              .fadeTo(1, 0)
+              .delay(1)
+              .fadeTo(0, 0);
+
+    s6.addSprite(s6_ground, assetsMap[Asset::TrainMid].drawFunction);
+    s6.addSprite(s6_penguin, assetsMap[Asset::Penguin].drawFunction);
+
+    s6.addSprite(s6_apple, assetsMap[Asset::Apple].drawFunction);
+    s6.addSprite(s6_banana, assetsMap[Asset::Banana].drawFunction);
+
+    s6.addSprite(s6_running001, assetsMap[Asset::RunningMan003].drawFunction);
+    s6.addSprite(s6_running003, assetsMap[Asset::RunningMan003].drawFunction);
+    s6.addSprite(s6_henshin, assetsMap[Asset::Henshin].drawFunction);
+    
+    // Scene 7
+    Scene s7;
+    
+    Sprite s7_ground;
+    s7_ground.set_id(assetsMap[Asset::Ground].id)
+             .init({{4000.0f, 900.0f}, {-1200, 0}, {1.0f, 1.0f}, 0.0f, WHITE, true})
+             .moveTo({0.0f, 0}, 10);
+
+    Sprite s7_running001;
+    s7_running001.set_id(assetsMap[Asset::RunningMan001].id)
+                 .init({{210, 300}, {1000, 500}, {1.0f, 1.0f}, 0, INVISIBLE_WHITE})
+                 .fadeTo(1, 0.5);
+    
+    s7.addSprite(s7_ground, assetsMap[Asset::Ground].drawFunction);
+    s7.addSprite(s7_running001, assetsMap[Asset::RunningMan001].drawFunction);
+    
     // RegisterScene(s1);
     // RegisterScene(s2);
     // RegisterScene(s3);
     // RegisterScene(s4);
-    RegisterScene(s5);
+    // RegisterScene(s5);
+    // RegisterScene(s6);
+    RegisterScene(s7);
 }
 
 

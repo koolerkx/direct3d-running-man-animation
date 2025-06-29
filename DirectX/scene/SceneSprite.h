@@ -20,7 +20,8 @@ enum class AnimProperty
     Scale,
     Rotation,
     Alpha,
-    Color
+    Color,
+    Flip
 };
 
 enum class RepeatMode
@@ -105,7 +106,8 @@ public:
 
     // 他
     Sprite& delay(double duration);
-
+    Sprite& flip();
+    
     // 非同期動きグループ
     Sprite& beginParallel();
     Sprite& endParallel();

@@ -66,7 +66,7 @@ Sprite& Sprite::fadeTo(float alpha, double duration, EaseType easing)
 
 Sprite& Sprite::colorTo(XMFLOAT4 color, double duration, EaseType easing)
 {
-    AnimationKeyframe keyframe(AnimProperty::Color, color, duration, easing);
+    AnimationKeyframe keyframe(AnimProperty::Color, 0, duration, easing);
     addKeyframe(keyframe);
     return *this;
 }
@@ -74,6 +74,13 @@ Sprite& Sprite::colorTo(XMFLOAT4 color, double duration, EaseType easing)
 Sprite& Sprite::delay(double duration)
 {
     totalDuration += duration;
+    return *this;
+}
+
+Sprite& Sprite::flip()
+{
+    AnimationKeyframe keyframe(AnimProperty::Flip, 0, 0, EaseType::Linear);
+    addKeyframe(keyframe);
     return *this;
 }
 
@@ -239,6 +246,11 @@ SpriteState Sprite::getState(double timeOffset)
             {
                 XMFLOAT4 start = (keyframe.startTime == 0.0) ? initialState.color : state.color;
                 state.color = interpolate(start, keyframe.targetValue, easedProgress);
+                break;
+            }
+        case AnimProperty::Flip:
+            {
+                state.flipY = !state.flipY;
                 break;
             }
         }

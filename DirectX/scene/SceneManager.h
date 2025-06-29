@@ -48,6 +48,12 @@ enum class Asset
     TrainFirst,
     TrainMid,
     TrainDoor,
+
+    Penguin,
+    Apple,
+    Banana,
+    Suica,
+    Henshin
 };
 
 using AssetDataType = std::variant<std::wstring, AnimPatternDataWithPath>;
@@ -79,7 +85,7 @@ static std::map<Asset, AssetDataType> AssetsSetting
     {
         Asset::BackgroundStar, AnimPatternDataWithPath{
             L"assets/starburst_640x480-min.png", {
-                -1, 5, 2, 0.05, {640, 480}, {0, 0}, true
+                -1, 10, 2, 0.03, {640, 480}, {0, 0}, true
             }
         }
     },
@@ -131,12 +137,23 @@ static std::map<Asset, AssetDataType> AssetsSetting
                 -1, 20, 4, 0.05, {320, 240}, {0, 0}, true
             }
         }
+    },{
+        Asset::Henshin, AnimPatternDataWithPath{
+            L"assets/pipo-mapeffect009.png", {
+                -1, 10, 10, 0.1, {480, 480}, {0, 0}, true
+            }
+        }
     },
 
     {Asset::UFO, L"assets/UFO.png"},
     {Asset::TrainFirst, L"assets/train_first.png"},
     {Asset::TrainMid, L"assets/train_mid.png"},
     {Asset::TrainDoor, L"assets/door.png"},
+
+    {Asset::Penguin, L"assets/penguin.png"},
+    {Asset::Apple, L"assets/apple.png"},
+    {Asset::Banana, L"assets/banana.png"},
+    {Asset::Suica, L"assets/suica.png"},
 
     // Background
     {Asset::ForegroundJapan, L"assets/S1_FG1.png"},
