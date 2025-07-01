@@ -4,6 +4,9 @@
 
 > **Homework**: DirectX 11 sprite animation lesson using a keyframe-driven fluent interface.
 
+[![direct3d-running-man-animation](https://img.youtube.com/vi/OoFPoHBwKng/0.jpg)](https://youtu.be/OoFPoHBwKng)
+> Youtube Demo
+
 ## Project Overview
 
 This assignment demonstrates:
